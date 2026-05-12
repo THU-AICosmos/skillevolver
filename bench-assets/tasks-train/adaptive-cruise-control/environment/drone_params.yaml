@@ -1,0 +1,24 @@
+drone:
+  mass: 2.5  # kg
+  max_thrust: 4.0  # m/s^2 (upward acceleration)
+  max_descent: -6.0  # m/s^2 (downward acceleration)
+  drag_coefficient: 0.15
+
+controller_settings:
+  set_altitude: 50.0  # m (target hover altitude)
+  time_margin: 1.2  # seconds (safety margin factor for gap)
+  min_gap: 8.0  # meters (minimum vertical gap to obstacle)
+  emergency_ttc_threshold: 2.5  # seconds (trigger emergency when TTC < this)
+
+pid_altitude:
+  kp: 0.1
+  ki: 0.01
+  kd: 0.0
+
+pid_gap:
+  kp: 0.1
+  ki: 0.01
+  kd: 0.0
+
+simulation:
+  dt: 0.1  # seconds

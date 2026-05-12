@@ -1,0 +1,8 @@
+name: jax-vmap-outer
+description: Compute outer product of row pairs using vmap
+inputs:
+  a: jax.Array
+  b: jax.Array
+outputs:
+  result: jax.Array
+implementation: jax_skills.vmap_outer

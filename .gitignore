@@ -1,0 +1,35 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+.eggs/
+.pytest_cache/
+
+# Evolved skills workspaces (large, regenerated per task run)
+evolved-skills/
+experiments/
+logs/
+.cache/
+
+# Benchmark results (regenerable)
+benchmark-results/
+
+# Local secrets / env
+.env
+.env.*
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Harbor / benchmark intermediate output
+Benchmarks/skillsbench/jobs/
+Benchmarks/skillsbench/.venv/
+Benchmarks/kernelbench/generated/

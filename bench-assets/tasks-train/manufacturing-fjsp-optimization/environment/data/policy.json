@@ -1,0 +1,18 @@
+{
+  "freeze": {
+    "enabled": true,
+    "freeze_until": 5,
+    "lock_fields": [
+      "machine",
+      "start",
+      "end"
+    ]
+  },
+  "change_budget": {
+    "max_machine_changes": 5,
+    "max_total_start_shift_L1": 150
+  },
+  "guards": {
+    "max_makespan_ratio": 1.15
+  }
+}

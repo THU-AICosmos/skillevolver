@@ -1,0 +1,121 @@
+# Self-Evolving Skills
+
+An iterative trace-distillation pipeline that lets a Claude agent generate
+high-quality, reusable agent skills by exploring a benchmark task, reading
+its own execution traces, and refining the skill across rounds — all in a
+single Agent SDK session.
+
+The same `skill-evolver` pipeline handles both:
+
+- **SkillsBench** (87 tasks) — discrete pass/fail tasks across domains
+- **KernelBench** — GPU kernel optimization (continuous reward)
+
+Both run on Harbor, so the agent runner is the same. **The two benchmarks
+differ in how tasks come into the pipeline and what the reward looks like** —
+see the table further down.
+
+## Common setup (do this once)
+
+```bash
+# Clone (with submodules — SkillsBench is one of them)
+git clone --recursive <repo-url> self-evolving-skills
+cd self-evolving-skills
+
+# Install
+conda env create -f environment.yml
+conda activate skillsbench
+export ANTHROPIC_API_KEY="<your-api-key>"
+
+# One-shot setup: clones SkillsBench, installs Harbor, applies the 3 Harbor
+# patches required by the runner, runs health checks
+bash scripts/setup.sh
+
+# Start a tmux window for Harbor (the agent uses tmux send-keys to dispatch
+# Harbor commands so they don't collide with the agent's own shell)
+bash scripts/prepare_tmux.sh
+```
+
+After this, both benchmarks work. Then pick one:
+
+### SkillsBench quick start (≈ $10, ≈ 30 min per task)
+
+```bash
+python -m agent.run \
+  --task court-form-filling \
+  --train-split \
+  --model claude-opus-4-6
+```
+
+Validation runs on `Benchmarks/skillsbench/tasks/<task>/` (the canonical task);
+exploration runs on `Benchmarks/skillsbench/tasks-train/<task>/` (a generated
+variant with different filenames and values). See [docs/skillsbench.md](docs/skillsbench.md).
+
+### KernelBench quick start
+
+```bash
+# One-time: clone KernelBench upstream
+git clone https://github.com/ScalingIntelligence/KernelBench.git "$HOME/KernelBench"
+
+# Convert one problem to a Harbor task
+python Benchmarks/kernelbench/harbor_converter.py \
+  --kernelbench-root "$HOME/KernelBench" \
+  --level 1 --problem-id 1 \
+  --output-dir Benchmarks/kernelbench/tasks-train
+
+# Build the task container
+TASK_NAME=kb-l1-p1-square-matrix-multiplication \
+  bash scripts/build_kernelbench_image.sh
+
+# Run the agent (continuous reward)
+python -m agent.run \
+  --task kb-l1-p1-square-matrix-multiplication \
+  --reward-signal-mode continuous \
+  --model claude-opus-4-6
+```
+
+See [docs/kernelbench.md](docs/kernelbench.md) for converter details and how
+to extend the verifier for GPU performance scoring.
+
+## Benchmark differences (read before running)
+
+| Aspect | SkillsBench | KernelBench |
+|--------|-------------|-------------|
+| Reward signal | Discrete (pass / fail) | Continuous (speedup ratio over reference) |
+| Where tasks come from | Submodule, auto-cloned by `scripts/setup.sh` | You clone KernelBench upstream, then `harbor_converter.py` packages one problem at a time |
+| Task naming | Domain slugs (`offer-letter-generator`, `court-form-filling`) | `kb-l<level>-p<id>-<slug>` (prefix triggers KernelBench-specific behavior) |
+| Skill identity | Each task evolves its own skill | All `kb-*` tasks share one skill name (`kernel-optim`), designed for cross-kernel transfer |
+| Train / test split | Yes — `tasks-train/` (variants) vs `tasks/` (canonical) | None — explore and validate on the same problem |
+| Verifier | Task-specific, baked into each Harbor task | OSS default is CPU-only correctness; for GPU performance scoring you extend the generated verifier |
+| Extra build step | None | `scripts/build_kernelbench_image.sh` builds the Docker image for each converted task |
+| Default `--reward-signal-mode` | `auto` → discrete | `continuous` (set explicitly; `auto` would also pick this up after the first trial) |
+| Run command | `python -m agent.run --task <slug> --train-split` | `python -m agent.run --task kb-l1-p1-... --reward-signal-mode continuous` |
+
+## What's inside
+
+| Path | What it is |
+|------|------------|
+| `agent/` | Thin runner using `claude-agent-sdk`. Sets up an isolated workspace, applies a PreToolUse path guard, launches one agent session per task. |
+| `skill-evolver/` | The pipeline: `SKILL.md`, the shared `benchmarks/harbor/` runner, and skill-writing references. |
+| `Benchmarks/skillsbench/` | SkillsBench submodule (87 tasks). Cloned by `scripts/setup.sh`. |
+| `Benchmarks/kernelbench/` | KernelBench → Harbor converter and verifier. |
+| `bench-assets/tasks-train/` | Source of truth for SkillsBench training variants; mirrored into the submodule by `scripts/sync_tasks_train.sh`. |
+| `scripts/` | Setup, single-task launchers, sweep launchers, result aggregation, Harbor patch applier. |
+| `tests/` | Unit tests for the agent runner, guards, and trace preprocessor. |
+| `docs/` | Pipeline and benchmark-specific docs. |
+
+## Documentation
+
+- [Pipeline overview](docs/pipeline.md) — how the explore → analyze → update loop works
+- [SkillsBench](docs/skillsbench.md) — running the discrete benchmark, sweeps, deploy
+- [KernelBench](docs/kernelbench.md) — converter, image build, continuous reward, GPU notes
+
+## Requirements
+
+- Python 3.12
+- Docker Desktop (Harbor runs each trial in a container)
+- An Anthropic API key with access to Claude Opus 4.6
+- ~30 GB free disk (Harbor images ≈ 2.5 GB per trial; clean periodically)
+
+## License
+
+MIT — see [LICENSE](LICENSE).

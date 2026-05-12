@@ -1,0 +1,22 @@
+metric,value
+# Bandwidth & Payload
+total_bytes,
+avg_packet_size,
+max_packet_size,
+# Protocol Breakdown
+protocol_tcp,
+protocol_arp,
+protocol_ip_total,
+# Topology Overview
+num_nodes,
+num_edges,
+max_outdegree,
+network_density,
+# Traffic Timing
+duration_seconds,
+iat_mean,
+iat_variance,
+# Capacity Flags (true/false)
+is_traffic_benign,
+has_beaconing,
+has_port_scan,

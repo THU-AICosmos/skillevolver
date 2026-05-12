@@ -1,0 +1,5 @@
+Fill the California Small Claims Court form at `/root/sc100-blank.pdf` based on the case description below, and save the filled one to `/root/sc100-filled.pdf`. Only fill in the necessary fields and leave the court-filled, optional fields or fields not mentioned in the case description below empty. Use this date format: xxxx-xx-xx.
+
+
+Case Description: I am Marcus Rivera. It's my first time suing by small claims. I live in 1234 El Camino Real, Mountain View, CA 94040, my phone # is 6503217890, email: mrivera2001@yahoo.com. I want to sue Sarah Kim in 567 Castro St, Mountain View, CA 94041. Her phone #: 4087654321. She failed to pay for furniture I sold her worth $2200 based on a written purchase agreement after delivery. This situation happened from 2025-06-15 until 2025-12-01.
+I have asked her to pay multiple times via email but she keeps ignoring me. The amount is listed on the written purchase agreement. We both live in Mountain View, so I am filing where defendant lives. Please file it with date: December 1, 2025.

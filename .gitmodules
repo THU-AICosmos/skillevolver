@@ -1,0 +1,3 @@
+[submodule "Benchmarks/skillsbench"]
+	path = Benchmarks/skillsbench
+	url = https://github.com/benchflow-ai/skillsbench.git

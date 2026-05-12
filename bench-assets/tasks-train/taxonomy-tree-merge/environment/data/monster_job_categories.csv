@@ -1,0 +1,183 @@
+category_id,category_path
+1,Education > Early Childhood > Preschool > Montessori Guide
+2,Finance & Banking > Insurance > Underwriting > Property Underwriter
+3,Engineering > Mechanical Engineering > HVAC > HVAC Engineer
+4,Engineering > Mechanical Engineering > Design > CAD Engineer
+5,Engineering > Mechanical Engineering > Design > Product Design Engineer
+6,Marketing & Sales > Market Research > Consumer Insights > Consumer Insights Manager
+7,Healthcare > Nursing & Allied Health > Registered Nursing > ER Nurse
+8,Technology > Cybersecurity > Application Security > Vulnerability Assessor
+9,Legal > Intellectual Property > Patents > Patent Attorney
+10,Healthcare > Clinical Medicine > Specialists > Oncologist
+11,Healthcare > Nursing & Allied Health > Lab & Diagnostics > Medical Technologist
+12,Engineering > Civil Engineering > Environmental > Environmental Engineer
+13,Engineering > Civil Engineering > Structural > Structural Engineer
+14,Government & Public Sector > Nonprofit > Program Management > Program Director
+15,Government & Public Sector > State & Local > Social Services > Case Manager
+16,Legal > Employment Law > Labor Relations > Employment Attorney
+17,Government & Public Sector > Nonprofit > Program Management > Volunteer Coordinator
+18,Science & Research > Life Sciences > Biology > Biologist
+19,Human Resources > HR Operations > Payroll > Payroll Specialist
+20,Technology > IT Infrastructure > Systems Administration > Windows Admin
+21,Legal > Litigation > Civil > Plaintiff Attorney
+22,Human Resources > Talent Acquisition > Recruiting > Campus Recruiter
+23,Human Resources > Compensation & Benefits > Benefits > Benefits Administrator
+24,Engineering > Biomedical > Medical Devices > Clinical Engineer
+25,Technology > Software Development > Frontend > Vue.js Developer
+26,Finance & Banking > Investment Banking > Advisory > Wealth Manager
+27,Science & Research > Life Sciences > Biology > Microbiologist
+28,Marketing & Sales > Sales > Field Sales > Regional Sales Manager
+29,Finance & Banking > Insurance > Actuarial > Actuarial Analyst
+30,Finance & Banking > Investment Banking > Capital Markets > Derivatives Trader
+31,Science & Research > Environmental Science > Sustainability > Sustainability Consultant
+32,Marketing & Sales > Digital Marketing > Social Media > Community Manager
+33,Healthcare > Mental Health > Psychology > Clinical Psychologist
+34,Technology > Product & Design > UX Design > UX Researcher
+35,Science & Research > Mathematics > Applied Math > Operations Research Analyst
+36,Finance & Banking > Commercial Banking > Relationship Management > Business Banker
+37,Legal > Real Estate > Commercial > Commercial Real Estate Attorney
+38,Engineering > Biomedical > Medical Devices > Biomedical Engineer
+39,Finance & Banking > Commercial Banking > Operations > Branch Manager
+40,Marketing & Sales > Digital Marketing > Email > CRM Specialist
+41,Human Resources > Talent Acquisition > Recruiting > Executive Recruiter
+42,Finance & Banking > Accounting > Public Accounting > Tax Accountant
+43,Healthcare > Pharmacy > Retail Pharmacy > Community Pharmacist
+44,Operations & Logistics > Manufacturing Operations > Production > Production Manager
+45,Science & Research > Physical Sciences > Chemistry > Analytical Chemist
+46,Operations & Logistics > Project Management > Traditional > Program Manager
+47,Finance & Banking > Insurance > Actuarial > Actuary
+48,Healthcare > Clinical Medicine > Surgery > Orthopedic Surgeon
+49,Technology > Product & Design > Product Management > Growth PM
+50,Legal > Intellectual Property > Copyright > Copyright Attorney
+51,Human Resources > HR Operations > HRIS > HRIS Administrator
+52,Healthcare > Clinical Medicine > Specialists > Neurologist
+53,Creative & Media > Visual Arts > Photography > Photo Editor
+54,Government & Public Sector > Federal Government > Defense > Defense Analyst
+55,Creative & Media > Music & Audio > Audio Engineering > Audio Engineer
+56,Technology > IT Infrastructure > Networking > Network Architect
+57,Education > Corporate Training > L&D > Training Manager
+58,Marketing & Sales > Sales > Enterprise Sales > Solution Architect
+59,Education > K-12 Teaching > Elementary > Elementary Teacher
+60,Education > K-12 Teaching > Middle School > Math Teacher
+61,Finance & Banking > Compliance > Risk Management > Operational Risk Manager
+62,Science & Research > Pharmaceutical > Drug Discovery > Pharmacologist
+63,Legal > Intellectual Property > Trademarks > Trademark Attorney
+64,Marketing & Sales > Brand Management > Creative > Creative Director
+65,Technology > Data & Analytics > Business Intelligence > Power BI Specialist
+66,Healthcare > Nursing & Allied Health > Registered Nursing > OR Nurse
+67,Operations & Logistics > Supply Chain > Logistics > Transportation Manager
+68,Healthcare > Clinical Medicine > Surgery > Cardiac Surgeon
+69,Healthcare > Clinical Medicine > Surgery > Neurosurgeon
+70,Engineering > Electrical Engineering > Electronics > Embedded Systems Engineer
+71,Science & Research > Pharmaceutical > Drug Discovery > Medicinal Chemist
+72,Education > K-12 Teaching > High School > AP Teacher
+73,Construction & Real Estate > Construction > Trades > Carpenter
+74,Technology > Cybersecurity > Network Security > Penetration Tester
+75,Education > Early Childhood > Preschool > Preschool Teacher
+76,Operations & Logistics > Supply Chain > Procurement > Procurement Manager
+77,Government & Public Sector > International > Development > Aid Worker
+78,Marketing & Sales > Sales > Field Sales > Territory Manager
+79,Finance & Banking > Insurance > Claims > Claims Adjuster
+80,Legal > Corporate Law > Compliance > Corporate Compliance Officer
+81,Creative & Media > Writing & Editorial > Technical Writing > Technical Writer
+82,Finance & Banking > Asset Management > Research > Equity Research Analyst
+83,Construction & Real Estate > Construction > Trades > Electrician
+84,Technology > IT Infrastructure > Cloud Services > GCP Engineer
+85,Engineering > Biomedical > Tissue Engineering > Tissue Engineer
+86,Operations & Logistics > Facilities > Safety > Safety Officer
+87,Healthcare > Administration > Health Informatics > EHR Analyst
+88,Marketing & Sales > Sales > Channel Sales > Channel Manager
+89,Creative & Media > Video & Film > Animation > 2D Animator
+90,Finance & Banking > Commercial Banking > Operations > Bank Teller
+91,Education > Higher Education > Professors > Associate Professor
+92,Construction & Real Estate > Real Estate > Residential > Property Manager
+93,Legal > Corporate Law > Contracts > Contract Attorney
+94,Technology > Data & Analytics > Business Intelligence > Tableau Developer
+95,Marketing & Sales > Digital Marketing > SEO > SEO Specialist
+96,Healthcare > Nursing & Allied Health > Registered Nursing > Pediatric Nurse
+97,Creative & Media > Writing & Editorial > Publishing > Literary Agent
+98,Finance & Banking > Commercial Banking > Lending > Credit Analyst
+99,Technology > IT Infrastructure > Database > DBA PostgreSQL
+100,Engineering > Electrical Engineering > Power Systems > Power Engineer
+101,Human Resources > Diversity & Inclusion > DEI Programs > Inclusion Specialist
+102,Finance & Banking > Insurance > Underwriting > Life Underwriter
+103,Legal > Corporate Law > Contracts > Contract Manager
+104,Engineering > Mechanical Engineering > Automotive > Powertrain Engineer
+105,Finance & Banking > Accounting > Corporate Accounting > Cost Accountant
+106,Marketing & Sales > Digital Marketing > SEM > PPC Specialist
+107,Science & Research > Physical Sciences > Physics > Astrophysicist
+108,Marketing & Sales > Sales > Inside Sales > Sales Development Rep
+109,Creative & Media > Writing & Editorial > Journalism > Editor
+110,Creative & Media > Video & Film > Production > Video Producer
+111,Engineering > Chemical Engineering > Materials > Materials Scientist
+112,Creative & Media > Gaming > Game Development > Game Programmer
+113,Technology > IT Infrastructure > Cloud Services > AWS Solutions Architect
+114,Science & Research > Mathematics > Statistics > Statistician
+115,Marketing & Sales > Market Research > Consumer Insights > Market Research Analyst
+116,Government & Public Sector > State & Local > Administration > City Manager
+117,Education > Higher Education > Administration > Admissions Officer
+118,Creative & Media > Visual Arts > Illustration > Digital Artist
+119,Education > K-12 Teaching > High School > Guidance Counselor
+120,Finance & Banking > Commercial Banking > Relationship Management > Private Banker
+121,Government & Public Sector > Federal Government > Defense > Intelligence Analyst
+122,Healthcare > Nursing & Allied Health > Lab & Diagnostics > Phlebotomist
+123,Science & Research > Physical Sciences > Geology > Geophysicist
+124,Legal > Intellectual Property > Patents > Patent Agent
+125,Science & Research > Environmental Science > Climate > Climate Scientist
+126,Construction & Real Estate > Real Estate > Residential > Real Estate Agent
+127,Government & Public Sector > Nonprofit > Fundraising > Development Director
+128,Education > Early Childhood > Daycare > Daycare Provider
+129,Human Resources > Compensation & Benefits > Compensation > Compensation Manager
+130,Operations & Logistics > Supply Chain > Procurement > Purchasing Agent
+131,Marketing & Sales > Sales > Inside Sales > Account Executive
+132,Finance & Banking > Financial Planning > Personal Finance > Financial Planner
+133,Finance & Banking > Commercial Banking > Lending > Mortgage Specialist
+134,Science & Research > Life Sciences > Biochemistry > Molecular Biologist
+135,Legal > Litigation > Criminal > Prosecutor
+136,Operations & Logistics > Manufacturing Operations > Lean > Lean Six Sigma Specialist
+137,Construction & Real Estate > Construction > Trades > Plumber
+138,Finance & Banking > Investment Banking > M&A > M&A Analyst
+139,Legal > Immigration > Family Immigration > Family Immigration Lawyer
+140,Finance & Banking > Investment Banking > Advisory > Financial Advisor
+141,Human Resources > Employee Relations > Conflict Resolution > Employee Relations Specialist
+142,Marketing & Sales > Digital Marketing > SEO > SEO Analyst
+143,Legal > Immigration > Business Immigration > Immigration Attorney
+144,Operations & Logistics > Supply Chain > Inventory > Demand Planner
+145,Marketing & Sales > Customer Success > Account Management > Renewals Manager
+146,Marketing & Sales > Brand Management > Brand Strategy > Brand Strategist
+147,Human Resources > Diversity & Inclusion > DEI Programs > DEI Manager
+148,Engineering > Electrical Engineering > Electronics > Circuit Designer
+149,Education > Student Services > Career Services > Placement Officer
+150,Technology > Data & Analytics > Data Engineering > Data Pipeline Architect
+151,Legal > Tax Law > Federal Tax > Tax Attorney
+152,Marketing & Sales > Public Relations > Crisis Management > Crisis Communications Manager
+153,Education > Online Learning > Content Creation > Course Designer
+154,Technology > Software Development > Full-Stack > LAMP Developer
+155,Healthcare > Pharmacy > Retail Pharmacy > Pharmacy Technician
+156,Technology > Cybersecurity > Network Security > Firewall Administrator
+157,Healthcare > Clinical Medicine > Specialists > Dermatologist
+158,Technology > Software Development > Backend > Java Developer
+159,Marketing & Sales > Digital Marketing > SEM > Paid Media Manager
+160,Marketing & Sales > Customer Success > Support > Technical Support Specialist
+161,Construction & Real Estate > Architecture > Interior > Interior Designer
+162,Engineering > Civil Engineering > Geotechnical > Geotechnical Engineer
+163,Engineering > Civil Engineering > Transportation > Traffic Engineer
+164,Operations & Logistics > Supply Chain > Inventory > Inventory Manager
+165,Technology > Data & Analytics > Business Intelligence > BI Analyst
+166,Education > Higher Education > Research > Postdoctoral Fellow
+167,Healthcare > Clinical Medicine > Primary Care > Family Physician
+168,Technology > Cybersecurity > Compliance > SOC Analyst
+169,Engineering > Civil Engineering
+170,Finance & Banking > Investment Banking > Advisory
+171,Marketing & Sales > Sales > Field Sales
+172,Science & Research
+173,Operations & Logistics > Manufacturing Operations > Production
+174,Science & Research > Physical Sciences
+175,Human Resources > HR Operations
+176,Technology > Data & Analytics > Business Intelligence
+177,Creative & Media > Writing & Editorial
+178,Marketing & Sales > Market Research > Consumer Insights
+179,Education > Early Childhood
+180,Education > Student Services > Career Services
+181,Technology > Data & Analytics > Data Engineering
+182,Technology > Cybersecurity

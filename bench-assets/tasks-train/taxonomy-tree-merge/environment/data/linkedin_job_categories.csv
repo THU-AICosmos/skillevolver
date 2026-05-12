@@ -1,0 +1,183 @@
+job_id,category_path
+LI-0001,Science & Research > Life Sciences > Ecology > Conservation Scientist
+LI-0002,Finance & Banking -> Insurance -> Underwriting -> Property Underwriter
+LI-0003,Education -> Student Services -> Academic Support -> Tutor
+LI-0004,Technology -> Software Development -> DevOps -> Site Reliability Engineer
+LI-0005,Marketing & Sales -> Market Research -> Consumer Insights -> Consumer Insights Manager
+LI-0006,Healthcare -> Nursing & Allied Health -> Registered Nursing -> ER Nurse
+LI-0007,Science & Research -> Pharmaceutical -> Clinical Trials -> Clinical Trial Manager
+LI-0008,Legal > Litigation > Criminal > Criminal Defense Attorney
+LI-0009,Human Resources > Compensation & Benefits > Compensation > Compensation Analyst
+LI-0010,Technology > Product & Design > UX Design > Interaction Designer
+LI-0011,Technology > Cybersecurity > Application Security > Vulnerability Assessor
+LI-0012,Healthcare > Clinical Medicine > Specialists > Oncologist
+LI-0013,Education > Early Childhood > Daycare > Childcare Coordinator
+LI-0014,Engineering > Civil Engineering > Environmental > Environmental Engineer
+LI-0015,Healthcare > Dental > General Dentistry > General Dentist
+LI-0016,Engineering > Civil Engineering > Structural > Structural Engineer
+LI-0017,Government & Public Sector > State & Local > Social Services > Case Manager
+LI-0018,Education > Student Services > Career Services > Career Counselor
+LI-0019,Government & Public Sector > Nonprofit > Program Management > Volunteer Coordinator
+LI-0020,Science & Research -> Life Sciences -> Biology -> Biologist
+LI-0021,Technology -> IT Infrastructure -> Systems Administration -> Windows Admin
+LI-0022,Government & Public Sector > Nonprofit > Fundraising > Grant Writer
+LI-0023,Legal -> Litigation -> Civil -> Plaintiff Attorney
+LI-0024,Human Resources -> Talent Acquisition -> Recruiting -> Technical Recruiter
+LI-0025,Technology > Software Development > Full-Stack > MERN Developer
+LI-0026,Healthcare > Mental Health > Counseling > Substance Abuse Counselor
+LI-0027,Construction & Real Estate -> Surveying -> Land Surveying -> Land Surveyor
+LI-0028,Legal > Litigation > Appellate > Appellate Attorney
+LI-0029,Finance & Banking > Compliance > Regulatory > AML Analyst
+LI-0030,Finance & Banking > Asset Management > Portfolio Management > Quantitative Analyst
+LI-0031,Finance & Banking > Investment Banking > Advisory > Wealth Manager
+LI-0032,Finance & Banking > Insurance > Actuarial > Actuarial Analyst
+LI-0033,Finance & Banking > Investment Banking > Capital Markets > Derivatives Trader
+LI-0034,Finance & Banking -> Compliance -> Risk Management -> Risk Analyst
+LI-0035,Human Resources > HR Operations > Payroll > Payroll Manager
+LI-0036,Science & Research -> Environmental Science -> Sustainability -> Sustainability Consultant
+LI-0037,Healthcare > Dental > General Dentistry > Dental Hygienist
+LI-0038,Healthcare > Clinical Medicine > Emergency > ER Physician
+LI-0039,Finance & Banking -> Asset Management -> Portfolio Management -> Portfolio Manager
+LI-0040,Education -> Online Learning -> Platform Management -> LMS Administrator
+LI-0041,Technology -> Software Development -> DevOps -> CI/CD Specialist
+LI-0042,Technology > Product & Design > UX Design > UX Researcher
+LI-0043,Education > Student Services > Academic Support > Academic Advisor
+LI-0044,Finance & Banking > Commercial Banking > Relationship Management > Business Banker
+LI-0045,Finance & Banking > Accounting > Corporate Accounting > Controller
+LI-0046,Creative & Media > Music & Audio > Music Production > Sound Designer
+LI-0047,Finance & Banking -> Commercial Banking -> Operations -> Branch Manager
+LI-0048,Human Resources -> Talent Acquisition -> Recruiting -> Executive Recruiter
+LI-0049,Technology -> IT Infrastructure -> Cloud Services -> Azure Administrator
+LI-0050,Science & Research > Physical Sciences > Chemistry > Analytical Chemist
+LI-0051,Finance & Banking > Financial Planning > Personal Finance > Retirement Advisor
+LI-0052,Healthcare > Clinical Medicine > Surgery > Orthopedic Surgeon
+LI-0053,Engineering -> Civil Engineering -> Environmental -> Water Resources Engineer
+LI-0054,Technology > Cybersecurity > Application Security > Security Analyst
+LI-0055,Creative & Media > Video & Film > Production > Film Director
+LI-0056,Finance & Banking -> Accounting -> Public Accounting -> Forensic Accountant
+LI-0057,Technology > Cybersecurity > Compliance > Risk Assessor
+LI-0058,Human Resources > HR Operations > HRIS > HRIS Administrator
+LI-0059,Healthcare > Clinical Medicine > Specialists > Neurologist
+LI-0060,Government & Public Sector > Federal Government > Defense > Defense Analyst
+LI-0061,Healthcare > Nursing & Allied Health > Registered Nursing > ICU Nurse
+LI-0062,Technology > IT Infrastructure > Networking > Network Architect
+LI-0063,Science & Research > Life Sciences > Biology > Geneticist
+LI-0064,Operations & Logistics > Manufacturing Operations > Quality > Quality Inspector
+LI-0065,Operations & Logistics > Facilities > Building Management > Maintenance Manager
+LI-0066,Healthcare > Nursing & Allied Health > Therapists > Respiratory Therapist
+LI-0067,Engineering -> Aerospace -> Space Systems -> Spacecraft Engineer
+LI-0068,Education > K-12 Teaching > Middle School > Math Teacher
+LI-0069,Education -> Online Learning -> Platform Management -> EdTech Specialist
+LI-0070,Marketing & Sales -> Digital Marketing -> Content -> Content Marketing Manager
+LI-0071,Education > Corporate Training > L&D > Instructional Designer
+LI-0072,Construction & Real Estate -> Construction -> General Contracting -> Construction Manager
+LI-0073,Marketing & Sales -> Brand Management -> Creative -> Creative Director
+LI-0074,Construction & Real Estate > Construction > Trades > Welder
+LI-0075,Education > Corporate Training > Technical Training > Certification Instructor
+LI-0076,Human Resources > Employee Relations > Workplace Culture > Employee Engagement Specialist
+LI-0077,Finance & Banking > Accounting > Public Accounting > Auditor
+LI-0078,Human Resources > Talent Acquisition > Sourcing > Talent Sourcer
+LI-0079,Science & Research > Pharmaceutical > Drug Discovery > Medicinal Chemist
+LI-0080,Technology > Cybersecurity > Network Security > Penetration Tester
+LI-0081,Engineering -> Electrical Engineering -> Telecommunications -> RF Engineer
+LI-0082,Education > Early Childhood > Preschool > Preschool Teacher
+LI-0083,Healthcare > Clinical Medicine > Emergency > Trauma Surgeon
+LI-0084,Government & Public Sector > International > Development > Aid Worker
+LI-0085,Science & Research > Pharmaceutical > Regulatory > Regulatory Affairs Manager
+LI-0086,Education > Corporate Training > L&D > E-Learning Developer
+LI-0087,Technology -> Software Development -> Mobile -> iOS Developer
+LI-0088,Finance & Banking > Insurance > Claims > Claims Adjuster
+LI-0089,Healthcare > Mental Health > Psychiatry > General Psychiatrist
+LI-0090,Creative & Media -> Writing & Editorial -> Technical Writing -> Technical Writer
+LI-0091,Finance & Banking -> Asset Management -> Research -> Fixed Income Research
+LI-0092,Government & Public Sector > Federal Government > Regulatory > Regulatory Affairs Specialist
+LI-0093,Marketing & Sales > Brand Management > Creative > Art Director
+LI-0094,Government & Public Sector > State & Local > Administration > County Administrator
+LI-0095,Government & Public Sector > State & Local > Social Services > Social Worker
+LI-0096,Marketing & Sales -> Customer Success -> Support -> Customer Support Lead
+LI-0097,Government & Public Sector -> Federal Government -> Policy -> Legislative Assistant
+LI-0098,Finance & Banking -> Commercial Banking -> Lending -> Loan Officer
+LI-0099,Construction & Real Estate -> Construction -> General Contracting -> General Contractor
+LI-0100,Human Resources > Compensation & Benefits > Benefits > Benefits Coordinator
+LI-0101,Construction & Real Estate > Urban Planning > City Planning > Urban Planner
+LI-0102,Education > Higher Education > Professors > Associate Professor
+LI-0103,Engineering > Mechanical Engineering > Manufacturing > Quality Engineer
+LI-0104,Marketing & Sales > Digital Marketing > SEO > SEO Specialist
+LI-0105,Finance & Banking -> Commercial Banking -> Lending -> Credit Analyst
+LI-0106,Technology -> IT Infrastructure -> Database -> DBA PostgreSQL
+LI-0107,Creative & Media > Gaming > Game Design > Level Designer
+LI-0108,Engineering > Mechanical Engineering > Automotive > Automotive Engineer
+LI-0109,Finance & Banking -> Investment Banking -> Capital Markets -> Equity Analyst
+LI-0110,Healthcare -> Administration -> Health Informatics -> Health IT Specialist
+LI-0111,Marketing & Sales -> Digital Marketing -> SEM -> PPC Specialist
+LI-0112,Creative & Media > Writing & Editorial > Journalism > Editor
+LI-0113,Operations & Logistics > Manufacturing Operations > Quality > Quality Assurance Manager
+LI-0114,Creative & Media > Video & Film > Production > Video Producer
+LI-0115,Engineering > Chemical Engineering > Materials > Materials Scientist
+LI-0116,Technology -> IT Infrastructure -> Cloud Services -> AWS Solutions Architect
+LI-0117,Marketing & Sales > Market Research > Consumer Insights > Market Research Analyst
+LI-0118,Government & Public Sector > State & Local > Administration > City Manager
+LI-0119,Creative & Media > Visual Arts > Illustration > Digital Artist
+LI-0120,Legal > Intellectual Property > Patents > Patent Agent
+LI-0121,Science & Research -> Environmental Science -> Climate -> Climate Scientist
+LI-0122,Healthcare > Mental Health > Psychiatry > Child Psychiatrist
+LI-0123,Human Resources -> Talent Acquisition -> Employer Branding -> Employer Brand Manager
+LI-0124,Technology -> IT Infrastructure -> Networking -> Network Engineer
+LI-0125,Human Resources > Compensation & Benefits > Compensation > Compensation Manager
+LI-0126,Marketing & Sales > Sales > Inside Sales > Account Executive
+LI-0127,Engineering > Aerospace > Space Systems > Propulsion Engineer
+LI-0128,Creative & Media > Writing & Editorial > Publishing > Publishing Editor
+LI-0129,Marketing & Sales > Digital Marketing > Content > Copywriter
+LI-0130,Legal > Litigation > Criminal > Prosecutor
+LI-0131,Technology > IT Infrastructure > Database > DBA MongoDB
+LI-0132,Construction & Real Estate -> Construction -> Trades -> Plumber
+LI-0133,Engineering > Civil Engineering > Transportation > Highway Engineer
+LI-0134,Education > Higher Education > Professors > Adjunct Professor
+LI-0135,Legal > Immigration > Family Immigration > Family Immigration Lawyer
+LI-0136,Technology > Product & Design > Product Management > Technical PM
+LI-0137,Marketing & Sales > Sales > Channel Sales > Partner Manager
+LI-0138,Human Resources -> Organizational Development -> Change Management -> Change Manager
+LI-0139,Legal > Immigration > Business Immigration > Immigration Attorney
+LI-0140,Science & Research > Environmental Science > Climate > Atmospheric Scientist
+LI-0141,Human Resources > HR Operations > HRIS > HRIS Analyst
+LI-0142,Marketing & Sales -> Brand Management -> Brand Strategy -> Brand Strategist
+LI-0143,Technology -> Software Development -> Backend -> Go Developer
+LI-0144,Science & Research > Pharmaceutical > Clinical Trials > Clinical Research Associate
+LI-0145,Creative & Media > Music & Audio > Music Production > Music Producer
+LI-0146,Finance & Banking > Accounting > Corporate Accounting > Financial Analyst
+LI-0147,Technology -> Data & Analytics -> Data Engineering -> Data Pipeline Architect
+LI-0148,Education > Online Learning > Content Creation > Course Designer
+LI-0149,Science & Research > Life Sciences > Biochemistry > Biochemist
+LI-0150,Legal > Corporate Law > Securities > Securities Attorney
+LI-0151,Engineering > Mechanical Engineering > Manufacturing > Industrial Engineer
+LI-0152,Technology > IT Infrastructure > Database > DBA Oracle
+LI-0153,Science & Research > Environmental Science > Sustainability > Environmental Consultant
+LI-0154,Construction & Real Estate > Architecture > Landscape > Landscape Architect
+LI-0155,Healthcare > Pharmacy > Clinical Pharmacy > Hospital Pharmacist
+LI-0156,Construction & Real Estate -> Urban Planning -> City Planning -> Zoning Analyst
+LI-0157,Engineering > Civil Engineering > Transportation > Traffic Engineer
+LI-0158,Operations & Logistics -> Supply Chain -> Inventory -> Inventory Manager
+LI-0159,Technology > Data & Analytics > Business Intelligence > BI Analyst
+LI-0160,Education -> Higher Education -> Research -> Postdoctoral Fellow
+LI-0161,Marketing & Sales > Sales > Inside Sales > Business Development Rep
+LI-0162,Education > Student Services
+LI-0163,Technology
+LI-0164,Education
+LI-0165,Healthcare > Mental Health > Counseling
+LI-0166,Finance & Banking > Asset Management > Portfolio Management
+LI-0167,Finance & Banking > Commercial Banking > Relationship Management
+LI-0168,Creative & Media
+LI-0169,Healthcare
+LI-0170,Technology > Cybersecurity
+LI-0171,Marketing & Sales > Digital Marketing
+LI-0172,Education
+LI-0173,Science & Research > Pharmaceutical > Drug Discovery
+LI-0174,Healthcare
+LI-0175,Operations & Logistics
+LI-0176,Science & Research
+LI-0177,Human Resources > Talent Acquisition
+LI-0178,Human Resources
+LI-0179,Human Resources
+LI-0180,Creative & Media > Music & Audio
+LI-0181,Education > Online Learning > Content Creation
+LI-0182,Operations & Logistics > Supply Chain

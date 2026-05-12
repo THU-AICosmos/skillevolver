@@ -1,0 +1,38 @@
+[
+    {
+      "id": "reduce_prod",
+      "description": "Given matrix v, compute the product of each column (axis=0).",
+      "input": "data/v.npy",
+      "output": "reduce_prod.npy"
+    },
+    {
+      "id": "map_tanh",
+      "description": "Apply the tanh activation function to every element using vectorization.",
+      "input": "data/v.npy",
+      "output": "map_tanh.npy"
+    },
+    {
+      "id": "grad_hinge",
+      "description": "Compute gradient of hinge loss with respect to weights.",
+      "input": "data/hinge.npz",
+      "output": "grad_hinge.npy"
+    },
+    {
+      "id": "scan_filter",
+      "description": "Implement an IIR low-pass filter forward pass using scan.",
+      "input": "data/signal.npz",
+      "output": "scan_filter.npy"
+    },
+    {
+      "id": "jit_residual",
+      "description": "Implement and JIT compile a residual block: relu(x @ W1 + b1) @ W2 + b2 + x.",
+      "input": "data/resblock.npz",
+      "output": "jit_residual.npy"
+    },
+    {
+      "id": "vmap_outer",
+      "description": "Use vmap to compute the outer product of each pair of corresponding row vectors in two matrices.",
+      "input": "data/outer.npz",
+      "output": "vmap_outer.npy"
+    }
+  ]

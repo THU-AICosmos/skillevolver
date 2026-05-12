@@ -1,0 +1,10 @@
+{
+  "case_id": "case_002",
+  "baseline": {
+    "makespan": 22,
+    "downtime_violations": 4
+  },
+  "thresholds": {
+    "max_downtime_violations": 0
+  }
+}

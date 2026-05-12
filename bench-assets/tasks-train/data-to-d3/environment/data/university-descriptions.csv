@@ -1,0 +1,41 @@
+,ticker,region,full name,endowment,facultyCount,country,website,founded
+0,MIT,North America,Massachusetts Institute of Technology,27400000000,1036,United States,https://www.mit.edu,1861
+1,HARV,North America,Harvard University,50900000000,2400,United States,https://www.harvard.edu,1636
+2,STAN,North America,Stanford University,36300000000,2279,United States,https://www.stanford.edu,1885
+3,CALT,North America,California Institute of Technology,15900000000,300,United States,https://www.caltech.edu,1891
+4,PRIN,North America,Princeton University,35800000000,1289,United States,https://www.princeton.edu,1746
+5,YALE,North America,Yale University,41400000000,4410,United States,https://www.yale.edu,1701
+6,CHIC,North America,University of Chicago,10300000000,2703,United States,https://www.uchicago.edu,1890
+7,COLM,North America,Columbia University,13300000000,4370,United States,https://www.columbia.edu,1754
+8,UTRO,North America,University of Toronto,4000000000,2200,Canada,https://www.utoronto.ca,1827
+9,MCGL,North America,McGill University,2100000000,1800,Canada,https://www.mcgill.ca,1821
+10,OXFD,Europe,University of Oxford,8100000000,1800,United Kingdom,https://www.ox.ac.uk,1096
+11,CAMB,Europe,University of Cambridge,9200000000,1600,United Kingdom,https://www.cam.ac.uk,1209
+12,ETHZ,Europe,ETH Zurich,1200000000,530,Switzerland,https://ethz.ch,1855
+13,ICLM,Europe,Imperial College London,400000000,3750,United Kingdom,https://www.imperial.ac.uk,1907
+14,EPFL,Europe,EPFL Lausanne,900000000,340,Switzerland,https://www.epfl.ch,1853
+15,LMUN,Europe,LMU Munich,600000000,750,Germany,https://www.lmu.de,1472
+16,SOBN,Europe,Sorbonne University,350000000,4400,France,https://www.sorbonne-universite.fr,1257
+17,KARO,Europe,Karolinska Institute,500000000,350,Sweden,https://ki.se,1810
+18,TSIN,Asia,Tsinghua University,4800000000,3500,China,https://www.tsinghua.edu.cn,1911
+19,PEKN,Asia,Peking University,3200000000,2900,China,https://www.pku.edu.cn,1898
+20,TOKU,Asia,University of Tokyo,3700000000,3800,Japan,https://www.u-tokyo.ac.jp,1877
+21,NUSN,Asia,National University of Singapore,5600000000,2700,Singapore,https://www.nus.edu.sg,1905
+22,KAIST,Asia,KAIST,1500000000,700,South Korea,https://www.kaist.ac.kr,1971
+23,HKST,Asia,Hong Kong University of Science and Technology,1800000000,700,Hong Kong,https://www.hkust.edu.hk,1991
+24,IIDB,Asia,Indian Institute of Technology Bombay,200000000,600,India,https://www.iitb.ac.in,1958
+25,UMEL,Oceania,University of Melbourne,2800000000,4100,Australia,https://www.unimelb.edu.au,1853
+26,USYD,Oceania,University of Sydney,2500000000,3400,Australia,https://www.sydney.edu.au,1850
+27,UNSW,Oceania,University of New South Wales,1900000000,2800,Australia,https://www.unsw.edu.au,1949
+28,ANUM,Oceania,Australian National University,1600000000,1500,Australia,https://www.anu.edu.au,1946
+29,MONASH,Oceania,Monash University,2200000000,3600,Australia,https://www.monash.edu,1958
+30,UQLD,Oceania,University of Queensland,1700000000,2500,Australia,https://www.uq.edu.au,1909
+31,AUCK,Oceania,University of Auckland,900000000,2000,New Zealand,https://www.auckland.ac.nz,1883
+32,U21,Consortium,Universitas 21 Network,0,0,,,0
+33,LERU,Consortium,League of European Research Universities,0,0,,,0
+34,AAU,Consortium,Association of American Universities,0,0,,,0
+35,IARU,Consortium,International Alliance of Research Universities,0,0,,,0
+36,WUN,Consortium,Worldwide Universities Network,0,0,,,0
+37,APRU,Consortium,Association of Pacific Rim Universities,0,0,,,0
+38,GULF,Consortium,Gulf University Alliance,0,0,,,0
+39,BRIC,Consortium,BRICS Universities League,0,0,,,0

@@ -1,0 +1,3 @@
+machine,start,end,reason
+0,3,8,calibration
+3,8,15,maintenance
