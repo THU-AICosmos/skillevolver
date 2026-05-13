@@ -18,20 +18,30 @@ no-refinement ablation.
 
 ## Sweep
 
-`scripts/run_eval.sh` runs the canonical 81-task sweep (the 6 tasks excluded
-require paid APIs the agent can't access). Open two tmux windows — one for the
-agent, one for Harbor — then launch:
+`scripts/run_eval.sh` auto-discovers every task under `bench-assets/tasks-train/`
+and runs them in order. Open two tmux windows — one for the agent, one for
+Harbor — then launch:
 
 ```bash
 # In the agent window
-bash scripts/run_eval.sh harbor:0 1 8     # tasks 1-8
+bash scripts/run_eval.sh harbor:0 1 4     # tasks 1-4
 
 # In a second agent window, in parallel
-bash scripts/run_eval.sh harbor:1 9 18    # tasks 9-18
+bash scripts/run_eval.sh harbor:1 5 8     # tasks 5-8
+
+# Or pass an explicit list:
+TASKS=offer-letter-generator,court-form-filling bash scripts/run_eval.sh harbor:0
 ```
 
 The first positional arg is the Harbor tmux window. The agent's
 `run_and_wait.py` uses `tmux send-keys` to dispatch Harbor commands there.
+Each task costs ≈ $10 and takes ≈ 30 min, so size the index range accordingly.
+
+Note that several SkillsBench tasks require paid third-party APIs (e.g.
+hosted LLM/STT services) which the agent cannot use; those will fail at
+exploration time. The OSS release does not curate a "runnable subset" — you
+can either start from a small explicit `TASKS=` list, or run the full sweep
+and ignore the API-dependent failures in the aggregated report.
 
 ## Re-deploy a previously evolved skill
 
@@ -52,8 +62,9 @@ After a sweep completes:
 python scripts/aggregate_results.py
 ```
 
-Writes a cross-task report under `evolved-skills/` and runs the Oracle Peek
-Audit described in [docs/pipeline.md](pipeline.md).
+Writes `evolved-skills/<version>/report.md` and `results-db.jsonl` per
+pipeline version, and runs the Oracle Peek Audit described in
+[docs/pipeline.md](pipeline.md).
 
 ## Train/test split
 

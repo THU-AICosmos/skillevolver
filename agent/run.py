@@ -10,7 +10,7 @@ Usage:
     python -m agent.run --task sales-pivot-analysis --train-split
     python -m agent.run --task sales-pivot-analysis --train-split --iterations 1
     python -m agent.run --task sales-pivot-analysis \
-        --deploy-from evolved-skills/evolver/.../output/skills/openpyxl-pivot-tables
+        --deploy-from evolved-skills/evolver/sales-pivot-analysis/<timestamp>/output/skills/<skill-name>
 """
 
 

@@ -59,11 +59,11 @@ Three independent layers:
    forbidden substrings.
 3. **Oracle Peek Audit** — `scripts/aggregate_results.py` greps each
    `agent.log` for reads of `train-context/solution/` and
-   `train-context/tests/test_outputs.py`. Tasks where the trace-distillation
-   variant beats the baseline without any oracle read are tagged
-   `clean_lift`. Reading the training oracle is allowed (it's training labels
-   by construction); the audit defends the headline against post-hoc
-   "you're leaking" critiques.
+   `train-context/tests/test_outputs.py`, and records the count per run.
+   Reading the training oracle is allowed (it's training labels by
+   construction), but the per-run counts let you tell whether a passing run
+   distilled its skill from explore-trace patterns or just learned to copy
+   the training answer.
 
 ## Reward signal modes
 

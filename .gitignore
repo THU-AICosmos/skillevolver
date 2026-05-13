@@ -29,7 +29,8 @@ benchmark-results/
 .DS_Store
 Thumbs.db
 
-# Harbor / benchmark intermediate output
-Benchmarks/skillsbench/jobs/
-Benchmarks/skillsbench/.venv/
+# SkillsBench is cloned by scripts/setup.sh, not tracked here
+Benchmarks/skillsbench/
+
+# KernelBench generated tasks
 Benchmarks/kernelbench/generated/
