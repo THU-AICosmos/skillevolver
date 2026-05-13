@@ -67,7 +67,7 @@ python Benchmarks/kernelbench/harbor_converter.py \
 
 # Build the task container
 TASK_NAME=kb-l1-p1-square-matrix-multiplication \
-  bash scripts/build_kernelbench_image.sh
+  bash Benchmarks/kernelbench/build_image.sh
 
 # Run the agent (continuous reward)
 python -m agent.run \
@@ -89,7 +89,7 @@ to extend the verifier for GPU performance scoring.
 | Skill identity | Each task evolves its own skill | All `kb-*` tasks share one skill name (`kernel-optim`), designed for cross-kernel transfer |
 | Train / test split | Yes — `tasks-train/` (variants) vs `tasks/` (canonical) | None — explore and validate on the same problem |
 | Verifier | Task-specific, baked into each Harbor task | OSS default is CPU-only correctness; for GPU performance scoring you extend the generated verifier |
-| Extra build step | None | `scripts/build_kernelbench_image.sh` builds the Docker image for each converted task |
+| Extra build step | None | `Benchmarks/kernelbench/build_image.sh` builds the Docker image for each converted task |
 | Default `--reward-signal-mode` | `auto` → discrete | `continuous` (set explicitly; `auto` would also pick this up after the first trial) |
 | Run command | `python -m agent.run --task <slug> --train-split` | `python -m agent.run --task kb-l1-p1-... --reward-signal-mode continuous` |
 
@@ -101,8 +101,9 @@ to extend the verifier for GPU performance scoring.
 | `skill-evolver/` | The pipeline: `SKILL.md`, the shared `benchmarks/harbor/` runner, and skill-writing references. |
 | `Benchmarks/skillsbench/` | SkillsBench (87 tasks). Not tracked here — cloned into place by `scripts/setup.sh`. |
 | `Benchmarks/kernelbench/` | KernelBench → Harbor converter and verifier. |
-| `bench-assets/tasks-train/` | Source of truth for SkillsBench training variants; mirrored into `Benchmarks/skillsbench/tasks-train/` by `scripts/sync_tasks_train.sh`. |
-| `scripts/` | Setup, single-task launchers, sweep launchers, result aggregation, Harbor patch applier. |
+| `bench-assets/tasks-train/` | Source of truth for SkillsBench training variants; `scripts/setup.sh` mirrors it into `Benchmarks/skillsbench/tasks-train/`. |
+| `scripts/` | The six commands you'll actually run: `setup.sh`, `doctor.sh`, `prepare_tmux.sh`, `run_eval.sh`, `apply_harbor_patches.py`, `aggregate_results.py`. |
+| `tools/` | Optional helpers (e.g. `generate_train_variant.py` for creating new training variants of a task). |
 | `docs/` | Pipeline and benchmark-specific docs. |
 
 ## Documentation

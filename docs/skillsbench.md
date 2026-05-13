@@ -71,6 +71,12 @@ pipeline version, and runs the Oracle Peek Audit described in
 Validation runs on `Benchmarks/skillsbench/tasks/<task>/` (canonical, immutable).
 Exploration runs on `Benchmarks/skillsbench/tasks-train/<task>/` — generated
 training variants with different filenames and values. The source of truth for
-training variants is `bench-assets/tasks-train/<task>/`;
-`scripts/sync_tasks_train.sh` mirrors it into the SkillsBench submodule for the
-benchmark runner.
+training variants is `bench-assets/tasks-train/<task>/`; `scripts/setup.sh`
+mirrors it into `Benchmarks/skillsbench/tasks-train/` for the benchmark
+runner. If you edit a variant under `bench-assets/` (or use
+`tools/generate_train_variant.py` to make a new one), re-run `setup.sh` or
+just:
+
+```bash
+rsync -a --delete bench-assets/tasks-train/ Benchmarks/skillsbench/tasks-train/
+```

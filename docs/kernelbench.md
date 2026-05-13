@@ -31,7 +31,7 @@ A converted task is named `kb-l<level>-p<id>-<slug>` and lives at
 
 ```bash
 TASK_NAME=kb-l1-p1-square-matrix-multiplication \
-  bash scripts/build_kernelbench_image.sh
+  bash Benchmarks/kernelbench/build_image.sh
 ```
 
 By default the image is loaded into the local Docker daemon. Override

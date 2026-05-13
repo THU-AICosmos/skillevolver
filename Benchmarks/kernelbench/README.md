@@ -47,7 +47,7 @@ the agent.
 
 ```bash
 TASK_NAME=kb-l1-p1-square-matrix-multiplication \
-  bash scripts/build_kernelbench_image.sh
+  bash Benchmarks/kernelbench/build_image.sh
 ```
 
 By default the image is built locally (`docker buildx --load`). Override

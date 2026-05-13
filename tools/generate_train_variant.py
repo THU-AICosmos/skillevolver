@@ -4,10 +4,10 @@
 Claude gets tools (Bash, Write, Read, etc.) and iterates: generate → verify → fix → verify.
 
 Usage:
-    python scripts/generate_train_variant.py --task court-form-filling
-    python scripts/generate_train_variant.py --task court-form-filling --dry-run-only
-    python scripts/generate_train_variant.py --all
-    python scripts/generate_train_variant.py --all --skip-verify
+    python tools/generate_train_variant.py --task court-form-filling
+    python tools/generate_train_variant.py --task court-form-filling --dry-run-only
+    python tools/generate_train_variant.py --all
+    python tools/generate_train_variant.py --all --skip-verify
 """
 
 import argparse

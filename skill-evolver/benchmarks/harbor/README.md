@@ -41,7 +41,7 @@ The two supported benchmarks lay tasks out differently:
 
 | Benchmark | Validation tasks | Training tasks | Source of truth |
 |-----------|------------------|----------------|------------------|
-| SkillsBench | `Benchmarks/skillsbench/tasks/<task>/` | `Benchmarks/skillsbench/tasks-train/<task>/` | `bench-assets/tasks-train/<task>/` (mirrored into the submodule by `scripts/sync_tasks_train.sh`) |
+| SkillsBench | `Benchmarks/skillsbench/tasks/<task>/` | `Benchmarks/skillsbench/tasks-train/<task>/` | `bench-assets/tasks-train/<task>/` (mirrored by `scripts/setup.sh`) |
 | KernelBench | none — same Dockerfile + verifier each trial | `Benchmarks/kernelbench/tasks-train/<task>/` | upstream KernelBench, converted via `Benchmarks/kernelbench/harbor_converter.py` |
 
 Each task contains:
