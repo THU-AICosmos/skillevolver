@@ -1,9 +1,0 @@
-name: jax-scan
-description: Run scan-based IIR filter forward
-inputs:
-  signal: jax.Array
-  alpha: jax.Array
-  beta: jax.Array
-outputs:
-  filtered: jax.Array
-implementation: jax_skills.iir_scan
