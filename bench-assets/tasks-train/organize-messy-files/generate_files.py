@@ -22,7 +22,8 @@ from pptx import Presentation
 from pptx.util import Inches
 import openpyxl
 
-OUTPUT_DIR = "/home/zhanggenrui/workplace/self-evolving-skills/Benchmarks/skillsbench/tasks-train/organize-messy-files/environment/data"
+OUTPUT_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "environment", "data")
+os.makedirs(OUTPUT_DIR, exist_ok=True)
 
 # Content templates per category
 ML_TOPICS = [

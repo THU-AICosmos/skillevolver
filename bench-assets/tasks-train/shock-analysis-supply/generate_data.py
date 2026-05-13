@@ -27,7 +27,10 @@ Structural contract (must mirror tasks/shock-analysis-supply/):
 import numpy as np
 import openpyxl
 from datetime import datetime
+from pathlib import Path
 from openpyxl.worksheet.formula import ArrayFormula
+
+_SCRIPT_DIR = Path(__file__).resolve().parent
 
 np.random.seed(42)
 
@@ -45,14 +48,10 @@ PROJ_END = 2041          # lower table spans 2002..2041 = 40 rows (36..75)
 
 OUTPUT_XLSX = "analysis-output.xlsx"
 
-ENV_DIR = (
-    "/home/zhanggenrui/workplace/self-evolving-skills/Benchmarks/skillsbench/"
-    "tasks-train/shock-analysis-supply/environment"
-)
-SOLUTION_DIR = (
-    "/home/zhanggenrui/workplace/self-evolving-skills/Benchmarks/skillsbench/"
-    "tasks-train/shock-analysis-supply/solution"
-)
+ENV_DIR = str(_SCRIPT_DIR / "environment")
+SOLUTION_DIR = str(_SCRIPT_DIR / "solution")
+Path(ENV_DIR).mkdir(parents=True, exist_ok=True)
+Path(SOLUTION_DIR).mkdir(parents=True, exist_ok=True)
 
 # ============================================================
 # ARMENIA SYNTHETIC DATA (different from Georgia's real values)
