@@ -19,7 +19,7 @@ RUN pip install --no-cache-dir \
 
 WORKDIR /root
 
-COPY earthquakes_2024.json /root/earthquakes_2024.json
+COPY volcanic_eruptions_2023.json /root/volcanic_eruptions_2023.json
 COPY PB2002_plates.json /root/PB2002_plates.json
 COPY PB2002_boundaries.json /root/PB2002_boundaries.json
 

@@ -1,0 +1,21 @@
+{
+  "team": [
+    "eid_a092f52a",
+    "eid_c5c14eb4",
+    "eid_c85aca46",
+    "eid_5eddbbbf",
+    "eid_575aed2c"
+  ],
+  "slack": [],
+  "documents": [
+    {
+      "id": "TraceForce_doc_0",
+      "type": "Product Brief",
+      "author": "eid_a092f52a"
+    }
+  ],
+  "meeting_transcripts": [],
+  "meeting_chats": [],
+  "urls": [],
+  "prs": []
+}

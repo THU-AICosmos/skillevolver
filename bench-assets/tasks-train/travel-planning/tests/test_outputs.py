@@ -1,17 +1,17 @@
-"""Custom tests for the travel planning task (single user query) - Texas variant."""
+"""Custom tests for the travel planning task (Texas variant, 5-day trip)."""
 
 import json
 import os
 
-PLAN_PATH = "/app/output/itinerary.json"
+PLAN_PATH = "/app/output/trip_plan.json"
 
 
-def _extract_cities(current_city: str):
-    """Heuristic splitter to collect city mentions from a current_city string."""
+def _extract_cities(location: str):
+    """Heuristic splitter to collect city mentions from a location string."""
     parts = []
-    if not current_city:
+    if not location:
         return parts
-    lowered = current_city.replace(" to ", "|").replace(" from ", "|")
+    lowered = location.replace(" to ", "|").replace(" from ", "|")
     for piece in lowered.split("|"):
         cleaned = piece.strip().strip(",")
         if cleaned:
@@ -19,122 +19,119 @@ def _extract_cities(current_city: str):
     return parts
 
 
-def test_plan_file_exists():
-    """Plan file should be produced at the expected path."""
+def test_output_file_exists():
+    """Output file should be produced at the expected path."""
     assert os.path.exists(PLAN_PATH), f"Plan JSON not found at {PLAN_PATH}"
 
 
-def test_plan_structure_and_length():
-    """Plan should be a JSON object with a 5-day plan array."""
+def test_itinerary_structure_and_length():
+    """Itinerary should be a JSON object with a 5-day itinerary array."""
     with open(PLAN_PATH) as f:
         payload = json.load(f)
 
     assert isinstance(payload, dict), "Top-level JSON should be an object"
-    assert "plan" in payload, "Top-level 'plan' key missing"
-    plan = payload["plan"]
-    assert isinstance(plan, list), "'plan' should be a list"
-    assert len(plan) == 5, f"Expected 5 days in plan, got {len(plan)}"
+    assert "itinerary" in payload, "Top-level 'itinerary' key missing"
+    itin = payload["itinerary"]
+    assert isinstance(itin, list), "'itinerary' should be a list"
+    assert len(itin) == 5, f"Expected 5 days in itinerary, got {len(itin)}"
 
 
-def test_plan_required_fields_and_days():
+def test_required_fields_and_day_numbers():
     """Each day should have required fields and sequential day numbers."""
     with open(PLAN_PATH) as f:
-        plan = json.load(f)["plan"]
+        itin = json.load(f)["itinerary"]
 
-    required = {"day", "current_city", "transportation", "breakfast", "lunch", "dinner", "attraction", "accommodation"}
-    for idx, day in enumerate(plan, start=1):
+    required = {"day_number", "location", "transport", "morning_meal", "midday_meal", "evening_meal", "sightseeing", "lodging"}
+    for idx, day in enumerate(itin, start=1):
         assert isinstance(day, dict), f"Day {idx} entry must be an object"
         missing = required - set(day.keys())
         assert not missing, f"Day {idx} missing fields: {missing}"
-        assert day["day"] == idx, f"Day numbering should be sequential starting at 1; got {day['day']} at position {idx}"
+        assert day["day_number"] == idx, f"Day numbering should be sequential starting at 1; got {day['day_number']} at position {idx}"
 
 
-def test_no_flights_in_transportation():
-    """Transportation should respect no-flight preference."""
+def test_no_flights_in_transport():
+    """Transport should respect no-flight preference."""
     with open(PLAN_PATH) as f:
-        plan = json.load(f)["plan"]
+        itin = json.load(f)["itinerary"]
 
-    for idx, day in enumerate(plan, start=1):
-        transport = day.get("transportation", "") or ""
-        assert "flight" not in transport.lower(), f"Day {idx} transportation should not include flights"
+    for idx, day in enumerate(itin, start=1):
+        transport = day.get("transport", "") or ""
+        assert "flight" not in transport.lower(), f"Day {idx} transport should not include flights"
 
 
 def test_starts_in_denver():
     """Day 1 should start from Denver."""
     with open(PLAN_PATH) as f:
-        plan = json.load(f)["plan"]
+        itin = json.load(f)["itinerary"]
 
-    day1_city = str(plan[0].get("current_city", "")).lower()
-    assert "denver" in day1_city, "Day 1 should start from Denver"
+    day1_loc = str(itin[0].get("location", "")).lower()
+    assert "denver" in day1_loc, "Day 1 should start from Denver"
 
 
 def test_visits_at_least_three_cities():
-    """Plan should cover at least three distinct cities."""
+    """Itinerary should cover at least three distinct cities."""
     with open(PLAN_PATH) as f:
-        plan = json.load(f)["plan"]
+        itin = json.load(f)["itinerary"]
 
     cities = []
-    for day in plan:
-        cities.extend(_extract_cities(str(day.get("current_city", ""))))
+    for day in itin:
+        cities.extend(_extract_cities(str(day.get("location", ""))))
     unique_cities = {c.lower() for c in cities if c}
     assert len(unique_cities) >= 3, f"Expected at least 3 distinct cities, got {len(unique_cities)}"
 
 
 def test_visits_texas_cities():
-    """Plan should visit cities in Texas (the required destination state)."""
+    """Itinerary should visit cities in Texas (the required destination state)."""
     with open(PLAN_PATH) as f:
-        plan = json.load(f)["plan"]
+        itin = json.load(f)["itinerary"]
 
-    # Known Texas cities that might appear in the dataset
     texas_cities = {
+        "abilene",
+        "amarillo",
+        "harlingen",
+        "lubbock",
+        "college station",
+        "corpus christi",
+        "wichita falls",
+        "waco",
+        "san angelo",
         "houston",
+        "san antonio",
+        "del rio",
+        "mission",
+        "beaumont",
+        "longview",
+        "midland",
+        "el paso",
+        "brownsville",
         "austin",
         "dallas",
-        "san antonio",
-        "el paso",
-        "corpus christi",
-        "lubbock",
-        "amarillo",
-        "laredo",
-        "brownsville",
-        "waco",
-        "abilene",
-        "beaumont",
-        "midland",
-        "college station",
-        "wichita falls",
-        "del rio",
-        "harlingen",
-        "longview",
-        "san angelo",
         "killeen",
+        "laredo",
         "texarkana",
-        "mission",
     }
 
     cities = []
-    for day in plan:
-        cities.extend(_extract_cities(str(day.get("current_city", ""))))
+    for day in itin:
+        cities.extend(_extract_cities(str(day.get("location", ""))))
     unique_cities = {c.lower() for c in cities if c}
 
-    # Check that at least some cities are in Texas
     texas_matches = unique_cities & texas_cities
     assert texas_matches, f"Expected to visit Texas cities, but found: {unique_cities}"
 
 
-def test_no_smoking_accommodation_hint():
-    """Accommodation strings should signal non-smoking preference."""
+def test_child_friendly_lodging_hint():
+    """Lodging strings should signal child-friendly preference."""
     with open(PLAN_PATH) as f:
-        plan = json.load(f)["plan"]
+        itin = json.load(f)["itinerary"]
 
-    # Check for non-smoking indicators
-    smoke_keywords = ["no smok", "non-smok", "nonsmoking", "smoke-free", "smoking"]
-    smoke_hints = []
-    for day in plan:
-        acc = str(day.get("accommodation", "")).lower()
-        if any(kw in acc for kw in smoke_keywords):
-            smoke_hints.append(day.get("accommodation", ""))
-    assert smoke_hints, "At least one accommodation should indicate non-smoking options (e.g., 'No smoking', 'non-smoking')"
+    child_keywords = ["child", "kid", "family", "children"]
+    hints = []
+    for day in itin:
+        lodging = str(day.get("lodging", "")).lower()
+        if any(kw in lodging for kw in child_keywords):
+            hints.append(day.get("lodging", ""))
+    assert hints, "At least one lodging should indicate child-friendly options (e.g., 'child-friendly', 'family-friendly')"
 
 
 def test_meals_include_requested_cuisines():
@@ -143,11 +140,11 @@ def test_meals_include_requested_cuisines():
     from pathlib import Path
 
     with open(PLAN_PATH) as f:
-        plan = json.load(f)["plan"]
+        itin = json.load(f)["itinerary"]
 
     # Load restaurant data
     restaurant_path = Path("/app/data/restaurants/clean_restaurant_2022.csv")
-    restaurant_cuisines = {}  # (name_lower, city_lower) -> cuisines_lower
+    restaurant_cuisines = {}
     if restaurant_path.exists():
         with open(restaurant_path) as f:
             reader = csv.DictReader(f)
@@ -157,14 +154,13 @@ def test_meals_include_requested_cuisines():
                 cuisines = row.get("Cuisines", "").strip().lower()
                 if name:
                     restaurant_cuisines[(name, city)] = cuisines
-                    # Also index by name only for flexible matching
                     if name not in restaurant_cuisines:
                         restaurant_cuisines[name] = cuisines
 
     # Collect all meals from the plan
     meals = []
-    for day in plan:
-        for meal_type in ["breakfast", "lunch", "dinner"]:
+    for day in itin:
+        for meal_type in ["morning_meal", "midday_meal", "evening_meal"]:
             meal = str(day.get(meal_type, "")).strip()
             if meal and meal != "-":
                 meals.append(meal)
@@ -175,20 +171,16 @@ def test_meals_include_requested_cuisines():
 
     for meal in meals:
         meal_lower = meal.lower()
-        # Try to match "Restaurant Name, City" format
         if ", " in meal:
             parts = meal.rsplit(", ", 1)
             name = parts[0].strip().lower()
             city = parts[1].strip().lower() if len(parts) > 1 else ""
-            # Try exact match with city first
             cuisines_str = restaurant_cuisines.get((name, city), "")
-            # Fall back to name-only match
             if not cuisines_str:
                 cuisines_str = restaurant_cuisines.get(name, "")
         else:
             cuisines_str = restaurant_cuisines.get(meal_lower, "")
 
-        # Also check if cuisine keyword appears directly in the meal string
         cuisines_str = cuisines_str + " " + meal_lower
 
         for cuisine in target_cuisines:
@@ -200,24 +192,24 @@ def test_meals_include_requested_cuisines():
     ), f"Expected at least 3 of the 4 preferred cuisines (Mexican, Indian, French, Chinese); found {covered or 'none'}"
 
 
-def test_attractions_non_empty():
-    """Attractions should not be empty placeholders."""
+def test_sightseeing_non_empty():
+    """Sightseeing should not be empty placeholders."""
     with open(PLAN_PATH) as f:
-        plan = json.load(f)["plan"]
+        itin = json.load(f)["itinerary"]
 
-    for idx, day in enumerate(plan, start=1):
-        attraction = str(day.get("attraction", "")).strip()
-        assert attraction and attraction != "-", f"Day {idx} attraction should not be empty or '-'"
+    for idx, day in enumerate(itin, start=1):
+        sightseeing = str(day.get("sightseeing", "")).strip()
+        assert sightseeing and sightseeing != "-", f"Day {idx} sightseeing should not be empty or '-'"
 
 
-def test_tool_calls_present():
-    """tool_called should include all core tools except search-flights (optional)."""
+def test_tools_used_present():
+    """tools_used should include all core tools except search-flights (optional)."""
     with open(PLAN_PATH) as f:
         payload = json.load(f)
 
-    assert "tool_called" in payload, "Top-level 'tool_called' key missing"
-    tools = payload["tool_called"]
-    assert isinstance(tools, list), "'tool_called' should be a list"
+    assert "tools_used" in payload, "Top-level 'tools_used' key missing"
+    tools = payload["tools_used"]
+    assert isinstance(tools, list), "'tools_used' should be a list"
 
     normalized = {str(t).strip().lower() for t in tools}
     required = {
@@ -229,4 +221,4 @@ def test_tool_calls_present():
     }
 
     missing = [t for t in required if t not in normalized]
-    assert not missing, f"'tool_called' missing required tools (excluding flights): {missing}"
+    assert not missing, f"'tools_used' missing required tools (excluding flights): {missing}"

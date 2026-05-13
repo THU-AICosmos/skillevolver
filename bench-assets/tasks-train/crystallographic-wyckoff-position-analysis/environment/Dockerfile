@@ -1,4 +1,4 @@
-# Dockerfile for Crystal Symmetry Centroid Analysis Task
+# Dockerfile for Site Symmetry Analysis Task
 FROM python:3.12-slim
 
 # Install system dependencies
@@ -9,8 +9,7 @@ RUN apt-get update && apt-get install -y \
 # Install Python packages
 RUN pip3 install --no-cache-dir \
     pymatgen==2025.10.7 \
-    sympy==1.14.0 \
-    pytest
+    sympy==1.14.0
 
 # Create directories
 RUN mkdir -p /root/workspace /root/cif_files

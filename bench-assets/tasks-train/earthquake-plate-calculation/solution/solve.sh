@@ -1,131 +1,112 @@
 #!/bin/bash
 set -e
 
-# Run the python solution
-python3 << 'EOF'
+python3 << 'SOLVER'
 import json
 from datetime import datetime
 import geopandas as gpd
 from shapely.geometry import Point
 
-# File path configuration
-EARTHQUAKES_FILE = "/root/earthquakes_2024.json"
-PLATES_POLY_FILE = "/root/PB2002_plates.json"
-BOUNDARIES_FILE = "/root/PB2002_boundaries.json"
-output_file = "/root/answer.json"
+# Input paths
+ERUPTIONS_PATH = "/root/volcanic_eruptions_2023.json"
+PLATES_PATH = "/root/PB2002_plates.json"
+BOUNDS_PATH = "/root/PB2002_boundaries.json"
+RESULT_PATH = "/root/result.json"
 
-# Projection (metric)
-METRIC_CRS = "EPSG:4087"
+# Coordinate reference system for metric distances
+PROJ_CRS = "EPSG:4087"
 
 
-def load_earthquakes_from_file():
-    """
-    Load earthquake data from local file
-    """
-    print(f"Loading earthquake data from {EARTHQUAKES_FILE}...")
+def parse_eruption_records(fpath):
+    """Read volcanic eruption GeoJSON and return list of dicts."""
+    print(f"Reading eruption records from {fpath} ...")
+    with open(fpath, "r", encoding="utf-8") as fh:
+        raw = json.load(fh)
 
-    with open(EARTHQUAKES_FILE, 'r', encoding='utf-8') as f:
-        data = json.load(f)
-
-    earthquakes = []
-    for feature in data["features"]:
-        props = feature["properties"]
-        coords = feature["geometry"]["coordinates"]
-
-        earthquakes.append({
-            "id": feature["id"],
-            "place": props["place"],
-            "time": props["time"],
-            "mag": props["mag"],
-            "longitude": coords[0],
-            "latitude": coords[1],
-            "depth": coords[2],
+    records = []
+    for feat in raw["features"]:
+        p = feat["properties"]
+        c = feat["geometry"]["coordinates"]
+        records.append({
+            "event_id": feat["id"],
+            "location": p["place"],
+            "epoch_ms": p["time"],
+            "vei": p["mag"],
+            "lon": c[0],
+            "lat": c[1],
+            "depth_km": c[2],
         })
+    print(f"  -> {len(records)} records loaded")
+    return records
 
-    print(f"Successfully loaded {len(earthquakes)} earthquake records")
-    return earthquakes
 
+def run():
+    records = parse_eruption_records(ERUPTIONS_PATH)
 
-def main():
-    print("Loading data...")
+    # Build GeoDataFrame of eruptions
+    pts = [Point(r["lon"], r["lat"]) for r in records]
+    gdf_events = gpd.GeoDataFrame(records, geometry=pts, crs="EPSG:4326")
 
-    # Load earthquake data from local file
-    earthquakes = load_earthquakes_from_file()
-    gdf_plates = gpd.read_file(PLATES_POLY_FILE)
-    gdf_boundaries = gpd.read_file(BOUNDARIES_FILE)
+    # Load tectonic plate polygons and boundaries
+    gdf_plates = gpd.read_file(PLATES_PATH)
+    gdf_bounds = gpd.read_file(BOUNDS_PATH)
 
-    # Convert to GeoDataFrame
-    geometry = [Point(eq["longitude"], eq["latitude"]) for eq in earthquakes]
-    gdf_eq = gpd.GeoDataFrame(earthquakes, geometry=geometry, crs="EPSG:4326")
+    # ---- Step 1: isolate Australian plate polygon ----
+    print("Extracting Australian plate polygon ...")
+    au_shape = gdf_plates[gdf_plates["PlateName"] == "Australia"].geometry.unary_union
 
-    # ================= Step 1: Identify North American Plate region =================
-    print("Filtering North American Plate region...")
-    na_poly = gdf_plates[gdf_plates["PlateName"] == "North America"].geometry.unary_union
+    # ---- Step 2: keep only eruptions inside the AU plate ----
+    print("Filtering eruptions within Australian plate ...")
+    mask = gdf_events.within(au_shape)
+    au_events = gdf_events[mask].copy()
+    print(f"  -> {len(au_events)} eruptions fall inside the Australian plate")
 
-    # ================= Step 2: Spatial filtering (keep only earthquakes inside NA Plate) =================
-    print("Filtering earthquakes within the North American Plate...")
-    is_in_na = gdf_eq.within(na_poly)
-    na_quakes = gdf_eq[is_in_na].copy()
+    if au_events.empty:
+        raise RuntimeError("No eruptions found inside the Australian plate!")
 
-    print(
-        f" -> Total of {len(gdf_eq)} earthquakes globally in 2024, {len(na_quakes)} occurred within the North American Plate."
+    # ---- Step 3: compute distance to AU boundaries ----
+    print("Computing distances to AU plate boundaries ...")
+    au_events_metric = au_events.to_crs(PROJ_CRS)
+
+    au_boundary_lines = (
+        gdf_bounds[gdf_bounds["Name"].str.contains("AU")]
+        .to_crs(PROJ_CRS)
+        .geometry.unary_union
+    )
+    au_events["dist_km"] = au_events_metric.geometry.distance(au_boundary_lines) / 1e3
+
+    # ---- Step 4: pick the most isolated eruption ----
+    most_isolated = au_events.nlargest(1, "dist_km").iloc[0]
+
+    ts = datetime.utcfromtimestamp(most_isolated["epoch_ms"] / 1e3).strftime(
+        "%Y-%m-%dT%H:%M:%SZ"
     )
 
-    if len(na_quakes) == 0:
-        print("No earthquakes found within the North American Plate.")
-        return
-
-    # ================= Step 3: Compute centroid and distances =================
-    print("Computing plate centroid and distances...")
-    # Project to metric coordinate system for distance calculation
-    na_quakes_proj = na_quakes.to_crs(METRIC_CRS)
-    na_plate_proj = gdf_plates[gdf_plates["PlateName"] == "North America"].to_crs(METRIC_CRS)
-    plate_centroid = na_plate_proj.geometry.unary_union.centroid
-
-    na_quakes["distance_to_centroid_km"] = (
-        na_quakes_proj.geometry.distance(plate_centroid) / 1000.0
-    )
-
-    # ================= Step 4: Find the closest one to centroid =================
-    closest_quake = na_quakes.nsmallest(1, "distance_to_centroid_km").iloc[0]
-
-    # Convert time from Unix timestamp (milliseconds) to ISO 8601 format (UTC)
-    time_iso = datetime.utcfromtimestamp(closest_quake['time'] / 1000.0).strftime('%Y-%m-%dT%H:%M:%SZ')
-
-    print("\n" + "=" * 30)
-    print("The earthquake closest to the North American Plate centroid")
-    print("=" * 30)
-    print(f"Earthquake ID: {closest_quake['id']}")
-    print(f"Location: {closest_quake['place']}")
-    print(f"Time: {time_iso}")
-    print(f"Magnitude: {closest_quake['mag']}")
-    print(f"Latitude: {closest_quake['latitude']}")
-    print(f"Longitude: {closest_quake['longitude']}")
-    print(f"Distance to plate centroid: {closest_quake['distance_to_centroid_km']:.2f} km")
-
-    # Output result to JSON file
-    result = {
-        "id": closest_quake['id'],
-        "place": closest_quake['place'],
-        "time": time_iso,
-        "magnitude": closest_quake['mag'],
-        "latitude": closest_quake['latitude'],
-        "longitude": closest_quake['longitude'],
-        "distance_to_centroid_km": round(closest_quake['distance_to_centroid_km'], 2)
+    output = {
+        "event_id": most_isolated["event_id"],
+        "location": most_isolated["location"],
+        "timestamp": ts,
+        "vei": most_isolated["vei"],
+        "lat": most_isolated["lat"],
+        "lon": most_isolated["lon"],
+        "boundary_distance_km": round(most_isolated["dist_km"], 2),
     }
 
-    with open(output_file, 'w', encoding='utf-8') as f:
-        json.dump(result, f, indent=2, ensure_ascii=False)
+    print("\n=== Most isolated volcanic eruption in the Australian Plate ===")
+    for k, v in output.items():
+        print(f"  {k}: {v}")
 
-    print(f"\nResult saved to {output_file}")
+    with open(RESULT_PATH, "w", encoding="utf-8") as fh:
+        json.dump(output, fh, indent=2, ensure_ascii=False)
+    print(f"\nResult written to {RESULT_PATH}")
 
 
 if __name__ == "__main__":
     try:
-        main()
-    except Exception as e:
-        print(f"Error: {e}")
+        run()
+    except Exception as exc:
+        print(f"FATAL: {exc}")
         import traceback
         traceback.print_exc()
         exit(1)
-EOF
+SOLVER

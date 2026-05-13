@@ -1,0 +1,21 @@
+{
+  "team": [
+    "eid_59970043",
+    "eid_a66fd7f7",
+    "eid_a6d964a3",
+    "eid_c1156d6d",
+    "eid_f319c125"
+  ],
+  "slack": [],
+  "documents": [
+    {
+      "id": "AlertForce_doc_0",
+      "type": "Product Brief",
+      "author": "eid_59970043"
+    }
+  ],
+  "meeting_transcripts": [],
+  "meeting_chats": [],
+  "urls": [],
+  "prs": []
+}

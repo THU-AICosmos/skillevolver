@@ -1,0 +1,8 @@
+{
+  "id": "scenario_5",
+  "description": "Geothermal mountain valley with river system",
+  "map_file": "maps/geothermal_valley.Civ6Map",
+  "num_cities": 1,
+  "population": 7,
+  "civilization": "GENERIC"
+}

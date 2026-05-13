@@ -1,0 +1,21 @@
+{
+  "team": [
+    "eid_3875394c",
+    "eid_382c043f",
+    "eid_6f92f25e",
+    "eid_076e2bba",
+    "eid_06f028ff"
+  ],
+  "slack": [],
+  "documents": [
+    {
+      "id": "DataBridge_doc_0",
+      "type": "Product Brief",
+      "author": "eid_3875394c"
+    }
+  ],
+  "meeting_transcripts": [],
+  "meeting_chats": [],
+  "urls": [],
+  "prs": []
+}

@@ -1,0 +1,21 @@
+{
+  "team": [
+    "eid_c4536f1d",
+    "eid_d1bdb8c0",
+    "eid_f6f7f0cc",
+    "eid_f54ad0a2",
+    "eid_b70b3420"
+  ],
+  "slack": [],
+  "documents": [
+    {
+      "id": "LogForce_doc_0",
+      "type": "Product Brief",
+      "author": "eid_c4536f1d"
+    }
+  ],
+  "meeting_transcripts": [],
+  "meeting_chats": [],
+  "urls": [],
+  "prs": []
+}

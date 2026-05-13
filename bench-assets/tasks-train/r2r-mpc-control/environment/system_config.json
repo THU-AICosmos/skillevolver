@@ -1,0 +1,16 @@
+{
+  "dt": 0.01,
+  "num_sections": 4,
+  "EA": 1800.0,
+  "J": 0.75,
+  "R": 0.05,
+  "fb": 8.0,
+  "L": 1.5,
+  "v0": 0.02,
+  "T_ref_initial": [30, 25, 35, 20],
+  "T_ref_final": [30, 45, 35, 20],
+  "step_time": 0.3,
+  "max_safe_tension": 55.0,
+  "min_safe_tension": 3.0,
+  "noise_std": 0.005
+}

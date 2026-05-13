@@ -1,0 +1,21 @@
+{
+  "team": [
+    "eid_2702878b",
+    "eid_20500494",
+    "eid_ab61a7b1",
+    "eid_37cc863b",
+    "eid_b31022f0"
+  ],
+  "slack": [],
+  "documents": [
+    {
+      "id": "MetricFlow_doc_0",
+      "type": "Product Brief",
+      "author": "eid_2702878b"
+    }
+  ],
+  "meeting_transcripts": [],
+  "meeting_chats": [],
+  "urls": [],
+  "prs": []
+}

@@ -1,20 +1,19 @@
-You are a mineralogist studying the symmetry properties of crystalline materials. You have a collection of CIF files obtained from powder diffraction experiments and need to perform a batch symmetry analysis.
+You are a computational crystallographer working on a batch analysis pipeline. You have a collection of CIF files representing common inorganic crystal structures obtained from X-ray diffraction refinement.
 
-Your task is to build a Python function that, for each CIF file, determines the space group number, counts atoms per Wyckoff position, and computes the centroid (mean fractional coordinate) of all atoms within each Wyckoff group.
+Your goal is to build a Python function that, for each CIF file, determines the **site multiplicities** for each distinct Wyckoff letter and extracts the **representative fractional coordinates** (of the first atom belonging to each Wyckoff position).
 
-The entry function should look like:
+The entry function should be:
 ```
-    def analyze_spacegroup_and_wyckoff_centroids(filepath: str) -> dict[str, Any]
+    def extract_site_symmetry_and_fractional_positions(cif_path: str) -> dict[str, dict]
 ```
 
-An example output using input "/root/cif_files/FeS2_mp-226.cif" (datasource: https://next-gen.materialsproject.org/) shall look like as follows in dict format (for fractions, constrain fractions to have denominators ≤ 10 for a simpler result):
+An example output for a hypothetical cubic structure might look like:
 ```
     {
-        "space_group_number": 205,
-        "wyckoff_atom_count": {"a": 4, "c": 8},
-        "wyckoff_centroid_coords": {
-            "a": ["1/4", "1/4", "1/4"],
-            "c": ["2/5", "1/2", "1/2"]
+        "site_multiplicities": {"a": 4, "c": 8},
+        "representative_coords": {
+            "a": ["0", "0", "0"],
+            "c": ["1/4", "1/4", "1/4"]
         }
     }
 ```
@@ -23,7 +22,7 @@ An example output using input "/root/cif_files/FeS2_mp-226.cif" (datasource: htt
 
 Write your script at: /root/workspace/solution.py
 
-You are encouraged to use external imports for CIF file reading, space group analysis, and coordinate calculations.
-You must not hardcode answers within your script.
-
-The centroid coordinates should be computed as the arithmetic mean of all fractional coordinates of atoms sharing the same Wyckoff letter, then rounded to the closest rational number format with denominator ≤ 10, as shown in the example output.
+- Use appropriate Python libraries for reading CIF data, performing symmetry analysis, and converting floating-point coordinates to rational fractions.
+- Fractional coordinate denominators must be limited to 12 or less.
+- Results must be sorted alphabetically by Wyckoff letter.
+- Do not hardcode any answers in your script.

@@ -1,56 +1,34 @@
-import os
 import csv
+import os
+
 import pytest
 
 
-class TestActionStageDetection:
-    """Test cases for Ohio action stage exceedance detection task."""
+class TestWisconsinFloodDetection:
+    """Test cases for Wisconsin flood-stage exceedance detection (Apr 22-28, 2025)."""
 
     @pytest.fixture(autouse=True)
     def setup(self):
-        """Load output file if it exists."""
-        self.csv_path = "/root/output/action_stage_results.csv"
+        self.csv_path = "/root/output/flood_results.csv"
         self.results = {}
-
         if os.path.exists(self.csv_path):
-            with open(self.csv_path, 'r') as f:
-                reader = csv.DictReader(f)
-                for row in reader:
-                    self.results[row['station_id']] = int(row['action_days'])
+            with open(self.csv_path, "r") as fh:
+                for row in csv.DictReader(fh):
+                    self.results[row["station_id"]] = int(row["flood_days"])
 
     def test_csv_output_exists(self):
-        """Check that CSV output file was created."""
         assert os.path.exists(self.csv_path), \
-            "CSV file not found at /root/output/action_stage_results.csv"
+            "CSV file not found at /root/output/flood_results.csv"
 
-    def test_correct_stations_and_action_days(self):
-        """Check that all stations and action days are correct."""
+    def test_correct_stations_and_flood_days(self):
         expected = {
-            '03124000': 9,
-            '03220000': 9,
-            '03264000': 9,
-            '03130000': 9,
-            '03225500': 9,
-            '03267900': 9,
-            '03109500': 9,
-            '03144000': 9,
-            '03232000': 9,
-            '03102500': 9,
-            '03234500': 9,
-            '03102950': 9,
-            '03120500': 9,
-            '03133500': 9,
-            '03126000': 9,
-            '03229500': 9,
-            '03157000': 9,
-            '03092090': 9,
-            '03141500': 9,
-            '03128500': 9,
-            '03127000': 9,
-            '03110000': 9,
-            '03217500': 2,
-            '03245500': 1
+            "05365500": 8,
+            "05367500": 8,
+            "05344500": 8,
+            "05340500": 8,
+            "05370000": 8,
+            "05402000": 1,
+            "05382000": 1,
         }
-
         assert self.results == expected, \
             f"Expected {expected}, got {self.results}"

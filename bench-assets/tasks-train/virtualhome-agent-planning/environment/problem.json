@@ -1,0 +1,20 @@
+[
+    {
+        "id": "delivery01",
+        "domain": "logistics/domain01.pddl",
+        "problem": "logistics/task01.pddl",
+        "plan_output": "delivery01.txt"
+    },
+    {
+        "id": "delivery02",
+        "domain": "logistics/domain02.pddl",
+        "problem": "logistics/task02.pddl",
+        "plan_output": "delivery02.txt"
+    },
+    {
+        "id": "delivery03",
+        "domain": "logistics/domain03.pddl",
+        "problem": "logistics/task03.pddl",
+        "plan_output": "delivery03.txt"
+    }
+]

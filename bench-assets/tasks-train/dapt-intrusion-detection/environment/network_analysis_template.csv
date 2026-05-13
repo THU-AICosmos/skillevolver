@@ -1,0 +1,48 @@
+metric,value
+# Volume and Protocol Mix
+frame_count,
+tcp_packet_count,
+udp_packet_count,
+icmp_packet_count,
+protocol_arp,
+protocol_ip_total,
+dominant_protocol,
+# Byte Counters and Frame Sizes
+total_octets,
+mean_frame_length,
+smallest_frame,
+largest_frame,
+# Capture Rate
+capture_span_seconds,
+peak_minute_rate,
+mean_minute_rate,
+floor_minute_rate,
+# Endpoint Diversity (Shannon entropy, log base 2)
+dest_port_entropy,
+source_port_entropy,
+source_ip_entropy,
+dest_ip_entropy,
+unique_dest_ports,
+unique_source_ports,
+# Conversation Graph (directed IP graph)
+host_count,
+conversation_edges,
+graph_density,
+max_fanin,
+max_fanout,
+# Inter-Arrival and Role Analysis
+interarrival_mean,
+interarrival_variance,
+interarrival_cv,
+producer_hosts,
+consumer_hosts,
+# 5-Tuple Flow Enumeration
+distinct_flows,
+tcp_flow_count,
+udp_flow_count,
+paired_flows,
+# Threat Indicators (lowercase true/false strings)
+benign_traffic_flag,
+port_scan_flag,
+dos_spike_flag,
+beaconing_flag,

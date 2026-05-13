@@ -1,8 +1,9 @@
 """
-Tests for court-form-filling task (SC-100 Small Claims Court form) - Training Variant.
+Tests for court-form-filling task (SC-120 Defendant's Claim form).
 
-Verifies that the agent correctly fills out the SC-100 Plaintiff's Claim
-and ORDER to Go to Small Claims Court form based on the provided case description.
+Verifies that the agent correctly fills out the SC-120 "Defendant's Claim
+and ORDER to Go to Small Claims Court" form based on the provided case
+description (Marcus Rivera vs. Thornwood Auto Repair LLC).
 
 Uses pdftotext to extract visible text content from the PDF, which works
 reliably for both AcroForms and XFA forms regardless of the filling method used.
@@ -16,8 +17,8 @@ from pathlib import Path
 
 import pytest
 
-OUTPUT_FILE = Path("/root/sc100-filled.pdf")
-INPUT_FILE = Path("/root/sc100-blank.pdf")
+OUTPUT_FILE = Path("/root/sc120-filled.pdf")
+INPUT_FILE = Path("/root/sc120-blank.pdf")
 
 
 def extract_xfa_xml(pdf_path: Path) -> str:
@@ -70,7 +71,7 @@ def extract_checkbox_values(pdf_path: Path) -> dict:
 
         for name, field in fields.items():
             # Check if it's a checkbox/radio field
-            if "Checkbox" in name or field.get("/FT") in ["/Btn"]:
+            if "Checkbox" in name or "CheckBox" in name or field.get("/FT") in ["/Btn"]:
                 value = field.get("/V", "")
                 if value:
                     if hasattr(value, "get_object"):
@@ -108,7 +109,7 @@ def parse_xfa_checkboxes(xfa_xml: str) -> dict:
             current_path = f"{path}.{tag}" if path else tag
 
             # Check if this looks like a checkbox field
-            if "Checkbox" in tag or "checkbox" in tag.lower():
+            if "Checkbox" in tag or "checkbox" in tag.lower() or tag.startswith("Ch") or "CheckBox" in tag:
                 if element.text and element.text.strip():
                     checkbox_values[current_path] = element.text.strip()
 
@@ -191,29 +192,29 @@ def normalize_text(text: str) -> str:
 # Text values that must appear in the filled PDF
 # Format: (expected_text, description)
 REQUIRED_TEXT_VALUES = [
-    # Plaintiff information
-    ("Marcus Rivera", "plaintiff_name"),
-    ("1234 El Camino Real", "plaintiff_address"),
-    ("Mountain View", "plaintiff_city"),  # Will appear multiple times (both parties)
-    ("94040", "plaintiff_zip"),
-    ("6503217890", "plaintiff_phone"),
-    ("mrivera2001@yahoo.com", "plaintiff_email"),
+    # Plaintiff (the party being sued back on SC-120)
+    ("Thornwood Auto Repair LLC", "plaintiff_name"),
+    ("2210 International Blvd", "plaintiff_address"),
+    ("94606", "plaintiff_zip"),
+    ("5105557432", "plaintiff_phone"),
 
-    # Defendant information
-    ("Sarah Kim", "defendant_name"),
-    ("567 Castro St", "defendant_address"),
-    ("4087654321", "defendant_phone"),
+    # Defendant (the filer on SC-120)
+    ("Marcus Rivera", "defendant_name"),
+    ("1428 Linden St", "defendant_address"),
+    ("Oakland", "defendant_city"),  # Will appear multiple times (both parties)
+    ("94607", "defendant_zip"),
+    ("5103340912", "defendant_phone"),
 
     # Claim information - check for amount in various formats
-    ("2200", "claim_amount"),  # May appear as 2200, $2,200, etc.
-    ("furniture", "claim_reason_keyword"),
+    ("3275", "claim_amount"),  # May appear as 3275, $3,275, etc.
+    ("transmission", "claim_reason_keyword"),
 
-    # Dates
-    ("2025-06-15", "incident_start_date"),
-    ("2025-12-01", "incident_end_date"),
+    # Dates for incident start/end
+    ("2025-11-12", "incident_start_date"),
+    ("2026-02-04", "incident_end_date"),
 
-    # Claim calculation should mention the agreement
-    ("purchase agreement", "claim_calculation_keyword"),
+    # Claim calculation should mention the towing / corrective repair
+    ("corrective", "claim_calculation_keyword"),
 ]
 
 # Checkbox fields that must be checked correctly
@@ -221,76 +222,76 @@ REQUIRED_TEXT_VALUES = [
 # - field_name_pattern: substring to match in the field name
 # - expected_value: "/1" = first option (Yes), "/2" = second option (No)
 # - should_be_checked: True if this specific option should be selected
+#
+# SC-120 uses separate fields for Yes vs No (Ch1[0] vs Ch1[1], etc.).
+# We assert on the specific option that should be selected.
 REQUIRED_CHECKBOXES = [
-    # Question 4: Have you asked defendant to pay? -> Yes
-    ("Checkbox50", "asked_to_pay_yes", "/1", True),
+    # Question 4: Have you asked the Plaintiff to pay? -> Yes (Ch1[0])
+    ("item4[0].Ch1[0]", "asked_to_pay_yes", "/1", True),
 
-    # Question 5a: Filing location - defendant lives/does business -> Yes
-    ("List5[0].Lia[0].Checkbox5cb", "filing_location_defendant_lives", "/1", True),
+    # Question 5: Attorney-client fee dispute? -> No (Ch2[1])
+    ("item5[0].Ch2[1]", "attorney_fee_dispute_no", "/2", True),
 
-    # Question 7: Attorney fee dispute? -> No
-    ("Checkbox60", "attorney_fee_dispute_no", "/2", True),
+    # Question 6: Suing a public entity? -> No (Ch3[1])
+    ("item6[0].Ch3[1]", "suing_public_entity_no", "/2", True),
 
-    # Question 8: Suing public entity? -> No
-    ("Checkbox61", "suing_public_entity_no", "/2", True),
-
-    # Question 9: Filed more than 12 claims? -> No
-    ("Checkbox62", "filed_12_claims_no", "/2", True),
-
-    # Question 10: Claim over $2,500? -> No (claim is $2,200)
-    ("Checkbox63", "claim_over_2500_no", "/2", True),
+    # Question 7: Filed more than 12 small claims in the last 12 months? -> No (Ch4[1])
+    ("item7[0].Ch4[1]", "filed_12_claims_no", "/2", True),
 ]
 
 # Checkbox fields that must NOT be checked (should be Off/unchecked)
 # Format: (field_name_pattern, description)
-# Question 5: Only one filing location should be checked (option 'a')
-# The other 4 options (b, c, d, e) must be unchecked
-_FILING_LOCATION_UNCHECKED = [
-    (f"List5[0].Li{opt}[0].Checkbox5cb", f"filing_location_{opt}_unchecked")
-    for opt in ["b", "c", "d", "e"]
-]
-
 UNCHECKED_CHECKBOXES = [
-    *_FILING_LOCATION_UNCHECKED,
-    # Question 7: Arbitration sub-checkbox must be unchecked (since answer is No)
-    # "If yes, and if you have had arbitration, fill out form SC-101..."
-    ("Checkbox11", "arbitration_checkbox_unchecked"),
-    # Question 8: Claim filed with entity sub-checkbox must be unchecked (since answer is No)
-    # "If yes, you must file a written claim with the entity first."
-    ("Checkbox14", "public_entity_claim_filed_unchecked"),
+    # Q4 sibling -- "No" option must be left off (we answered Yes)
+    ("item4[0].Ch1[1]", "asked_to_pay_no_sibling_unchecked"),
+    # Q5 sibling -- "Yes" option must be left off (we answered No)
+    ("item5[0].Ch2[0]", "attorney_fee_yes_sibling_unchecked"),
+    # Q5 arbitration sub-checkbox (only relevant if Yes)
+    ("CheckBox09", "arbitration_checkbox_unchecked"),
+    # Q6 sibling -- "Yes" option must be left off
+    ("item6[0].Ch3[0]", "public_entity_yes_sibling_unchecked"),
+    # Q6 "claim filed with entity" sub-checkbox
+    ("CheckBox11", "public_entity_claim_filed_unchecked"),
+    # Q7 sibling -- "Yes" option must be left off
+    ("item7[0].Ch4[0]", "filed_12_claims_yes_sibling_unchecked"),
+    # Item 3 "need more space" checkbox
+    ("List3[0].CheckBox05", "need_more_space_unchecked"),
+    # Header "more than 2 plaintiffs / defendants / fictitious name" checkboxes
+    ("item1[0].CheckBox01", "more_than_2_plaintiffs_unchecked"),
+    ("item1[0].CheckBox02", "plaintiff_military_duty_unchecked"),
+    ("item2[0].CheckBox03", "more_than_2_defendants_unchecked"),
+    ("item2[0].CheckBox04", "defendant_fictitious_name_unchecked"),
 ]
 
 # Fields that should be empty (court fills in, or second plaintiff/defendant)
 # Format: (field_name, description)
 EMPTY_FIELDS = [
-    # Page 1 fields are court-filled (17 total)
-    # Caption area
-    ("SC-100[0].Page1[0].CaptionRight[0].CN[0].CaseName[0]", "page1_case_name"),
-    ("SC-100[0].Page1[0].CaptionRight[0].CN[0].CaseNumber[0]", "page1_case_number"),
-    ("SC-100[0].Page1[0].CaptionRight[0].County[0].CourtInfo[0]", "page1_court_info"),
-    ("SC-100[0].Page1[0].CaptionRight[0].County[0].County[0]", "page1_county"),
-    # Trial date section 1
-    ("SC-100[0].Page1[0].Order[0].List1[0].LI1[0].TrialDate1[0]", "page1_trial_date1"),
-    ("SC-100[0].Page1[0].Order[0].List1[0].LI1[0].TrialTime1[0]", "page1_trial_time1"),
-    ("SC-100[0].Page1[0].Order[0].List1[0].LI1[0].TrialDepartment1[0]", "page1_trial_dept1"),
-    ("SC-100[0].Page1[0].Order[0].List1[0].LI1[0].TrialDateCourtAdd1[0]", "page1_court_addr1"),
-    # Trial date section 2
-    ("SC-100[0].Page1[0].Order[0].List1[0].LI2[0].TrialDate2[0]", "page1_trial_date2"),
-    ("SC-100[0].Page1[0].Order[0].List1[0].LI2[0].TrialTime2[0]", "page1_trial_time2"),
-    ("SC-100[0].Page1[0].Order[0].List1[0].LI2[0].TrialDepartment2[0]", "page1_trial_dept2"),
-    ("SC-100[0].Page1[0].Order[0].List1[0].LI2[0].TrialDateCourtAdd2[0]", "page1_court_addr2"),
-    # Trial date section 3
-    ("SC-100[0].Page1[0].Order[0].List1[0].LI3[0].TrialDate3[0]", "page1_trial_date3"),
-    ("SC-100[0].Page1[0].Order[0].List1[0].LI3[0].TrialTIme3[0]", "page1_trial_time3"),
-    ("SC-100[0].Page1[0].Order[0].List1[0].LI3[0].TrialDepartment3[0]", "page1_trial_dept3"),
-    ("SC-100[0].Page1[0].Order[0].List1[0].LI3[0].TrialDateClerkSign[0]", "page1_clerk_sign"),
-    ("SC-100[0].Page1[0].Order[0].List1[0].LI3[0].TrialDateClerkSignDate[0]", "page1_clerk_date"),
-    # Second plaintiff/defendant (only one of each in this case)
-    ("SC-100[0].Page2[0].List1[0].Item1[0].PlaintiffName2[0]", "second_plaintiff"),
-    ("SC-100[0].Page2[0].List2[0].item2[0].DefendantName2[0]", "second_defendant"),
-    # Question 8: Claim filed date (should be empty since not suing public entity)
-    # "A claim was filed on (date):"
-    ("SC-100[0].Page3[0].List8[0].item8[0].Date4[0]", "public_entity_claim_date"),
+    # Page 1 clerk-filled trial-schedule block
+    ("SC-120[0].Page1[0].CourtInfo[0].CourtInfo_ft[0]", "page1_court_info"),
+    ("SC-120[0].Page1[0].CourtInfo[0].CaseNumber_ft[0]", "page1_case_number"),
+    ("SC-120[0].Page1[0].CourtInfo[0].CaseName_ft[0]", "page1_case_name"),
+    ("SC-120[0].Page1[0].Order[0].Trial[0].FillText02[0]", "page1_trial_02"),
+    ("SC-120[0].Page1[0].Order[0].Trial[0].FillText03[0]", "page1_trial_03"),
+    ("SC-120[0].Page1[0].Order[0].Trial[0].FillText04[0]", "page1_trial_04"),
+    ("SC-120[0].Page1[0].Order[0].Trial[0].FillText05[0]", "page1_trial_05"),
+    ("SC-120[0].Page1[0].Order[0].Trial[0].FillText06[0]", "page1_trial_06"),
+    ("SC-120[0].Page1[0].Order[0].Trial[0].FillText07[0]", "page1_trial_07"),
+    ("SC-120[0].Page1[0].Order[0].Trial[0].FillText08[0]", "page1_trial_08"),
+    ("SC-120[0].Page1[0].Order[0].Trial[0].FillText09[0]", "page1_trial_09"),
+    ("SC-120[0].Page1[0].Order[0].Trial[0].FillText10[0]", "page1_trial_10"),
+    ("SC-120[0].Page1[0].Order[0].Trial[0].FillText11[0]", "page1_trial_11"),
+    ("SC-120[0].Page1[0].Order[0].Trial[0].FillText12[0]", "page1_trial_12"),
+    ("SC-120[0].Page1[0].Order[0].Trial[0].FillText13[0]", "page1_trial_13"),
+    ("SC-120[0].Page1[0].Order[0].Trial[0].FillText16[0]", "page1_trial_16"),
+    # Second plaintiff / second defendant (we only have one of each)
+    ("SC-120[0].Page2[0].List1[0].item1[0].Plaintiff2Name[0]", "second_plaintiff_name"),
+    ("SC-120[0].Page2[0].List2[0].item2[0].Def2Name[0]", "second_defendant_name"),
+    # Military-duty plaintiff name (none on active military duty)
+    ("SC-120[0].Page2[0].List1[0].item1[0].PlaintiffMilName[0]", "plaintiff_military_name"),
+    # Q6: public-entity claim-filed date (not suing a public entity)
+    ("SC-120[0].Page3[0].List6[0].item6[0].FillText71[0]", "public_entity_claim_date"),
+    # Second signature block (only one defendant signs)
+    ("SC-120[0].Page3[0].List10[0].Li1[0].Field2[0]", "second_defendant_sign_name"),
 ]
 
 
@@ -326,7 +327,7 @@ def checkbox_data():
     print(f"\n[Checkbox Extraction] Found {len(values)} checkbox values")
     if values:
         for name, val in sorted(values.items()):
-            if "Checkbox" in name or "checkbox" in name.lower():
+            if "Checkbox" in name or "CheckBox" in name or ".Ch" in name:
                 print(f"  {name}: {val}")
     return values
 
@@ -395,13 +396,13 @@ class TestRequiredContent:
         # For currency amounts, also check common formatted variants
         if description == "claim_amount":
             amount_variants = [
-                normalize_text("2200"),
-                normalize_text("2,200"),
-                normalize_text("2,200.00"),
+                normalize_text("3275"),
+                normalize_text("3,275"),
+                normalize_text("3,275.00"),
             ]
             found = any(v in normalized_pdf for v in amount_variants)
             assert found, \
-                f"Claim amount not found in PDF. Expected '2200' or formatted variant."
+                f"Claim amount not found in PDF. Expected '3275' or formatted variant."
         else:
             assert normalized_expected in normalized_pdf, \
                 f"Required content '{expected_text}' ({description}) not found in PDF text"

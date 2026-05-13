@@ -21,7 +21,7 @@ else
   echo 0 > /logs/verifier/reward.txt
 fi
 
-# Copy the itinerary.json for debugging.
-if [ -f "/app/output/itinerary.json" ]; then
-  cp /app/output/itinerary.json /logs/verifier/itinerary.json
+# Copy the trip_plan.json for debugging.
+if [ -f "/app/output/trip_plan.json" ]; then
+  cp /app/output/trip_plan.json /logs/verifier/trip_plan.json
 fi

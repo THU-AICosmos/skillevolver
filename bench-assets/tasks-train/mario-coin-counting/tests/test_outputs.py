@@ -2,7 +2,7 @@ import glob
 import os
 
 GROUND_TRUTH = "/tests/expected_output.csv"
-OUTPUT_FILE = "/root/replay_analysis.csv"
+OUTPUT_FILE = "/root/counting_results.csv"
 
 
 class TestReplayAnalysis:
@@ -28,7 +28,7 @@ class TestReplayAnalysis:
         df_out = pd.read_csv(OUTPUT_FILE)
 
         assert len(df_gt) == len(df_out), "Number of keyframes does not match"
-        assert list(df_out.columns) == ["frame_id", "coins", "turtles"]
+        assert list(df_out.columns) == ["frame_id", "coins", "enemies", "turtles"]
 
     def test_coin_counts(self):
         """Check that coin counts match ground truth."""
@@ -37,6 +37,14 @@ class TestReplayAnalysis:
         df_gt = pd.read_csv(GROUND_TRUTH)
         df_out = pd.read_csv(OUTPUT_FILE)
         assert df_gt["coins"].equals(df_out["coins"])
+
+    def test_enemy_counts(self):
+        """Check that enemy counts match ground truth."""
+        import pandas as pd
+
+        df_gt = pd.read_csv(GROUND_TRUTH)
+        df_out = pd.read_csv(OUTPUT_FILE)
+        assert df_gt["enemies"].equals(df_out["enemies"])
 
     def test_turtle_counts(self):
         """Check that turtle counts match ground truth."""

@@ -442,7 +442,7 @@ class TestSchema:
         """Verify most_loaded_branches has correct structure."""
         branches = report["most_loaded_branches"]
         assert isinstance(branches, list), "most_loaded_branches must be a list"
-        assert len(branches) == 5, f"Expected 5 most loaded branches, got {len(branches)}"
+        assert len(branches) == 10, f"Expected 10 most loaded branches, got {len(branches)}"
 
         required = ["from_bus", "to_bus", "loading_pct", "flow_from_MVA", "flow_to_MVA", "limit_MVA"]
         for br in branches:

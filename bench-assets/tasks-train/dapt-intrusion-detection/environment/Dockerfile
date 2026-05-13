@@ -22,18 +22,24 @@ RUN pip3 install --break-system-packages \
 WORKDIR /root
 
 # Copy data files
-# Data source note: packets.pcap is an anonymized enterprise traffic capture
-# provided by the task author; provenance is not publicly documented.
+# Data source note: packets.pcap for the TRAIN variant is a synthetic cloud-tenant
+# web-audit capture generated for exploration; it is NOT the DAPT2020 capture used
+# for validation.
 COPY packets.pcap /root/packets.pcap
-COPY capacity_audit_template.csv /root/capacity_audit.csv
+COPY network_analysis_template.csv /root/network_analysis.csv
 
-# Copy skills
+# Copy skills to agent-specific locations
+# Claude Code
 COPY skills /root/.claude/skills
+# Codex
 COPY skills /root/.codex/skills
-COPY skills /root/.opencode/skills
+# OpenCode
 COPY skills /root/.opencode/skill
+# Goose
 COPY skills /root/.goose/skills
+# Factory
 COPY skills /root/.factory/skills
+# Portable agents format (Goose, Amp)
 COPY skills /root/.agents/skills
+# Gemini
 COPY skills /root/.gemini/skills
-COPY skills /root/skills

@@ -7,14 +7,14 @@
 mkdir -p /logs/verifier
 
 # Copy PDFs to verifier folder for manual inspection
-if [ -f /root/sc100-filled.pdf ]; then
-    cp /root/sc100-filled.pdf /logs/verifier/sc100-filled.pdf
-    echo "Copied filled PDF to /logs/verifier/sc100-filled.pdf"
+if [ -f /root/sc120-filled.pdf ]; then
+    cp /root/sc120-filled.pdf /logs/verifier/sc120-filled.pdf
+    echo "Copied filled PDF to /logs/verifier/sc120-filled.pdf"
 fi
 
-if [ -f /root/sc100-blank.pdf ]; then
-    cp /root/sc100-blank.pdf /logs/verifier/sc100-blank.pdf
-    echo "Copied blank PDF to /logs/verifier/sc100-blank.pdf"
+if [ -f /root/sc120-blank.pdf ]; then
+    cp /root/sc120-blank.pdf /logs/verifier/sc120-blank.pdf
+    echo "Copied blank PDF to /logs/verifier/sc120-blank.pdf"
 fi
 
 # Install test-only dependencies (PDF libraries already in Dockerfile)

@@ -1,0 +1,68 @@
+{
+  "video_id": "94kAIpRnhcY",
+  "title": "In-Depth Floor Plan Tutorial Part 1 [UPDATED 2025]",
+  "duration_seconds": 1382,
+  "source": "YouTube Official Chapters (milestone subset)",
+  "milestones": [
+    {
+      "id": 1,
+      "label": "What we'll do",
+      "timestamp": 0
+    },
+    {
+      "id": 2,
+      "label": "Getting started",
+      "timestamp": 92
+    },
+    {
+      "id": 3,
+      "label": "Import your plan into Blender",
+      "timestamp": 126
+    },
+    {
+      "id": 4,
+      "label": "It all starts with a plane",
+      "timestamp": 242
+    },
+    {
+      "id": 5,
+      "label": "Getting the plan in place",
+      "timestamp": 329
+    },
+    {
+      "id": 6,
+      "label": "Tracing inner walls",
+      "timestamp": 550
+    },
+    {
+      "id": 7,
+      "label": "Continue tracing inner walls",
+      "timestamp": 628
+    },
+    {
+      "id": 8,
+      "label": "Make the floor",
+      "timestamp": 881
+    },
+    {
+      "id": 9,
+      "label": "Extruding the walls in Z",
+      "timestamp": 1040
+    },
+    {
+      "id": 10,
+      "label": "Fixing face orientation errors",
+      "timestamp": 1134
+    },
+    {
+      "id": 11,
+      "label": "Save As",
+      "timestamp": 1325
+    },
+    {
+      "id": 12,
+      "label": "Great job!",
+      "timestamp": 1367
+    }
+  ]
+}

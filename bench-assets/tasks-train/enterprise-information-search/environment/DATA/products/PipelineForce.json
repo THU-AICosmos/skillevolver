@@ -1,0 +1,21 @@
+{
+  "team": [
+    "eid_a48b3dbe",
+    "eid_7631de9d",
+    "eid_0cdf742b",
+    "eid_610cf373",
+    "eid_362f5e5c"
+  ],
+  "slack": [],
+  "documents": [
+    {
+      "id": "PipelineForce_doc_0",
+      "type": "Product Brief",
+      "author": "eid_a48b3dbe"
+    }
+  ],
+  "meeting_transcripts": [],
+  "meeting_chats": [],
+  "urls": [],
+  "prs": []
+}

@@ -13,9 +13,9 @@ RUN apt-get update && apt-get install -y \
 # Create working directory
 WORKDIR /root
 
-# Copy the SC-100 blank form (California Small Claims Court)
-# Source: https://courts.ca.gov/sites/default/files/courts/default/2024-11/sc100.pdf
-COPY sc100-blank.pdf /root/sc100-blank.pdf
+# Copy the SC-120 blank form (California Small Claims Court - Defendant's Claim)
+# Source: https://courts.ca.gov/sites/default/files/courts/default/2024-11/sc120.pdf
+COPY sc120-blank.pdf /root/sc120-blank.pdf
 
 # Install Python dependencies for PDF form filling
 RUN pip3 install --break-system-packages \

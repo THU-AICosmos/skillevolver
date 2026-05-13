@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-Test script for pharmaceutical compound similarity search
-Validates that the solution produces correct top K similar compounds
+Test script for compound structural similarity search.
+Validates that the solution returns correct nearest N compounds.
 """
 
 import sys
@@ -12,123 +12,116 @@ import pytest
 sys.path.insert(0, '/root/workspace')
 
 # Import the solution function
-from solution import topk_tanimoto_similarity_molecules
+from finder import find_nearest_compounds
 
 
-# Expected results based on testing
-# Caffeine: top 15, Cholesterol: top 8 (to reduce possibility of guessing)
-EXPECTED_RESULTS = {
+# Ground-truth rankings computed with PubChem + Morgan FP (radius=2, chirality) + Tanimoto
+# Caffeine: top 15, Cholesterol: top 8
+GROUND_TRUTH = {
     'Caffeine': {
-        'top_k': 15,
-        'molecules': [
+        'n': 15,
+        'ranking': [
             'Caffeine',
             'Theobromine',
             'Theophylline',
+            'Thymine',
             'Guanine',
-            'Phenobarbital',
+            'Meloxicam',
+            'Piroxicam',
+            'Cytosine',
             'Uracil',
             'Riboflavin',
-            'Diazepam',
+            'Metronidazole',
             'Pyridoxine',
-            'Thymol',
+            'Sulfamethoxazole',
             'Omeprazole',
-            'Thiamine',
-            'Doxycycline',
-            'Propofol',
-            'Lidocaine'
+            'Trimethoprim',
         ]
     },
     'Cholesterol': {
-        'top_k': 8,
-        'molecules': [
+        'n': 8,
+        'ranking': [
             'Cholesterol',
+            'Campesterol',
+            'Stigmasterol',
+            'Ergosterol',
             'Testosterone',
             'Progesterone',
-            'Hydrocortisone',
-            'Cortisone',
-            'Prednisone',
-            'Menthol',
-            'Simvastatin'
+            'Cortisol',
+            'Estradiol',
         ]
     }
 }
 
-PDF_PATH = '/root/compounds.pdf'  # Path to compounds PDF in container
+COMPOUNDS_PDF = '/root/compounds.pdf'  # Path to compounds PDF in container
 
 
-@pytest.mark.parametrize("molecule,top_k,expected", [
-    ('Caffeine', EXPECTED_RESULTS['Caffeine']['top_k'], EXPECTED_RESULTS['Caffeine']['molecules']),
-    ('Cholesterol', EXPECTED_RESULTS['Cholesterol']['top_k'], EXPECTED_RESULTS['Cholesterol']['molecules']),
+@pytest.mark.parametrize("query,n,expected_ranking", [
+    ('Caffeine', GROUND_TRUTH['Caffeine']['n'], GROUND_TRUTH['Caffeine']['ranking']),
+    ('Cholesterol', GROUND_TRUTH['Cholesterol']['n'], GROUND_TRUTH['Cholesterol']['ranking']),
 ])
-def test_molecule_similarity(molecule, top_k, expected):
-    """Test that compound similarity ranking returns correct top K results"""
-    print("\n" + "="*70)
-    print(f"TEST: {molecule} Similarity Search (top {top_k})")
-    print("="*70)
+def test_nearest_compounds(query, n, expected_ranking):
+    """Test that compound similarity search returns the correct nearest N compounds."""
+    print("\n" + "=" * 70)
+    print(f"TEST: {query} Nearest Compounds (n={n})")
+    print("=" * 70)
 
-    result = topk_tanimoto_similarity_molecules(molecule, PDF_PATH, top_k=top_k)
+    result = find_nearest_compounds(query, COMPOUNDS_PDF, n=n)
 
-    print(f"\nExpected ({top_k}): {expected}")
+    print(f"\nExpected ({n}): {expected_ranking}")
     print(f"Got:      {result}")
 
-    # Check that result has correct number of molecules
-    assert len(result) == top_k, f"Expected {top_k} compounds for {molecule}, got {len(result)}"
+    # Check length
+    assert len(result) == n, f"Expected {n} compounds for {query}, got {len(result)}"
 
-    # Check that all expected molecules are in the result
-    for mol in expected:
-        assert mol in result, f"Expected compound '{mol}' not found in {molecule} results"
+    # Check membership
+    for cmpd in expected_ranking:
+        assert cmpd in result, f"Expected compound '{cmpd}' not found in {query} results"
 
-    # Check exact order
-    assert result == expected, f"Order mismatch for {molecule}. Expected {expected}, got {result}"
+    # Check ordering
+    assert result == expected_ranking, (
+        f"Order mismatch for {query}. Expected {expected_ranking}, got {result}"
+    )
 
-    print(f"\n✓ {molecule} test PASSED")
+    print(f"\n[OK] {query} test PASSED")
 
 
-def calculate_score():
+def compute_reward():
     """
-    Calculate test score: passed_tests / total_tests
+    Compute test reward: passed_tests / total_tests
     """
-    # Test cases with parameterized inputs
-    test_cases = [
-        ('Caffeine', EXPECTED_RESULTS['Caffeine']['top_k'], EXPECTED_RESULTS['Caffeine']['molecules']),
-        ('Cholesterol', EXPECTED_RESULTS['Cholesterol']['top_k'], EXPECTED_RESULTS['Cholesterol']['molecules']),
+    cases = [
+        ('Caffeine', GROUND_TRUTH['Caffeine']['n'], GROUND_TRUTH['Caffeine']['ranking']),
+        ('Cholesterol', GROUND_TRUTH['Cholesterol']['n'], GROUND_TRUTH['Cholesterol']['ranking']),
     ]
 
-    total_tests = len(test_cases)
-    passed_tests = 0
+    total = len(cases)
+    passed = 0
 
-    for molecule, top_k, expected in test_cases:
-        print("\n" + "="*70)
-        print(f"Running {molecule} test...")
-        print("="*70)
+    for query, n, expected_ranking in cases:
+        print("\n" + "=" * 70)
+        print(f"Running {query} test...")
+        print("=" * 70)
         try:
-            test_molecule_similarity(molecule, top_k, expected)
-            passed_tests += 1
-            print(f"[PASSED] {molecule} test")
-        except Exception as e:
-            print(f"[FAILED] {molecule} test: {e}")
+            test_nearest_compounds(query, n, expected_ranking)
+            passed += 1
+            print(f"[PASSED] {query} test")
+        except Exception as exc:
+            print(f"[FAILED] {query} test: {exc}")
 
-    # Calculate score
-    score = passed_tests / total_tests
+    reward = passed / total
 
-    print("\n" + "="*70)
-    print(f"FINAL SCORE: {passed_tests}/{total_tests} = {score}")
-    print("="*70)
+    print("\n" + "=" * 70)
+    print(f"FINAL REWARD: {passed}/{total} = {reward}")
+    print("=" * 70)
 
-    # Write score to reward file
     os.makedirs('/logs/verifier', exist_ok=True)
-    with open('/logs/verifier/reward.txt', 'w') as f:
-        f.write(f"{score}\n")
+    with open('/logs/verifier/reward.txt', 'w') as fh:
+        fh.write(f"{reward}\n")
 
-    return score
+    return reward
 
 
 if __name__ == "__main__":
-    # Run the scoring function directly
-    score = calculate_score()
-
-    # Exit with appropriate code
-    if score == 1.0:
-        sys.exit(0)
-    else:
-        sys.exit(1)
+    reward = compute_reward()
+    sys.exit(0 if reward == 1.0 else 1)

@@ -1,100 +1,135 @@
 #!/bin/bash
 set -e
 
-python3 << 'PYTHON'
-from dataretrieval import nwis
-import pandas as pd
+python3 <<'PYCODE'
+"""Wisconsin flood-stage exceedance detector.
+
+Pulls candidate USGS sites from a text manifest, joins each against the
+NWS gauge inventory to recover its flood stage, then queries USGS IV
+gage-height (parameter 00065) for the analysis window and counts how many
+calendar days the daily peak met or exceeded the published flood stage.
+"""
+
 import csv
-import urllib.request
 import io
 import os
+import sys
+import urllib.request
+from pathlib import Path
 
-# Read station IDs from input file
-with open('/root/data/ohio_stations.txt', 'r') as f:
-    station_ids = [line.strip() for line in f if line.strip()]
+import pandas as pd
+from dataretrieval import nwis
 
-print(f"Stations to analyze: {len(station_ids)}")
+SITES_FILE = Path("/root/data/wisconsin_stations.txt")
+OUTPUT_FILE = Path("/root/output/flood_results.csv")
+NWS_INVENTORY_URL = (
+    "https://water.noaa.gov/resources/downloads/reports/nwps_all_gauges_report.csv"
+)
+GAGE_HEIGHT_PARAM = "00065"
+WINDOW_START = "2025-04-22"
+WINDOW_END = "2025-04-28"
 
-# Step 1: Download action stage thresholds from NWS
-print("Downloading NWS action stage thresholds...")
 
-nws_url = "https://water.noaa.gov/resources/downloads/reports/nwps_all_gauges_report.csv"
-response = urllib.request.urlopen(nws_url)
-content = response.read().decode('utf-8')
-reader = csv.reader(io.StringIO(content))
-headers = next(reader)
-data = [row[:43] for row in reader]
-nws_df = pd.DataFrame(data, columns=headers)
+def load_site_manifest(path: Path) -> list[str]:
+    sites: list[str] = []
+    with path.open() as fh:
+        for raw in fh:
+            sid = raw.strip()
+            if sid:
+                sites.append(sid)
+    return sites
 
-nws_df['action stage'] = pd.to_numeric(nws_df['action stage'], errors='coerce')
 
-thresholds = {}
-for _, row in nws_df.iterrows():
-    usgs_id = str(row['usgs id']).strip()
-    if usgs_id in station_ids:
-        thresholds[usgs_id] = {
-            'name': row['location name'],
-            'action': row['action stage']
-        }
+def fetch_flood_stage_lookup(target_sites: set[str]) -> dict[str, float]:
+    """Return {usgs_id: flood_stage_ft} restricted to target_sites."""
+    print(f"Fetching NWS gauge inventory from {NWS_INVENTORY_URL} ...")
+    with urllib.request.urlopen(NWS_INVENTORY_URL) as resp:
+        payload = resp.read().decode("utf-8")
 
-print(f"Thresholds found: {len(thresholds)}")
+    csv_reader = csv.reader(io.StringIO(payload))
+    header_row = next(csv_reader)
+    # NWS report occasionally adds trailing metadata columns that don't exist
+    # in every data row; normalize both sides to the narrower width.
+    body_rows = [row for row in csv_reader]
+    min_width = min([len(header_row)] + [len(r) for r in body_rows]) if body_rows else len(header_row)
+    inventory = pd.DataFrame(
+        [row[:min_width] for row in body_rows],
+        columns=header_row[:min_width],
+    )
 
-# Step 2: Download water level data from USGS
-print("Downloading USGS water level data...")
+    flood_col = pd.to_numeric(inventory["flood stage"], errors="coerce")
+    inventory = inventory.assign(_flood_ft=flood_col)
 
-start_date = '2025-03-10'
-end_date = '2025-03-17'
+    lookup: dict[str, float] = {}
+    for _, record in inventory.iterrows():
+        sid = str(record["usgs id"]).strip()
+        if sid in target_sites and pd.notna(record["_flood_ft"]):
+            lookup[sid] = float(record["_flood_ft"])
+    return lookup
 
-all_data = {}
 
-for site_id in thresholds.keys():
+def daily_peak_series(site_id: str) -> pd.Series | None:
+    """Return per-day max gage-height series for a site, or None on miss."""
     try:
-        df, meta = nwis.get_iv(
+        frame, _ = nwis.get_iv(
             sites=site_id,
-            start=start_date,
-            end=end_date,
-            parameterCd='00065'
+            start=WINDOW_START,
+            end=WINDOW_END,
+            parameterCd=GAGE_HEIGHT_PARAM,
         )
+    except Exception as exc:  # network / no-data / parse error
+        print(f"  [{site_id}] fetch failed: {exc}")
+        return None
 
-        if len(df) > 0:
-            gage_col = [c for c in df.columns if '00065' in str(c) and '_cd' not in str(c)]
-            if gage_col:
-                daily_data = df[gage_col[0]].resample('D').max()
-                all_data[site_id] = daily_data
-    except:
-        pass
+    if frame is None or len(frame) == 0:
+        return None
 
-print(f"Data downloaded: {len(all_data)} stations")
+    cols = [c for c in frame.columns
+            if GAGE_HEIGHT_PARAM in str(c) and "_cd" not in str(c)]
+    if not cols:
+        return None
+    return frame[cols[0]].resample("D").max()
 
-# Step 3: Detect action stage exceedances
-print("Detecting action stage exceedances...")
 
-action_results = []
+def count_exceedance_days(series: pd.Series, threshold: float) -> int:
+    return int((series >= threshold).sum())
 
-for site_id, daily_max in all_data.items():
-    threshold = thresholds[site_id]['action']
-    days_above = int((daily_max >= threshold).sum())
 
-    if days_above > 0:
-        action_results.append({
-            'station_id': site_id,
-            'action_days': days_above
-        })
+def write_output(rows: list[tuple[str, int]], target: Path) -> None:
+    target.parent.mkdir(parents=True, exist_ok=True)
+    with target.open("w", newline="") as fh:
+        writer = csv.writer(fh)
+        writer.writerow(["station_id", "flood_days"])
+        for sid, days in rows:
+            writer.writerow([sid, days])
 
-action_results.sort(key=lambda x: x['action_days'], reverse=True)
 
-print(f"Stations exceeding action stage: {len(action_results)}")
-for r in action_results:
-    print(f"  {r['station_id']}: {r['action_days']} days")
+def main() -> int:
+    candidates = load_site_manifest(SITES_FILE)
+    print(f"Sites in manifest: {len(candidates)}")
 
-# Save results
-os.makedirs('/root/output', exist_ok=True)
+    flood_stage = fetch_flood_stage_lookup(set(candidates))
+    print(f"Sites with NWS flood stage published: {len(flood_stage)}")
 
-with open('/root/output/action_stage_results.csv', 'w', newline='') as f:
-    writer = csv.writer(f)
-    writer.writerow(['station_id', 'action_days'])
-    for result in action_results:
-        writer.writerow([result['station_id'], result['action_days']])
+    flagged: list[tuple[str, int]] = []
+    for sid, threshold_ft in flood_stage.items():
+        series = daily_peak_series(sid)
+        if series is None:
+            continue
+        days = count_exceedance_days(series, threshold_ft)
+        if days > 0:
+            flagged.append((sid, days))
 
-print("Results saved to /root/output/action_stage_results.csv")
-PYTHON
+    flagged.sort(key=lambda pair: pair[1], reverse=True)
+    print(f"Sites with >=1 flood day in window: {len(flagged)}")
+    for sid, days in flagged:
+        print(f"  {sid}: {days} day(s)")
+
+    write_output(flagged, OUTPUT_FILE)
+    print(f"Wrote {OUTPUT_FILE}")
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())
+PYCODE

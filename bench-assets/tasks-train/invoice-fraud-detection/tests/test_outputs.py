@@ -13,8 +13,8 @@ class TestOutputs:
         """
         Check content of fraud report against a comprehensive static ground truth.
         This test verifies two things:
-        1. The agent correctly identifies all fraudulent expense reports.
-        2. The agent does not incorrectly flag any clean expense reports as fraudulent.
+        1. The agent correctly identifies all fraudulent invoices.
+        2. The agent does not incorrectly flag any clean invoices as fraudulent.
         """
         # Load Comprehensive Ground Truth
         gt_path = os.path.join(os.path.dirname(__file__), "ground_truth.json")
@@ -35,7 +35,7 @@ class TestOutputs:
 
         # --- Verification ---
 
-        # 1. Check for False Positives (flagging clean expense reports as fraud)
+        # 1. Check for False Positives (flagging clean invoices as fraud)
         actual_fraud_pages = {inv["invoice_page_number"] for inv in actual_fraud}
         false_positives = actual_fraud_pages.intersection(expected_clean_pages)
 

@@ -21,7 +21,7 @@ ENV PATH="/app/kona:${PATH}"
 # Create working directory
 WORKDIR /app
 
-# Install Python dependencies for citation verification
+# Install Python dependencies
 RUN pip3 install --break-system-packages \
     requests==2.32.3 \
     bibtexparser==1.4.2 \
@@ -31,7 +31,7 @@ RUN pip3 install --break-system-packages \
     numpy==2.4.1 \
     pytest
 
-# Copy the test.bib file to /root
+# Copy task data
 COPY problem.json /app/problem.json
 COPY data /app/data
 COPY reference /app/reference

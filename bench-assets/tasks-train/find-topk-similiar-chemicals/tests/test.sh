@@ -1,5 +1,5 @@
 #!/bin/bash
-# Test runner for molecular similarity search
+# Test runner for compound structural similarity search
 
 echo "=========================================="
 echo "Installing dependencies..."
@@ -10,9 +10,9 @@ pip3 install --break-system-packages pytest==8.3.4 pytest-json-report==1.5.0 --q
 
 echo ""
 echo "=========================================="
-echo "Agent's solution.py:"
+echo "Agent's finder.py:"
 echo "=========================================="
-cat /root/workspace/solution.py 2>/dev/null || echo "ERROR: solution.py not found"
+cat /root/workspace/finder.py 2>/dev/null || echo "ERROR: finder.py not found"
 
 echo ""
 echo "=========================================="

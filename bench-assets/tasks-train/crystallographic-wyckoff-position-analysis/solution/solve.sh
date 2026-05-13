@@ -5,83 +5,57 @@ set -e
 
 mkdir -p /root/workspace
 
-cat > /root/workspace/solution.py << 'EOF'
+cat > /root/workspace/solution.py << 'SOLEOF'
 #!/usr/bin/env python3
 """
-Solution for Crystal Symmetry and Wyckoff Centroid Analysis.
-Analyzes space group numbers, Wyckoff atom counts, and centroid coordinates using pymatgen and sympy.
+Extracts site symmetry multiplicities and representative fractional
+coordinates from CIF files using pymatgen symmetry tools and sympy rationals.
 """
 
 from pymatgen.core import Structure
 from pymatgen.symmetry.analyzer import SpacegroupAnalyzer
 from collections import Counter, defaultdict
 from sympy import Rational
-import numpy as np
 
 
-def analyze_spacegroup_and_wyckoff_centroids(filepath: str):
+def _coord_to_fraction(val, max_denom=12):
+    """Convert a float coordinate to a string fraction with bounded denominator."""
+    r = Rational(val).limit_denominator(max_denom)
+    return str(r)
+
+
+def extract_site_symmetry_and_fractional_positions(cif_path: str) -> dict:
     """
-    Analyze crystal symmetry: space group number, Wyckoff atom counts,
-    and centroid coordinates for each Wyckoff group.
-
-    Args:
-        filepath: Path to the CIF file
-
-    Returns:
-        dict with space_group_number, wyckoff_atom_count, wyckoff_centroid_coords
+    Parse a CIF file, determine Wyckoff site letters via spglib,
+    then return multiplicities and the first atom's coordinates per letter.
     """
-    # Load structure from CIF
-    structure = Structure.from_file(filepath)
+    crystal = Structure.from_file(cif_path)
+    analyzer = SpacegroupAnalyzer(crystal)
+    sym_data = analyzer.get_symmetry_dataset()
 
-    # Get symmetry analyzer
-    sga = SpacegroupAnalyzer(structure)
+    if sym_data is None:
+        return {"site_multiplicities": {}, "representative_coords": {}}
 
-    # Get space group number
-    sg_number = sga.get_space_group_number()
+    letters = sym_data.wyckoffs
 
-    # Get symmetry dataset with Wyckoff information
-    dataset = sga.get_symmetry_dataset()
+    # Tally how many atoms share each Wyckoff letter
+    counts = dict(sorted(Counter(letters).items()))
 
-    if dataset is None:
-        return {
-            'space_group_number': sg_number,
-            'wyckoff_atom_count': {},
-            'wyckoff_centroid_coords': {}
-        }
+    # Group sites by letter and pick the first representative
+    grouped = defaultdict(list)
+    for idx, s in enumerate(crystal):
+        grouped[letters[idx]].append(s)
 
-    # Get Wyckoff letters for each atom
-    wyckoff_letters = dataset.wyckoffs
-
-    # Count atoms per Wyckoff position
-    wyckoff_counts = Counter(wyckoff_letters)
-    atom_count_dict = dict(sorted(wyckoff_counts.items()))
-
-    # Group fractional coordinates by Wyckoff letter
-    wyckoff_coords = defaultdict(list)
-    for i, site in enumerate(structure):
-        letter = wyckoff_letters[i]
-        wyckoff_coords[letter].append(site.frac_coords)
-
-    # Compute centroid for each Wyckoff group
-    centroid_dict = {}
-    for letter in sorted(wyckoff_coords.keys()):
-        coords_list = wyckoff_coords[letter]
-        # Compute mean of all coordinates in this Wyckoff group
-        mean_coords = np.mean(coords_list, axis=0)
-
-        # Convert to exact fractions using sympy with denominator limit 10
-        exact = []
-        for c in mean_coords:
-            rat = Rational(c).limit_denominator(10)
-            exact.append(str(rat))
-
-        centroid_dict[letter] = exact
+    coords_map = {}
+    for ltr in sorted(grouped):
+        first_site = grouped[ltr][0]
+        frac = first_site.frac_coords
+        coords_map[ltr] = [_coord_to_fraction(c) for c in frac]
 
     return {
-        'space_group_number': sg_number,
-        'wyckoff_atom_count': atom_count_dict,
-        'wyckoff_centroid_coords': centroid_dict
+        "site_multiplicities": counts,
+        "representative_coords": coords_map,
     }
-EOF
+SOLEOF
 
 echo "Solution written to /root/workspace/solution.py"

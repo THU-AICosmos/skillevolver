@@ -1,0 +1,20 @@
+[
+    {
+        "id": "prob_alpha",
+        "domain": "marketplace/domain.pddl",
+        "problem": "marketplace/prob_alpha.pddl",
+        "plan_output": "prob_alpha.txt"
+    },
+    {
+        "id": "prob_beta",
+        "domain": "marketplace/domain.pddl",
+        "problem": "marketplace/prob_beta.pddl",
+        "plan_output": "prob_beta.txt"
+    },
+    {
+        "id": "prob_gamma",
+        "domain": "marketplace/domain.pddl",
+        "problem": "marketplace/prob_gamma.pddl",
+        "plan_output": "prob_gamma.txt"
+    }
+]

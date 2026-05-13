@@ -10,7 +10,7 @@ import re
 import subprocess
 from pathlib import Path
 
-LIBS = ["pyyaml", "chardet", "mistune", "dateutil"]
+LIBS = ["chardet", "autopep8", "jinja2", "pygments"]
 
 BASE_APP_DIR = Path("/app")
 

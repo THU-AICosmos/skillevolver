@@ -1,8 +1,8 @@
 """
-Test for earthquake_plate_calculation task (training variant).
+Test for volcanic eruption plate analysis task.
 
-Verifies the agent computed the correct information for the 2024 earthquake
-within the North American plate that is closest to the plate's geometric centroid.
+Verifies the agent computed the correct information for the 2023 volcanic
+eruption within the Australian plate that is furthest from the AU plate boundary.
 """
 
 import json
@@ -10,159 +10,140 @@ import os
 import unittest
 
 
-class TestEarthquakeTask(unittest.TestCase):
-    """Test suite for the earthquake plate centroid calculation task."""
+class TestVolcanicEruptionTask(unittest.TestCase):
+    """Test suite for the volcanic eruption plate analysis task."""
 
     # Expected values from the reference solution
-    # Location: Reykjanes Ridge earthquake on 2024-02-05
-    EXPECTED_RESULT = {
-        "id": "us7000lx33",
-        "place": "Reykjanes Ridge",
-        "time": "2024-02-05T13:53:33Z",
-        "magnitude": 5.3,
-        "latitude": 55.4319,
-        "longitude": -35.2226,
-        "distance_to_centroid_km": 1729.38,
+    # Location: Great Victoria Basin anomaly on 2023-02-06
+    EXPECTED = {
+        "event_id": "ve20230002",
+        "location": "Great Victoria Basin anomaly",
+        "timestamp": "2023-02-06T14:38:39Z",
+        "vei": 5.68,
+        "lat": -30.0,
+        "lon": 128.5,
+        "boundary_distance_km": 2086.56,
     }
 
     # Tolerances
-    DISTANCE_TOLERANCE = 0.01  # ±0.01 km
-    COORD_TOLERANCE = 0.0001  # ±0.0001 degrees
-    MAG_TOLERANCE = 0.01  # ±0.01 magnitude
+    DIST_TOL = 0.01  # +/- 0.01 km
+    COORD_TOL = 0.0001  # +/- 0.0001 degrees
+    VEI_TOL = 0.01  # +/- 0.01
 
-    result = None  # Class variable to store loaded result
+    loaded = None
 
     @classmethod
     def setUpClass(cls):
-        """Load the answer file once for all tests."""
-        paths = ["/root/answer.json", "answer.json"]
-        path = None
-        for p in paths:
-            if os.path.exists(p):
-                path = p
+        """Load the result file once for all tests."""
+        candidates = ["/root/result.json", "result.json"]
+        filepath = None
+        for c in candidates:
+            if os.path.exists(c):
+                filepath = c
                 break
 
-        if path is None:
-            raise FileNotFoundError("Answer file not found. Expected /root/answer.json")
+        if filepath is None:
+            raise FileNotFoundError("Result file not found. Expected /root/result.json")
 
-        with open(path, encoding="utf-8") as f:
-            cls.result = json.load(f)
+        with open(filepath, encoding="utf-8") as fh:
+            cls.loaded = json.load(fh)
 
-    def test_output_file_and_structure(self):
-        """Verify answer file exists, is valid JSON, and has required fields."""
-        required_fields = [
-            "id",
-            "place",
-            "time",
-            "magnitude",
-            "latitude",
-            "longitude",
-            "distance_to_centroid_km",
+    def test_result_structure(self):
+        """Verify result file exists, is valid JSON, and has all required fields."""
+        needed = [
+            "event_id",
+            "location",
+            "timestamp",
+            "vei",
+            "lat",
+            "lon",
+            "boundary_distance_km",
         ]
-        for field in required_fields:
-            self.assertIn(field, self.result, f"Missing required field: {field}")
+        for key in needed:
+            self.assertIn(key, self.loaded, f"Missing required field: {key}")
 
-    def test_earthquake_id_correct(self):
+    def test_event_id_matches(self):
         """
-        Verify earthquake ID is correct.
+        Verify volcanic event ID is correct.
 
-        This is the most critical test - it confirms the correct earthquake
-        was identified (closest to North American plate centroid within the plate).
+        This is the most critical test - confirms the correct eruption
+        was identified (furthest from AU plate boundary within AU plate).
         """
-        expected = self.EXPECTED_RESULT["id"]
-        actual = self.result.get("id")
-
+        want = self.EXPECTED["event_id"]
+        got = self.loaded.get("event_id")
         self.assertEqual(
-            actual,
-            expected,
-            f"Expected id '{expected}', got '{actual}' - wrong earthquake selected!",
+            got,
+            want,
+            f"Expected event_id '{want}', got '{got}' - wrong eruption selected!",
         )
 
-    def test_place_correct(self):
-        """Verify earthquake location description is correct."""
-        expected = self.EXPECTED_RESULT["place"]
-        actual = self.result.get("place")
+    def test_location_matches(self):
+        """Verify eruption location description is correct."""
+        want = self.EXPECTED["location"]
+        got = self.loaded.get("location")
+        self.assertEqual(got, want, f"Expected location '{want}', got '{got}'")
 
-        self.assertEqual(
-            actual,
-            expected,
-            f"Expected place '{expected}', got '{actual}'",
-        )
+    def test_timestamp_matches(self):
+        """Verify eruption timestamp is correct."""
+        want = self.EXPECTED["timestamp"]
+        got = self.loaded.get("timestamp")
+        self.assertEqual(got, want, f"Expected timestamp '{want}', got '{got}'")
 
-    def test_time_correct(self):
-        """Verify earthquake time is correct."""
-        expected = self.EXPECTED_RESULT["time"]
-        actual = self.result.get("time")
-
-        self.assertEqual(
-            actual,
-            expected,
-            f"Expected time '{expected}', got '{actual}'",
-        )
-
-    def test_magnitude_within_tolerance(self):
-        """Verify earthquake magnitude is within tolerance (±0.01)."""
-        mag = self.result.get("magnitude")
-        self.assertIsInstance(mag, (int, float), "Magnitude should be a number")
-
+    def test_vei_within_tolerance(self):
+        """Verify eruption magnitude (VEI) is within tolerance (+/-0.01)."""
+        val = self.loaded.get("vei")
+        self.assertIsInstance(val, (int, float), "VEI should be a number")
         self.assertAlmostEqual(
-            mag,
-            self.EXPECTED_RESULT["magnitude"],
-            delta=self.MAG_TOLERANCE,
-            msg=f"Expected magnitude {self.EXPECTED_RESULT['magnitude']} ± {self.MAG_TOLERANCE}, got {mag}",
+            val,
+            self.EXPECTED["vei"],
+            delta=self.VEI_TOL,
+            msg=f"Expected VEI {self.EXPECTED['vei']} +/- {self.VEI_TOL}, got {val}",
         )
 
     def test_latitude_within_tolerance(self):
-        """Verify earthquake latitude is within tolerance (±0.0001 degrees)."""
-        lat = self.result.get("latitude")
-        expected = self.EXPECTED_RESULT["latitude"]
-
-        self.assertIsInstance(lat, (int, float), "Latitude should be a number")
-
+        """Verify event latitude is within tolerance (+/-0.0001 degrees)."""
+        val = self.loaded.get("lat")
+        self.assertIsInstance(val, (int, float), "Latitude should be a number")
         self.assertAlmostEqual(
-            lat,
-            expected,
-            delta=self.COORD_TOLERANCE,
-            msg=f"Expected latitude {expected} ± {self.COORD_TOLERANCE}, got {lat}",
+            val,
+            self.EXPECTED["lat"],
+            delta=self.COORD_TOL,
+            msg=f"Expected lat {self.EXPECTED['lat']} +/- {self.COORD_TOL}, got {val}",
         )
 
     def test_longitude_within_tolerance(self):
-        """Verify earthquake longitude is within tolerance (±0.0001 degrees)."""
-        lon = self.result.get("longitude")
-        expected = self.EXPECTED_RESULT["longitude"]
-
-        self.assertIsInstance(lon, (int, float), "Longitude should be a number")
-
+        """Verify event longitude is within tolerance (+/-0.0001 degrees)."""
+        val = self.loaded.get("lon")
+        self.assertIsInstance(val, (int, float), "Longitude should be a number")
         self.assertAlmostEqual(
-            lon,
-            expected,
-            delta=self.COORD_TOLERANCE,
-            msg=f"Expected longitude {expected} ± {self.COORD_TOLERANCE}, got {lon}",
+            val,
+            self.EXPECTED["lon"],
+            delta=self.COORD_TOL,
+            msg=f"Expected lon {self.EXPECTED['lon']} +/- {self.COORD_TOL}, got {val}",
         )
 
-    def test_distance_within_tolerance(self):
+    def test_boundary_distance_within_tolerance(self):
         """
-        Verify computed distance is within tolerance (±0.01 km).
+        Verify computed boundary distance is within tolerance (+/-0.01 km).
 
-        The distance represents the closest earthquake within the
-        North American plate to the plate's geometric centroid in 2024.
+        The distance represents the furthest volcanic eruption within the
+        Australian plate from the AU plate boundary in 2023.
         """
-        distance = self.result.get("distance_to_centroid_km")
-        self.assertIsInstance(distance, (int, float), "Distance should be a number")
+        val = self.loaded.get("boundary_distance_km")
+        self.assertIsInstance(val, (int, float), "Distance should be a number")
 
-        # Sanity checks
-        self.assertGreater(distance, 0.0, msg="Distance should be positive")
+        self.assertGreater(val, 0.0, msg="Distance should be positive")
         self.assertLess(
-            distance, 10000.0, msg="Distance seems unreasonably large (> 10000 km)"
+            val, 10000.0, msg="Distance seems unreasonably large (> 10000 km)"
         )
 
         self.assertAlmostEqual(
-            distance,
-            self.EXPECTED_RESULT["distance_to_centroid_km"],
-            delta=self.DISTANCE_TOLERANCE,
+            val,
+            self.EXPECTED["boundary_distance_km"],
+            delta=self.DIST_TOL,
             msg=(
-                f"Expected {self.EXPECTED_RESULT['distance_to_centroid_km']} ± {self.DISTANCE_TOLERANCE} km, "
-                f"got {distance} km"
+                f"Expected {self.EXPECTED['boundary_distance_km']} +/- {self.DIST_TOL} km, "
+                f"got {val} km"
             ),
         )
 

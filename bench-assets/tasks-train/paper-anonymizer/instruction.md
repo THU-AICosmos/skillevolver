@@ -1,11 +1,16 @@
-I need to prepare research manuscripts `/root/paper{1-3}.pdf` for a double-blind conference submission portal.
+I have three research manuscripts at `/root/paper{1-3}.pdf` that I need prepared for a double-blind review system.
 
-The portal requires that all institutional affiliations and unique identifying metadata be stripped from the PDFs before upload. Author names on their own are less of a concern since the portal handles name removal separately — but affiliations, email addresses, and external identifiers (like arXiv IDs, DOIs, or venue mentions) MUST be removed from the documents.
+You must fully anonymize each PDF so that no authorship information remains. Specifically, you must remove:
 
-Specific requirements:
-- Remove all university/company affiliations (e.g., institution names)
-- Remove any arXiv identifiers, DOIs, or conference/workshop venue names that could reveal authorship
-- Remove email addresses and acknowledgement-related names that could identify authors
-- Preserve the rest of the paper content intact (titles, abstracts, body text, references)
+- **Author names**: every author's name as it appears on the title page, footnotes, headers, email lines, and acknowledgements. Do not leave individual first or last names visible.
+- **Affiliations**: all universities, companies, research labs, and departments (including shorter forms and common acronyms).
+- **Email addresses and handles**: any email address, username, or contact line that could identify an author.
+- **External identifiers**: arXiv IDs, DOIs, venue names (conferences, workshops, journals), and any acknowledgement names that would identify the authors or funders.
 
-Save the cleaned PDFs to `/root/redacted/paper{1-3}.pdf`.
+You must preserve:
+
+- Titles, abstracts, body text, figures, tables, and section headings.
+- The bibliography/references section in full. Self-citations to the authors' own prior work should remain intact — after everything else is redacted, an entry like `Lin et al., 2025` in the reference list no longer leaks identity, so leave the references list alone.
+- The PDF's page count and overall structure (no blank or truncated pages).
+
+Save the anonymized PDFs to `/root/redacted/paper{1-3}.pdf`.

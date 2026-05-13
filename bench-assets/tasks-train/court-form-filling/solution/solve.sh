@@ -1,140 +1,213 @@
 #!/bin/bash
 set -e
 
-cat > /tmp/fill_form.py << 'PYTHON_SCRIPT'
+cat > /tmp/fill_defendant_claim.py << 'PYSRC'
 #!/usr/bin/env python3
-"""
-Oracle solution for court-form-filling task (training variant).
+"""Oracle for the court-form-filling training variant (SC-120).
 
-Fills out the California SC-100 Small Claims Court form based on the case
-description.
+Populates the California "Defendant's Claim and ORDER to Go to Small
+Claims Court" form on behalf of Marcus Rivera, who is filing a
+defendant's counterclaim against Thornwood Auto Repair LLC for damage
+caused during a botched transmission service.
 """
 
-import os
+from dataclasses import dataclass
+from pathlib import Path
 from pypdf import PdfReader, PdfWriter
 
-INPUT_PDF = "/root/sc100-blank.pdf"
-OUTPUT_PDF = "/root/sc100-filled.pdf"
+
+BLANK_PATH = Path("/root/sc120-blank.pdf")
+FILLED_PATH = Path("/root/sc120-filled.pdf")
+VERIFIER_COPY = Path("/logs/verifier/sc120-filled.pdf")
 
 
-def fill_sc100_form():
-    """Main function to fill the SC-100 form."""
-    print("=" * 60)
-    print("SC-100 Small Claims Form Filling Solution")
-    print("=" * 60)
+@dataclass(frozen=True)
+class CaseRecord:
+    """All the values the defendant needs to communicate on SC-120."""
 
-    print("\n[1/4] Reading blank form...")
-    reader = PdfReader(INPUT_PDF)
-    print(f"  Input form has {len(reader.pages)} pages")
+    # Defendant (the person filing SC-120 -- that's "us")
+    def_name: str
+    def_phone: str
+    def_street: str
+    def_city: str
+    def_state: str
+    def_zip: str
 
-    # IMPORTANT: Use append() for XFA forms, not add_page()
+    # Plaintiff (the party we are suing back)
+    pl_name: str
+    pl_phone: str
+    pl_street: str
+    pl_city: str
+    pl_state: str
+    pl_zip: str
+
+    # Claim narrative (item 3)
+    claim_amount: str
+    claim_reason: str
+    claim_start: str
+    claim_end: str
+    claim_calc: str
+
+    # Signature block
+    sign_date: str
+
+
+CASE = CaseRecord(
+    def_name="Marcus Rivera",
+    def_phone="5103340912",
+    def_street="1428 Linden St",
+    def_city="Oakland",
+    def_state="CA",
+    def_zip="94607",
+    pl_name="Thornwood Auto Repair LLC",
+    pl_phone="5105557432",
+    pl_street="2210 International Blvd",
+    pl_city="Oakland",
+    pl_state="CA",
+    pl_zip="94606",
+    claim_amount="3275",
+    claim_reason=(
+        "Botched transmission service caused further damage to my vehicle, "
+        "requiring towing and a second corrective repair at another shop."
+    ),
+    claim_start="2025-11-12",
+    claim_end="2026-02-04",
+    claim_calc=(
+        "$475 tow invoice + $2800 corrective-repair invoice from a second "
+        "mechanic. Receipts retained."
+    ),
+    sign_date="2026-03-07",
+)
+
+
+# -- SC-120 field paths --------------------------------------------------
+# Prefix shortcuts keep the long qualified names readable.
+P2_PL = "SC-120[0].Page2[0].List1[0].item1[0]."
+P2_DF = "SC-120[0].Page2[0].List2[0].item2[0]."
+P2_L3 = "SC-120[0].Page2[0].List3[0]."
+P3_Q4 = "SC-120[0].Page3[0].List4[0].item4[0]."  # asked plaintiff to pay
+P3_Q5 = "SC-120[0].Page3[0].List5[0].item5[0]."  # attorney-client fee dispute
+P3_Q6 = "SC-120[0].Page3[0].List6[0].item6[0]."  # suing a public entity
+P3_Q7 = "SC-120[0].Page3[0].List7[0].item7[0]."  # >12 claims in 12 months
+P3_SG = "SC-120[0].Page3[0].List10[0].Li1[0]."   # signature block
+
+
+def build_text_fields(rec: CaseRecord) -> dict:
+    """Build every /Tx (text) field we want written onto SC-120."""
+    return {
+        # -- Item 1: the Plaintiff being sued (Thornwood Auto Repair LLC) --
+        # FillText19 = primary plaintiff name, FillText7 = primary phone
+        P2_PL + "FillText19[0]": rec.pl_name,
+        P2_PL + "FillText7[0]": rec.pl_phone,
+        P2_PL + "PlaintiffAdress[0]": rec.pl_street,
+        P2_PL + "PlaintiffCity[0]": rec.pl_city,
+        P2_PL + "PlaintiffState[0]": rec.pl_state,
+        P2_PL + "PlaintiffZip[0]": rec.pl_zip,
+
+        # -- Item 2: the Defendant (us, Marcus Rivera) --
+        P2_DF + "DefName[0]": rec.def_name,
+        P2_DF + "DefPhone[0]": rec.def_phone,
+        P2_DF + "DefAddress[0]": rec.def_street,
+        P2_DF + "DefCity[0]": rec.def_city,
+        P2_DF + "DefState[0]": rec.def_state,
+        P2_DF + "DefZip[0]": rec.def_zip,
+
+        # -- Item 3: the money owed and why --
+        P2_L3 + "FillText63[0]": rec.claim_amount,
+        P2_L3 + "Lia[0].FillText64[0]": rec.claim_reason,
+        # Item 3b "time period" sub-fields
+        P2_L3 + "Lib[0].FillText67[0]": rec.claim_start,  # Date started
+        P2_L3 + "Lib[0].FillText68[0]": rec.claim_end,    # Through
+        # Item 3c: how the amount was calculated
+        P2_L3 + "Lic[0].FillText70[0]": rec.claim_calc,
+
+        # -- Signature block (item 10) --
+        P3_SG + "Field1[0]": rec.def_name,   # prints defendant name
+        P3_SG + "Date1[0]": rec.sign_date,   # date next to name
+        P3_SG + "Date2[0]": rec.sign_date,   # date next to signature line
+    }
+
+
+def build_checkbox_fields() -> dict:
+    """Build every /Btn field we want toggled on SC-120.
+
+    Each yes/no question on SC-120 is a pair of sibling checkboxes:
+    ``ChN[0]`` is the "Yes" option and ``ChN[1]`` is the "No" option.
+    Setting the desired option to ``/1`` selects it; the other sibling
+    stays at its default ``Off`` value.
+    """
+    return {
+        # Q4: Have you asked the Plaintiff to pay? -> Yes
+        P3_Q4 + "Ch1[0]": "/1",
+
+        # Q5: Is your claim about an attorney-client fee dispute? -> No
+        P3_Q5 + "Ch2[1]": "/2",
+
+        # Q6: Are you suing a public entity? -> No
+        P3_Q6 + "Ch3[1]": "/2",
+
+        # Q7: Filed >12 small claims in the last 12 months? -> No
+        P3_Q7 + "Ch4[1]": "/2",
+    }
+
+
+def apply_to_writer(writer: PdfWriter, values: dict) -> None:
+    """Apply ``values`` to every page of ``writer``."""
+    for page_index, page in enumerate(writer.pages):
+        try:
+            writer.update_page_form_field_values(page, values)
+        except Exception as exc:  # pypdf may warn on unknown fields
+            print(f"  [page {page_index}] warning: {exc}")
+
+
+def copy_to_verifier() -> None:
+    """Mirror the filled PDF to /logs/verifier for manual review."""
+    verifier_dir = VERIFIER_COPY.parent
+    if verifier_dir.parent.exists():
+        verifier_dir.mkdir(parents=True, exist_ok=True)
+        VERIFIER_COPY.write_bytes(FILLED_PATH.read_bytes())
+        print(f"  Mirrored to {VERIFIER_COPY}")
+
+
+def run() -> None:
+    banner = "=" * 60
+    print(banner)
+    print("SC-120 Defendant's Claim -- Oracle Fill")
+    print(banner)
+
+    print("\n[step 1/4] loading blank form")
+    reader = PdfReader(str(BLANK_PATH))
+    print(f"  pages: {len(reader.pages)}")
+
+    # IMPORTANT: XFA templates survive only via append(); add_page()
+    # copies the raw page but drops the /XFA array -> rendered PDFs
+    # come out blank in most viewers.
     writer = PdfWriter()
     writer.append(reader)
 
-    print("\n[2/4] Preparing form data...")
+    print("\n[step 2/4] assembling field payload")
+    text_fields = build_text_fields(CASE)
+    checkbox_fields = build_checkbox_fields()
+    all_fields = {**text_fields, **checkbox_fields}
+    print(f"  text fields:     {len(text_fields)}")
+    print(f"  checkbox fields: {len(checkbox_fields)}")
 
-    # Text fields to fill
-    field_data = {
-        # Plaintiff information (Section 1)
-        "SC-100[0].Page2[0].List1[0].Item1[0].PlaintiffName1[0]": "Marcus Rivera",
-        "SC-100[0].Page2[0].List1[0].Item1[0].PlaintiffAddress1[0]": "1234 El Camino Real",
-        "SC-100[0].Page2[0].List1[0].Item1[0].PlaintiffCity1[0]": "Mountain View",
-        "SC-100[0].Page2[0].List1[0].Item1[0].PlaintiffState1[0]": "CA",
-        "SC-100[0].Page2[0].List1[0].Item1[0].PlaintiffZip1[0]": "94040",
-        "SC-100[0].Page2[0].List1[0].Item1[0].PlaintiffPhone1[0]": "6503217890",
-        "SC-100[0].Page2[0].List1[0].Item1[0].EmailAdd1[0]": "mrivera2001@yahoo.com",
+    print("\n[step 3/4] updating pages")
+    apply_to_writer(writer, all_fields)
 
-        # Defendant information (Section 2)
-        "SC-100[0].Page2[0].List2[0].item2[0].DefendantName1[0]": "Sarah Kim",
-        "SC-100[0].Page2[0].List2[0].item2[0].DefendantAddress1[0]": "567 Castro St",
-        "SC-100[0].Page2[0].List2[0].item2[0].DefendantCity1[0]": "Mountain View",
-        "SC-100[0].Page2[0].List2[0].item2[0].DefendantState1[0]": "CA",
-        "SC-100[0].Page2[0].List2[0].item2[0].DefendantZip1[0]": "94041",
-        "SC-100[0].Page2[0].List2[0].item2[0].DefendantPhone1[0]": "4087654321",
+    print("\n[step 4/4] writing output")
+    with FILLED_PATH.open("wb") as out:
+        writer.write(out)
+    print(f"  wrote {FILLED_PATH}")
 
-        # Claim amount and reason (Section 3)
-        "SC-100[0].Page2[0].List3[0].PlaintiffClaimAmount1[0]": "2200",
-        "SC-100[0].Page2[0].List3[0].Lia[0].FillField2[0]": "Failure to pay for furniture sold based on written purchase agreement after delivery.",
+    copy_to_verifier()
 
-        # Case caption (top of pages)
-        "SC-100[0].Page2[0].PxCaption[0].Plaintiff[0]": "Marcus Rivera",
-
-        # Date range (Section 3b on Page 3)
-        "SC-100[0].Page3[0].List3[0].Lib[0].Date2[0]": "2025-06-15",
-        "SC-100[0].Page3[0].List3[0].Lib[0].Date3[0]": "2025-12-01",
-
-        # How calculated (Section 3c)
-        "SC-100[0].Page3[0].List3[0].Lic[0].FillField1[0]": "It's listed on the written purchase agreement.",
-
-        # Filing location zip code (Section 6)
-        "SC-100[0].Page3[0].List6[0].item6[0].ZipCode1[0]": "94041",
-
-        # Signature section (Page 4)
-        "SC-100[0].Page4[0].Sign[0].PlaintiffName1[0]": "Marcus Rivera",
-        "SC-100[0].Page4[0].Sign[0].Date1[0]": "2025-12-01",
-    }
-
-    # Checkbox/radio button fields
-    # /1 = first option (Yes), /2 = second option (No)
-    checkbox_data = {
-        # Section 4: Asked defendant to pay? Yes
-        "SC-100[0].Page3[0].List4[0].Item4[0].Checkbox50[0]": "/1",
-
-        # Section 5a: Filing location - where defendant lives/does business
-        "SC-100[0].Page3[0].List5[0].Lia[0].Checkbox5cb[0]": "/1",
-
-        # Section 7: Attorney-client fee dispute? No
-        "SC-100[0].Page3[0].List7[0].item7[0].Checkbox60[1]": "/2",
-
-        # Section 8: Suing a public entity? No
-        "SC-100[0].Page3[0].List8[0].item8[0].Checkbox61[1]": "/2",
-
-        # Section 9: Filed more than 12 claims in last 12 months? No
-        "SC-100[0].Page4[0].List9[0].Item9[0].Checkbox62[1]": "/2",
-
-        # Section 10: Claim for more than $2,500? No (claim is $2200)
-        "SC-100[0].Page4[0].List10[0].li10[0].Checkbox63[1]": "/2",
-    }
-
-    print(f"  Text fields: {len(field_data)}")
-    print(f"  Checkbox fields: {len(checkbox_data)}")
-
-    print("\n[3/4] Filling form fields...")
-
-    # Combine all field data
-    all_data = {**field_data, **checkbox_data}
-
-    # Fill fields on all pages
-    for i, page in enumerate(writer.pages):
-        try:
-            writer.update_page_form_field_values(page, all_data)
-        except Exception as e:
-            print(f"  Warning on page {i}: {e}")
-
-    print(f"  Updated fields across {len(writer.pages)} pages")
-
-    print("\n[4/4] Saving filled form...")
-    with open(OUTPUT_PDF, "wb") as f:
-        writer.write(f)
-
-    print(f"  Saved to: {OUTPUT_PDF}")
-
-    # Copy to verifier folder for manual review
-    verifier_dir = "/logs/verifier"
-    if os.path.exists("/logs"):
-        os.makedirs(verifier_dir, exist_ok=True)
-        import shutil
-        shutil.copy(OUTPUT_PDF, os.path.join(verifier_dir, "sc100-filled.pdf"))
-        print(f"  Copied to verifier folder")
-
-    print(f"\n{'=' * 60}")
-    print("Solution complete!")
-    print("=" * 60)
+    print(f"\n{banner}\nDone.\n{banner}")
 
 
 if __name__ == "__main__":
-    fill_sc100_form()
-PYTHON_SCRIPT
+    run()
+PYSRC
 
-python3 /tmp/fill_form.py
+python3 /tmp/fill_defendant_claim.py
 echo "Solution complete."

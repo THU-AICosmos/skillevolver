@@ -1,0 +1,14 @@
+{
+  "pulls": {
+    "count": 29,
+    "merged_count": 18,
+    "open_count": 0,
+    "mean_merge_days": 3.7,
+    "most_active_author": "wraithgar"
+  },
+  "issues": {
+    "count": 30,
+    "bugs": 24,
+    "open_bugs": 3
+  }
+}

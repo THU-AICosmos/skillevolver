@@ -8,238 +8,242 @@ ls -la /app/ || echo "Cannot list /app"
 echo "Contents of /app/skills:"
 ls -la /app/skills/ || echo "Cannot list /app/skills"
 
-python3 <<'EOF'
+python3 <<'PYEOF'
 import json
 import os
 import sys
 from pathlib import Path
+
 import pandas as pd
 
-print("=== Python script starting ===")
+print("=== Python solver starting ===")
 print(f"CWD: {os.getcwd()}")
 
 base_dir = Path(os.getcwd())
 
 # Resolve skills directory (prefer container /app/skills, fallback to repo layouts).
-skills_roots = [
+candidate_roots = [
     Path("/app/skills"),
     base_dir / "environment" / "skills",
     base_dir / "skills",
 ]
 
-# Add skill modules to sys.path (mirrors notebook setup).
-for root in skills_roots:
+skill_dirs = [
+    "search-cities",
+    "search-accommodations",
+    "search-restaurants",
+    "search-attractions",
+    "search-driving-distance",
+]
+
+for root in candidate_roots:
     print(f"Checking root: {root}, exists: {root.exists()}")
     if not root.exists():
         continue
-    for skill in [
-        "search-cities",
-        "search-accommodations",
-        "search-restaurants",
-        "search-attractions",
-        "search-driving-distance",
-    ]:
-        skill_path = root / skill / "scripts"
-        print(f"  Adding to path: {skill_path}, exists: {skill_path.exists()}")
-        sys.path.append(str(skill_path))
+    for sdir in skill_dirs:
+        sp = root / sdir / "scripts"
+        print(f"  Adding to path: {sp}, exists: {sp.exists()}")
+        sys.path.append(str(sp))
 
-print("Attempting imports...")
+print("Importing skill modules...")
 from search_cities import Cities
-print("Cities imported")
 from search_accommodations import Accommodations
 from search_restaurants import Restaurants
 from search_attractions import Attractions
 from search_driving_distance import GoogleDistanceMatrix
 
+DESIRED_CUISINES = ["Mexican", "Indian", "French", "Chinese"]
 
-PREFERRED_CUISINES = ["Mexican", "Indian", "French", "Chinese"]
 
-
-def primary_cuisine(cuisines: str) -> str:
-    if not isinstance(cuisines, str) or not cuisines.strip():
+def dominant_cuisine(cuisines_str: str) -> str:
+    """Return the first matching desired cuisine, or fallback to the first listed one."""
+    if not isinstance(cuisines_str, str) or not cuisines_str.strip():
         return "-"
-    for cuisine in PREFERRED_CUISINES:
-        if cuisine.lower() in cuisines.lower():
-            return cuisine
-    return cuisines.split(",")[0].strip()
+    for c in DESIRED_CUISINES:
+        if c.lower() in cuisines_str.lower():
+            return c
+    return cuisines_str.split(",")[0].strip()
 
 
-def interleave_by_cuisine(df):
-    """Reorder restaurants to interleave different cuisines for variety."""
+def rotate_cuisines(df):
+    """Reorder restaurants so different cuisine types alternate for variety."""
     if isinstance(df, str) or df is None or df.empty:
         return df
     df = df.copy()
-    df["_primary"] = df["Cuisines"].apply(primary_cuisine)
-    groups = {c: df[df["_primary"] == c].reset_index(drop=True) for c in PREFERRED_CUISINES}
-    result = []
-    max_len = max((len(g) for g in groups.values()), default=0)
-    for i in range(max_len):
-        for c in PREFERRED_CUISINES:
-            if i < len(groups[c]):
-                result.append(groups[c].iloc[i])
-    if result:
-        return pd.DataFrame(result).reset_index(drop=True)
+    df["_dom"] = df["Cuisines"].apply(dominant_cuisine)
+    buckets = {c: df[df["_dom"] == c].reset_index(drop=True) for c in DESIRED_CUISINES}
+    ordered = []
+    longest = max((len(b) for b in buckets.values()), default=0)
+    for i in range(longest):
+        for c in DESIRED_CUISINES:
+            if i < len(buckets[c]):
+                ordered.append(buckets[c].iloc[i])
+    if ordered:
+        return pd.DataFrame(ordered).reset_index(drop=True)
     return df.reset_index(drop=True)
 
 
-def pick_restaurant(restaurants, idx: int) -> str:
-    if isinstance(restaurants, str) or restaurants is None or idx >= len(restaurants):
+def format_meal(restaurants_df, row_idx: int) -> str:
+    if isinstance(restaurants_df, str) or restaurants_df is None or row_idx >= len(restaurants_df):
         return "-"
-    row = restaurants.iloc[idx].to_dict()
-    city = row.get("City", "").strip()
-    name = row.get("Name", "").strip()
-    cuisine = primary_cuisine(row.get("Cuisines", ""))
-    if not name:
+    r = restaurants_df.iloc[row_idx].to_dict()
+    rname = r.get("Name", "").strip()
+    rcity = r.get("City", "").strip()
+    rcuisine = dominant_cuisine(r.get("Cuisines", ""))
+    if not rname:
         return "-"
-    return f"{cuisine} at {name}, {city}".strip(", ")
+    return f"{rcuisine} at {rname}, {rcity}".strip(", ")
 
 
-def pick_accommodation(df) -> str:
+def format_lodging(df) -> str:
     if isinstance(df, str) or df is None or df.empty:
         return "-"
     row = df.iloc[0].to_dict()
-    return f"No smoking {row.get('NAME', '').strip()}, {row.get('city', '').strip()}"
+    return f"Child-friendly {row.get('NAME', '').strip()}, {row.get('city', '').strip()}"
 
 
-def attraction_block(df, start: int, end: int) -> str:
+def format_sightseeing(df, begin: int, end: int) -> str:
     if isinstance(df, str) or df is None:
         return "-"
-    slice_df = df.iloc[start:end]
-    if slice_df.empty:
+    chunk = df.iloc[begin:end]
+    if chunk.empty:
         return "-"
-    names = [name for name in slice_df["Name"].tolist() if isinstance(name, str)]
+    names = [n for n in chunk["Name"].tolist() if isinstance(n, str)]
     return ";".join(names) + ";" if names else "-"
 
 
-# Determine the three target cities from Texas.
-cities = Cities().run("Texas")
-if isinstance(cities, str):
-    raise SystemExit("Unable to load Texas cities.")
-# Pick Dallas (index 19), Houston (index 9), Austin (index 18)
-target_cities = [cities[19], cities[9], cities[18]]  # Dallas, Houston, Austin
-city1, city2, city3 = target_cities
+# Identify three target cities in Texas from the database.
+all_texas = Cities().run("Texas")
+if isinstance(all_texas, str):
+    raise SystemExit("Unable to load Texas cities from database.")
 
-# City 1: Dallas
-acc1 = Accommodations().run(city1)
-if not isinstance(acc1, str):
-    acc1 = acc1[acc1["maximum occupancy"] >= 3.0]
-    acc1 = acc1[~acc1["house_rules"].str.contains("No smoking", case=False, na=False)]
-    acc1 = acc1[acc1["minimum nights"] <= 2.0].reset_index(drop=True)
-acc1_label = pick_accommodation(acc1)
+# Pick three well-known cities in different positions than the original task
+target_a = all_texas[9]   # Houston
+target_b = all_texas[18]  # Austin
+target_c = all_texas[19]  # Dallas
+print(f"Selected cities: {target_a}, {target_b}, {target_c}")
 
-rest1 = Restaurants().run(city1)
-if not isinstance(rest1, str):
-    mask1 = (
-        rest1["Cuisines"].str.contains("Mexican", case=False)
-        | rest1["Cuisines"].str.contains("Indian", case=False)
-        | rest1["Cuisines"].str.contains("French", case=False)
-        | rest1["Cuisines"].str.contains("Chinese", case=False)
+# --- Houston ---
+lodging_a = Accommodations().run(target_a)
+if not isinstance(lodging_a, str):
+    lodging_a = lodging_a[lodging_a["maximum occupancy"] >= 3.0]
+    lodging_a = lodging_a[~lodging_a["house_rules"].str.contains("No children", case=False, na=False)]
+    lodging_a = lodging_a[lodging_a["minimum nights"] <= 2.0].reset_index(drop=True)
+lodging_a_label = format_lodging(lodging_a)
+
+food_a = Restaurants().run(target_a)
+if not isinstance(food_a, str):
+    cuisine_mask_a = (
+        food_a["Cuisines"].str.contains("Mexican", case=False)
+        | food_a["Cuisines"].str.contains("Indian", case=False)
+        | food_a["Cuisines"].str.contains("French", case=False)
+        | food_a["Cuisines"].str.contains("Chinese", case=False)
     )
-    rest1 = rest1[mask1].sort_values(by="Average Cost", ascending=True).reset_index(drop=True)
-    rest1 = interleave_by_cuisine(rest1)
-attr1 = Attractions().run(city1)
+    food_a = food_a[cuisine_mask_a].sort_values(by="Average Cost", ascending=True).reset_index(drop=True)
+    food_a = rotate_cuisines(food_a)
+sights_a = Attractions().run(target_a)
 
-# City 2: Houston
-acc2 = Accommodations().run(city2)
-if not isinstance(acc2, str):
-    acc2 = acc2[acc2["maximum occupancy"] >= 3.0]
-    acc2 = acc2[~acc2["house_rules"].str.contains("No smoking", case=False, na=False)]
-    acc2 = acc2[acc2["minimum nights"] <= 2.0].reset_index(drop=True)
-acc2_label = pick_accommodation(acc2)
+# --- Austin ---
+lodging_b = Accommodations().run(target_b)
+if not isinstance(lodging_b, str):
+    lodging_b = lodging_b[lodging_b["maximum occupancy"] >= 3.0]
+    lodging_b = lodging_b[~lodging_b["house_rules"].str.contains("No children", case=False, na=False)]
+    lodging_b = lodging_b[lodging_b["minimum nights"] <= 2.0].reset_index(drop=True)
+lodging_b_label = format_lodging(lodging_b)
 
-rest2 = Restaurants().run(city2)
-if not isinstance(rest2, str):
-    mask2 = (
-        rest2["Cuisines"].str.contains("Mexican", case=False)
-        | rest2["Cuisines"].str.contains("Indian", case=False)
-        | rest2["Cuisines"].str.contains("French", case=False)
-        | rest2["Cuisines"].str.contains("Chinese", case=False)
+food_b = Restaurants().run(target_b)
+if not isinstance(food_b, str):
+    cuisine_mask_b = (
+        food_b["Cuisines"].str.contains("Mexican", case=False)
+        | food_b["Cuisines"].str.contains("Indian", case=False)
+        | food_b["Cuisines"].str.contains("French", case=False)
+        | food_b["Cuisines"].str.contains("Chinese", case=False)
     )
-    rest2 = rest2[mask2].sort_values(by="Average Cost", ascending=True).reset_index(drop=True)
-    rest2 = interleave_by_cuisine(rest2)
-attr2 = Attractions().run(city2)
+    food_b = food_b[cuisine_mask_b].sort_values(by="Average Cost", ascending=True).reset_index(drop=True)
+    food_b = rotate_cuisines(food_b)
+sights_b = Attractions().run(target_b)
 
-# City 3: Austin
-acc3 = Accommodations().run(city3)
-if not isinstance(acc3, str):
-    acc3 = acc3[acc3["maximum occupancy"] >= 3.0]
-    acc3 = acc3[~acc3["house_rules"].str.contains("No smoking", case=False, na=False)]
-    acc3 = acc3[acc3["minimum nights"] <= 2.0].reset_index(drop=True)
-acc3_label = pick_accommodation(acc3)
+# --- Dallas ---
+lodging_c = Accommodations().run(target_c)
+if not isinstance(lodging_c, str):
+    lodging_c = lodging_c[lodging_c["maximum occupancy"] >= 3.0]
+    lodging_c = lodging_c[~lodging_c["house_rules"].str.contains("No children", case=False, na=False)]
+    lodging_c = lodging_c[lodging_c["minimum nights"] <= 2.0].reset_index(drop=True)
+lodging_c_label = format_lodging(lodging_c)
 
-rest3 = Restaurants().run(city3)
-if not isinstance(rest3, str):
-    mask3 = (
-        rest3["Cuisines"].str.contains("Mexican", case=False)
-        | rest3["Cuisines"].str.contains("Indian", case=False)
-        | rest3["Cuisines"].str.contains("French", case=False)
-        | rest3["Cuisines"].str.contains("Chinese", case=False)
+food_c = Restaurants().run(target_c)
+if not isinstance(food_c, str):
+    cuisine_mask_c = (
+        food_c["Cuisines"].str.contains("Mexican", case=False)
+        | food_c["Cuisines"].str.contains("Indian", case=False)
+        | food_c["Cuisines"].str.contains("French", case=False)
+        | food_c["Cuisines"].str.contains("Chinese", case=False)
     )
-    rest3 = rest3[mask3].sort_values(by="Average Cost", ascending=True).reset_index(drop=True)
-    rest3 = interleave_by_cuisine(rest3)
-attr3 = Attractions().run(city3)
+    food_c = food_c[cuisine_mask_c].sort_values(by="Average Cost", ascending=True).reset_index(drop=True)
+    food_c = rotate_cuisines(food_c)
+sights_c = Attractions().run(target_c)
 
-# Distances (invoked to mirror tool usage).
-GoogleDistanceMatrix().run(origin=city1, destination=city2)
-GoogleDistanceMatrix().run(origin=city2, destination=city3)
-GoogleDistanceMatrix().run(origin=city3, destination=city1)
+# Query driving distances (to register tool usage)
+GoogleDistanceMatrix().run(origin=target_a, destination=target_b)
+GoogleDistanceMatrix().run(origin=target_b, destination=target_c)
+GoogleDistanceMatrix().run(origin=target_c, destination=target_a)
 
-plan = [
+itinerary = [
     {
-        "day": 1,
-        "current_city": f"from Denver to {city1}",
-        "transportation": f"Self-driving: from Denver to {city1}",
-        "breakfast": "-",
-        "lunch": "-",
-        "dinner": pick_restaurant(rest1, 0),
-        "attraction": attraction_block(attr1, 0, 2),
-        "accommodation": acc1_label,
+        "day_number": 1,
+        "location": f"from Denver to {target_a}",
+        "transport": f"Self-driving: from Denver to {target_a}",
+        "morning_meal": "-",
+        "midday_meal": "-",
+        "evening_meal": format_meal(food_a, 0),
+        "sightseeing": format_sightseeing(sights_a, 0, 3),
+        "lodging": lodging_a_label,
     },
     {
-        "day": 2,
-        "current_city": f"from {city1} to {city2}",
-        "transportation": f"Self-driving: from {city1} to {city2}",
-        "breakfast": pick_restaurant(rest1, 1),
-        "lunch": pick_restaurant(rest2, 0),
-        "dinner": pick_restaurant(rest2, 1),
-        "attraction": attraction_block(attr2, 0, 2),
-        "accommodation": acc2_label,
+        "day_number": 2,
+        "location": f"from {target_a} to {target_b}",
+        "transport": f"Self-driving: from {target_a} to {target_b}",
+        "morning_meal": format_meal(food_a, 1),
+        "midday_meal": format_meal(food_b, 0),
+        "evening_meal": format_meal(food_b, 1),
+        "sightseeing": format_sightseeing(sights_b, 0, 2),
+        "lodging": lodging_b_label,
     },
     {
-        "day": 3,
-        "current_city": city2,
-        "transportation": "-",
-        "breakfast": pick_restaurant(rest2, 2),
-        "lunch": pick_restaurant(rest2, 3),
-        "dinner": pick_restaurant(rest2, 4),
-        "attraction": attraction_block(attr2, 2, 4),
-        "accommodation": acc2_label,
+        "day_number": 3,
+        "location": target_b,
+        "transport": "-",
+        "morning_meal": format_meal(food_b, 2),
+        "midday_meal": format_meal(food_b, 3),
+        "evening_meal": format_meal(food_b, 4),
+        "sightseeing": format_sightseeing(sights_b, 2, 5),
+        "lodging": lodging_b_label,
     },
     {
-        "day": 4,
-        "current_city": f"from {city2} to {city3}",
-        "transportation": f"Self-driving: from {city2} to {city3}",
-        "breakfast": pick_restaurant(rest2, 5),
-        "lunch": pick_restaurant(rest3, 0),
-        "dinner": pick_restaurant(rest3, 1),
-        "attraction": attraction_block(attr3, 0, 2),
-        "accommodation": acc3_label,
+        "day_number": 4,
+        "location": f"from {target_b} to {target_c}",
+        "transport": f"Self-driving: from {target_b} to {target_c}",
+        "morning_meal": format_meal(food_b, 5),
+        "midday_meal": format_meal(food_c, 0),
+        "evening_meal": format_meal(food_c, 1),
+        "sightseeing": format_sightseeing(sights_c, 0, 3),
+        "lodging": lodging_c_label,
     },
     {
-        "day": 5,
-        "current_city": f"from {city3} to Denver",
-        "transportation": f"Self-driving: from {city3} to Denver",
-        "breakfast": pick_restaurant(rest3, 2),
-        "lunch": "-",
-        "dinner": "-",
-        "attraction": attraction_block(attr3, 2, 3),
-        "accommodation": "-",
+        "day_number": 5,
+        "location": f"from {target_c} to Denver",
+        "transport": f"Self-driving: from {target_c} to Denver",
+        "morning_meal": format_meal(food_c, 2),
+        "midday_meal": "-",
+        "evening_meal": "-",
+        "sightseeing": format_sightseeing(sights_c, 3, 5),
+        "lodging": "-",
     },
 ]
 
-output = {
-    "plan": plan,
-    "tool_called": [
+result_payload = {
+    "itinerary": itinerary,
+    "tools_used": [
         "search_cities",
         "search_accommodations",
         "search_restaurants",
@@ -249,14 +253,14 @@ output = {
 }
 
 out_dir = os.environ.get("OUTPUT_DIR", "/app/output")
-print(f"Output dir: {out_dir}")
+print(f"Output directory: {out_dir}")
 os.makedirs(out_dir, exist_ok=True)
-out_path = os.path.join(out_dir, "itinerary.json")
-print(f"Writing to: {out_path}")
-with open(out_path, "w", encoding="utf-8") as f:
-    json.dump(output, f, ensure_ascii=False, indent=2)
-print(f"=== SUCCESS: itinerary.json written to {out_path} ===")
+out_file = os.path.join(out_dir, "trip_plan.json")
+print(f"Writing to: {out_file}")
+with open(out_file, "w", encoding="utf-8") as fh:
+    json.dump(result_payload, fh, ensure_ascii=False, indent=2)
+print(f"=== SUCCESS: trip_plan.json written to {out_file} ===")
 
-EOF
+PYEOF
 
 echo "=== solve.sh completed ==="

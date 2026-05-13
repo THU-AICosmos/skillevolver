@@ -10,7 +10,7 @@ The "problem.json" file has the following fields, for example:
     {
       "id": a unique problem id,
       "description": a language description of the task,
-      "input": input data path, for example: "data/v.npy",
+      "input": input data path, for example: "data/u.npy",
       "output": output result path, for example: "col_sum.npy"
     },
     ...,

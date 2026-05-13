@@ -367,7 +367,7 @@ def main() -> None:
                 "flow_to_MVA": round(float(r["flow_to_MVA"]), 3),
                 "limit_MVA": round(float(r["limit_MVA"]), 3),
             }
-            for r in sorted(branch_records, key=lambda x: x["loading_pct"], reverse=True)[:5]
+            for r in sorted(branch_records, key=lambda x: x["loading_pct"], reverse=True)[:10]
         ],
         "feasibility_check": {
             "max_p_mismatch_MW": round(max_p_mis, 6),

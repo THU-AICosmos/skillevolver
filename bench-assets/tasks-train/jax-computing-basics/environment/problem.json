@@ -1,38 +1,38 @@
 [
     {
-      "id": "reduce_prod",
-      "description": "Given matrix v, compute the product of each column (axis=0).",
-      "input": "data/v.npy",
-      "output": "reduce_prod.npy"
+      "id": "basic_sum",
+      "description": "Column sum reduction: compute sum of each column (axis=0) of matrix u.",
+      "input": "data/u.npy",
+      "output": "basic_sum.npy"
     },
     {
-      "id": "map_tanh",
-      "description": "Apply the tanh activation function to every element using vectorization.",
-      "input": "data/v.npy",
-      "output": "map_tanh.npy"
+      "id": "map_exp",
+      "description": "Apply elementwise exponential to each element using vectorization.",
+      "input": "data/u.npy",
+      "output": "map_exp.npy"
     },
     {
-      "id": "grad_hinge",
-      "description": "Compute gradient of hinge loss with respect to weights.",
-      "input": "data/hinge.npz",
-      "output": "grad_hinge.npy"
+      "id": "grad_mse",
+      "description": "Compute gradient of mean-squared error loss L(w) = mean((x @ w - t)**2) w.r.t. weights w.",
+      "input": "data/mse.npz",
+      "output": "grad_mse.npy"
     },
     {
-      "id": "scan_filter",
-      "description": "Implement an IIR low-pass filter forward pass using scan.",
-      "input": "data/signal.npz",
-      "output": "scan_filter.npy"
+      "id": "grad_bce",
+      "description": "Compute gradient of binary cross-entropy (logistic) loss w.r.t. weights w, with sigmoid(x @ w) and labels y_bin in {0,1}.",
+      "input": "data/bce.npz",
+      "output": "grad_bce.npy"
     },
     {
-      "id": "jit_residual",
-      "description": "Implement and JIT compile a residual block: relu(x @ W1 + b1) @ W2 + b2 + x.",
-      "input": "data/resblock.npz",
-      "output": "jit_residual.npy"
+      "id": "scan_rnn_v",
+      "description": "Implement RNN forward pass over a sequence using jax.lax.scan with tanh cell: h_new = tanh(Ux @ x_t + Uh @ h + c). Output stacked hidden states.",
+      "input": "data/seq_rnn.npz",
+      "output": "scan_rnn_v.npy"
     },
     {
-      "id": "vmap_outer",
-      "description": "Use vmap to compute the outer product of each pair of corresponding row vectors in two matrices.",
-      "input": "data/outer.npz",
-      "output": "vmap_outer.npy"
+      "id": "jit_mlp",
+      "description": "JIT-compile 2-layer MLP forward pass with ReLU nonlinearity: relu(X @ W1 + b1) @ W2 + b2.",
+      "input": "data/mlp.npz",
+      "output": "jit_mlp.npy"
     }
-  ]
+]

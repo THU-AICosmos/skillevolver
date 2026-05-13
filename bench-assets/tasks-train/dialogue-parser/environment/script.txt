@@ -1,0 +1,1108 @@
+[Start]
+Comms: Docking sequence complete. Welcome to Vanguard Station, pilot. -> ArrivalBay
+
+[ArrivalBay]
+Comms: Three corridors branch ahead: Security Checkpoint, the Bazaar, and the Cantina. -> HubChoice
+
+[HubChoice]
+1. Head to Security Checkpoint. -> SecurityApproach
+2. Browse the Bazaar. -> BazaarApproach
+3. Enter the Cantina. -> CantinaApproach
+4. [Scan] Survey the station layout from here. -> ScanStation
+5. Check the notice board. -> NoticeBoard
+
+[ScanStation]
+Comms: Sensors detect unusual energy readings from Docking Bay 7. A restricted area lies beyond the command deck. -> ScanChoice
+
+[ScanChoice]
+1. Investigate Docking Bay 7. -> Bay7Approach
+2. Head to the command deck. -> CommandApproach
+3. Ignore it for now. -> HubChoice
+
+[Bay7Approach]
+Engineer: Hey! You shouldn't be here. This bay is under quarantine. -> Bay7Confront
+
+[Bay7Confront]
+1. Why is it quarantined? -> Bay7Explain
+2. [Bluff] Maintenance crew, just checking systems. -> Bay7Bluff
+3. Leave quietly. -> HubChoice
+
+[Bay7Explain]
+Engineer: A cargo ship crashed here yesterday. Something in the wreckage is emitting weird signals. Command wants it contained. -> Bay7Info
+
+[Bay7Info]
+1. What kind of signals? -> Bay7Signals
+2. Can I see the wreckage? -> Bay7Access
+3. Sounds dangerous. I'll go. -> HubChoice
+
+[Bay7Access]
+Engineer: Follow me, but stay close. This place is unstable. -> Bay7Partnership
+
+[Bay7Signals]
+Engineer: Electromagnetic pulses. Frying circuits nearby. My tools keep shorting out. -> Bay7SignalChoice
+
+[Bay7SignalChoice]
+1. I have shielded equipment. Let me help. -> Bay7Help
+2. Could it be a weapon? -> Bay7Weapon
+3. Good luck with that. -> HubChoice
+
+[Bay7Help]
+Engineer: Really? That would save me days of work. Come on, I'll show you. -> Bay7Partnership
+
+[Bay7Partnership]
+Comms: You and the engineer approach the smoldering wreckage together. -> Bay7Wreckage
+
+[Bay7Wreckage]
+1. Search for the source of the signals. -> SignalSource
+2. Look for the ship's black box. -> BlackBoxSearch
+3. Check for survivors. -> SurvivorCheck
+
+[SurvivorCheck]
+Engineer: Already checked. No survivors. Whatever happened, it was fast. -> Bay7Wreckage
+
+[SignalSource]
+Engineer: It's coming from deep inside the hull. We'll need to cut through. -> SignalCut
+
+[SignalCut]
+1. [Engineering] I can reroute the power conduits to make it safer. -> SignalSafe
+2. Just cut through. -> SignalDangerous
+3. Let's find another way in. -> BlackBoxSearch
+
+[SignalSafe]
+Engineer: Clever. Rerouting now. The pulses have stopped temporarily. -> SignalRevealed
+
+[SignalDangerous]
+Engineer: Careful! The sparks almost hit the fuel line! -> SignalRevealed
+
+[SignalRevealed]
+Engineer: It's... a beacon. Military grade. Someone wanted this ship found. -> BeaconChoice
+
+[BeaconChoice]
+1. Who would plant a military beacon? -> BeaconMilitary
+2. Disable it. -> BeaconDisable
+3. Leave it active. Someone might come looking. -> BeaconLeave
+
+[BeaconMilitary]
+Engineer: Nexus Command, maybe. Or pirates using stolen tech. Either way, trouble. -> BeaconChoice2
+
+[BeaconChoice2]
+1. Disable it before they arrive. -> BeaconDisable
+2. We should report this to station security. -> SecurityReport
+3. Let's set a trap for whoever comes. -> BeaconTrap
+
+[BeaconDisable]
+Engineer: Done. But whoever planted it will know it went dark. Clock's ticking. -> Bay7After
+
+[BeaconLeave]
+Engineer: Your call. But if Nexus Command shows up, I was never here. -> Bay7After
+
+[BeaconTrap]
+Engineer: You're bold. I like it. Let me rig some surprises. -> TrapSet
+
+[TrapSet]
+Comms: The engineer wires stun charges around the bay entrance. -> Bay7After
+
+[SecurityReport]
+Comms: You relay the information to station security. They promise to investigate. Eventually. -> Bay7After
+
+[Bay7After]
+Comms: The bay grows quiet. What now? -> Bay7AfterChoice
+
+[Bay7AfterChoice]
+1. Continue exploring the wreckage. -> BlackBoxSearch
+2. Return to the hub. -> HubChoice
+3. Talk more with the engineer. -> EngineerChat
+
+[EngineerChat]
+Engineer: Name's Dex. Been fixing things on this station for twelve years. -> DexTalk
+
+[DexTalk]
+1. What do you know about the crashed ship? -> DexShipInfo
+2. Any interesting rumors around the station? -> DexRumors
+3. I should get going. -> HubChoice
+
+[DexShipInfo]
+Engineer: Registry says it's the Orion's Wake. Private vessel. No known affiliation. But that beacon says otherwise. -> DexShipMore
+
+[DexShipMore]
+1. Can you trace the beacon's origin? -> DexTrace
+2. Who was the captain? -> DexCaptain
+3. Interesting. Thanks. -> HubChoice
+
+[DexTrace]
+Engineer: Give me a few hours and access to the comm array. I might be able to pull something. -> DexTraceQuest
+
+[DexTraceQuest]
+1. I'll get you access. -> CommArrayQuest
+2. Too risky. Forget it. -> HubChoice
+
+[CommArrayQuest]
+Comms: Dex needs access to the main communications array on the command deck. -> CommandApproach
+
+[DexCaptain]
+Engineer: A woman named Voss. Helena Voss. Freelancer with a reputation for taking risky contracts. -> VossInfo
+
+[VossInfo]
+1. What kind of contracts? -> VossContracts
+2. Is she dead? -> VossFate
+3. Noted. -> DexTalk
+
+[VossContracts]
+Engineer: Salvage runs in contested space. Artifact retrieval from dead worlds. The kind of work nobody talks about. -> DexTalk
+
+[VossFate]
+Engineer: No body found. Could be anywhere. Or nowhere. -> DexTalk
+
+[DexRumors]
+Engineer: Word is the station commander has been nervous lately. Doubled patrols. Something's got her spooked. -> DexRumorChoice
+
+[DexRumorChoice]
+1. What's she afraid of? -> DexCommanderFear
+2. Doubled patrols means doubled opportunity. -> DexSmirk
+3. Not my concern. -> HubChoice
+
+[DexCommanderFear]
+Engineer: Nobody knows for sure. But it started right around when that ship crashed. Coincidence? -> DexTalk
+
+[DexSmirk]
+Engineer: Ha. You sound like the smuggler in the Cantina. You two would get along. -> DexTalk
+
+[Bay7Bluff]
+Engineer: Maintenance? In that getup? Fine, whatever. Just don't touch the wreckage. -> Bay7Info
+
+[Bay7Weapon]
+Engineer: Maybe. Military beacons don't end up on civilian ships by accident. -> Bay7SignalChoice
+
+[BlackBoxSearch]
+Comms: You dig through twisted metal and sparking wires. -> BlackBoxResult
+
+[BlackBoxResult]
+Engineer: There! Under that panel. The flight recorder. -> BlackBoxFound
+
+[BlackBoxFound]
+1. Take the black box. -> BlackBoxTaken
+2. Leave it. Someone else can deal with this. -> HubChoice
+3. [Decrypt] Try to access the data here. -> BlackBoxDecrypt
+
+[BlackBoxTaken]
+Comms: The black box is heavy in your hands. Its data could be worth a fortune—or a death sentence. -> BlackBoxDecision
+
+[BlackBoxDecision]
+1. Give it to station security. -> SecurityHandoff
+2. Sell it to the highest bidder. -> BlackBoxSell
+3. Decrypt it yourself. -> BlackBoxDecrypt
+4. Keep it hidden for now. -> HubChoice
+
+[SecurityHandoff]
+Comms: Security thanks you. They seem unusually interested in the contents. -> HubChoice
+
+[BlackBoxSell]
+Comms: The Bazaar might have interested buyers. Or perhaps the smuggler in the Cantina. -> HubChoice
+
+[BlackBoxDecrypt]
+Comms: The encryption is military-grade. You'll need specialized tools or expert help. -> DecryptChoice
+
+[DecryptChoice]
+1. Ask Dex for help. -> DexDecrypt
+2. Find a hacker in the Bazaar. -> HackerSearch
+3. Try brute force. -> BruteForce
+4. Forget it for now. -> HubChoice
+
+[DexDecrypt]
+Engineer: Military encryption? That's Nexus-level stuff. I can try, but it'll take time. -> DexDecryptResult
+
+[DexDecryptResult]
+Engineer: Partial decrypt. The ship was carrying classified cargo. Destination: this station. -> DecryptReveal
+
+[DecryptReveal]
+1. What kind of cargo? -> CargoReveal
+2. Why this station? -> StationReveal
+3. Who sent it? -> SenderReveal
+
+[CargoReveal]
+Engineer: The manifest just says "Project Chimera." Whatever that is. -> ChimeraLead
+
+[StationReveal]
+Engineer: The coordinates match Vanguard Station exactly. This wasn't a crash. It was a delivery. -> ChimeraLead
+
+[SenderReveal]
+Engineer: Encrypted sender tag. But the routing went through Nexus Command channels. -> ChimeraLead
+
+[ChimeraLead]
+Comms: Project Chimera. The name echoes in your mind. Someone on this station knows more. -> HubChoice
+
+[HackerSearch]
+Comms: The Bazaar's back alleys might house someone with the right skills. -> BazaarApproach
+
+[BruteForce]
+Comms: After hours of trying, you manage to extract fragments. Coordinates. A name: Chimera. -> ChimeraLead
+
+[NoticeBoard]
+Comms: Several postings catch your eye. -> NoticeBoardChoice
+
+[NoticeBoardChoice]
+1. "WANTED: Pilot for high-risk cargo run." -> CargoPosting
+2. "MISSING: Helena Voss. Last seen Docking Bay 7." -> VossPosting
+3. "REWARD: Information about Project Chimera." -> ChimeraPosting
+4. Return to the hub. -> HubChoice
+
+[CargoPosting]
+Comms: The posting offers 500 credits for a single delivery. No questions asked. -> CargoPostChoice
+
+[CargoPostChoice]
+1. Take the job. -> CargoJobAccept
+2. Sounds like smuggling. Pass. -> NoticeBoardChoice
+
+[CargoJobAccept]
+Comms: A contact code is listed. You memorize it. -> CantinaApproach
+
+[VossPosting]
+Comms: Helena Voss. Missing for 48 hours. 200 credit reward for information. Posted by: Anonymous. -> VossPostChoice
+
+[VossPostChoice]
+1. Investigate the disappearance. -> VossInvestigate
+2. Suspicious. Who posted this? -> VossAnonymous
+3. Not interested. -> NoticeBoardChoice
+
+[VossInvestigate]
+Comms: The trail leads to Docking Bay 7 and the Cantina. -> HubChoice
+
+[VossAnonymous]
+Comms: The posting terminal shows no ID. Someone went to great lengths to stay hidden. -> NoticeBoardChoice
+
+[ChimeraPosting]
+Comms: "If you know about Project Chimera, meet me at Cantina booth 7. Come alone." -> ChimeraPostChoice
+
+[ChimeraPostChoice]
+1. Go to the Cantina. -> CantinaApproach
+2. It's a trap. Avoid it. -> NoticeBoardChoice
+
+[SecurityApproach]
+Commander: Identification, pilot. This station is on heightened alert. -> SecurityGreet
+
+[SecurityGreet]
+1. Here are my credentials. -> SecurityClear
+2. What's the alert about? -> SecurityAlert
+3. [Forge] Present falsified documents. -> SecurityForge
+4. I'll come back later. -> HubChoice
+
+[SecurityClear]
+Commander: Everything checks out. Welcome to Vanguard. Don't cause trouble. -> SecurityTalk
+
+[SecurityTalk]
+1. What can you tell me about the station? -> StationInfo
+2. I heard about a crash in Bay 7. -> SecurityBay7
+3. I'm looking for someone named Voss. -> SecurityVoss
+4. Just passing through. -> HubChoice
+
+[SecurityAlert]
+Commander: Classified. But between us, we've had some... incidents. Unauthorized transmissions. Equipment failures. -> SecurityAlertChoice
+
+[SecurityAlertChoice]
+1. Sounds like sabotage. -> SecuritySabotage
+2. Could be coincidence. -> SecurityDismiss
+3. Need any help? -> SecurityHelp
+
+[SecuritySabotage]
+Commander: That's our working theory. But we can't find the source. -> SecurityHelp
+
+[SecurityDismiss]
+Commander: I don't believe in coincidence. Not out here. -> SecurityTalk
+
+[SecurityHelp]
+Commander: You offering? We could use someone from outside the station. Less chance of compromise. -> SecurityOffer
+
+[SecurityOffer]
+1. What would you need me to do? -> SecurityMission
+2. What's in it for me? -> SecurityReward
+3. On second thought, no. -> HubChoice
+
+[SecurityMission]
+Commander: Monitor the comm array for unauthorized signals. Report anything unusual directly to me. -> SecurityMissionChoice
+
+[SecurityMissionChoice]
+1. I'll do it. -> SecurityAccept
+2. That sounds boring. -> SecurityReward
+3. I have other priorities. -> HubChoice
+
+[SecurityAccept]
+Commander: Good. Here's a security clearance badge. Level 3. Don't abuse it. -> SecurityBadge
+
+[SecurityBadge]
+Comms: Level 3 clearance opens new doors—literally. The command deck is now accessible. -> HubChoice
+
+[SecurityReward]
+Commander: Standard contractor rate. 300 credits plus station amenities. -> SecurityMissionChoice
+
+[SecurityForge]
+Commander: These look... wrong. Guards! -> SecurityCaught
+
+[SecurityCaught]
+1. [Flee] Run for it! -> SecurityChase
+2. [Talk] Wait, I can explain! -> SecurityExplain
+3. [Fight] Not going quietly. -> SecurityFight
+
+[SecurityChase]
+Comms: You bolt down the corridor. Alarms blare behind you. -> ChaseResult
+
+[ChaseResult]
+1. Duck into the Bazaar crowd. -> BazaarHide
+2. Head for the Cantina. -> CantinaHide
+3. Find Docking Bay 7. -> Bay7Approach
+
+[BazaarHide]
+Comms: You lose the guards in the crowded stalls. Heart pounding. -> BazaarApproach
+
+[CantinaHide]
+Comms: The Cantina's dim lighting provides cover. You slip into a booth. -> CantinaApproach
+
+[SecurityExplain]
+Commander: You have thirty seconds. Make it good. -> ExplainChoice
+
+[ExplainChoice]
+1. [Persuade] I'm undercover, investigating the crash in Bay 7. -> SecurityConvinced
+2. [Lie] System glitch corrupted my credentials. -> SecuritySkeptical
+3. I've got nothing. Lock me up. -> SecurityDetained
+
+[SecurityConvinced]
+Commander: Undercover? For whom? ... Fine. I'll issue temporary credentials. But I'm watching you. -> SecurityBadge
+
+[SecuritySkeptical]
+Commander: Convenient. I'll run a system check. You stay here. -> SecurityDetained
+
+[SecurityDetained]
+Comms: Hours pass in the holding cell. Eventually a guard releases you with a warning. -> HubChoice
+
+[SecurityFight]
+Comms: Station guards are well-trained. You're overwhelmed quickly. -> SecurityDetained
+
+[StationInfo]
+Commander: Vanguard Station. Frontier outpost. Mining hub. Population: about 2,000. We keep the peace out here. -> SecurityTalk
+
+[SecurityBay7]
+Commander: The crash? Under investigation. Why do you ask? -> Bay7SecurityChoice
+
+[Bay7SecurityChoice]
+1. Just curious. -> SecurityTalk
+2. I might have information. -> Bay7SecurityInfo
+3. I want to help investigate. -> SecurityHelp
+
+[Bay7SecurityInfo]
+Commander: Information? Speak. Anything about that ship could be crucial. -> Bay7SecurityTell
+
+[Bay7SecurityTell]
+1. I found a military beacon in the wreckage. -> BeaconReport
+2. The ship's name is Orion's Wake. -> OrionReport
+3. I'd rather not say more without guarantees. -> SecurityReward
+
+[BeaconReport]
+Commander: Military beacon? That changes things. Show me. -> Bay7Approach
+
+[OrionReport]
+Commander: Orion's Wake. I'll run it through the database. Thank you. -> SecurityTalk
+
+[SecurityVoss]
+Commander: Voss? Helena Voss? Why are you looking for her? -> VossSecurityChoice
+
+[VossSecurityChoice]
+1. She owes me money. -> VossSecurityDebt
+2. She's a friend. I'm worried. -> VossSecurityFriend
+3. [Lie] No reason. Forget I asked. -> SecurityTalk
+
+[VossSecurityDebt]
+Commander: Get in line. Half the station claims she owes them something. -> SecurityTalk
+
+[VossSecurityFriend]
+Commander: Friend? Then you should know she's been classified as missing. 48 hours now. -> VossSecurityLead
+
+[VossSecurityLead]
+Commander: Last confirmed sighting was the Cantina. Talk to the smuggler there. Name's Rook. -> CantinaApproach
+
+[BazaarApproach]
+Vendor: Welcome to the Bazaar! Anything you need, we've got it. Mostly legal. -> BazaarGreet
+
+[BazaarGreet]
+1. I need equipment. -> BazaarShop
+2. I'm looking for information. -> BazaarInfo
+3. [Examine] Anything unusual for sale? -> BazaarUnusual
+4. Just browsing. -> HubChoice
+
+[BazaarShop]
+Vendor: Weapons, tools, med-kits, data chips. What's your flavor? -> ShopMenu
+
+[ShopMenu]
+1. Weapons. -> WeaponShop
+2. Tools and equipment. -> ToolShop
+3. Med-kits. -> MedShop
+4. Data chips. -> DataShop
+5. I'm done shopping. -> HubChoice
+
+[WeaponShop]
+Vendor: Plasma pistol, shock baton, or a compact rail rifle. Take your pick. -> WeaponChoice
+
+[WeaponChoice]
+1. Plasma pistol. 80 credits. -> BuyPlasma
+2. Shock baton. 40 credits. -> BuyBaton
+3. Rail rifle. 200 credits. -> BuyRifle
+4. [Haggle] Got anything under the counter? -> WeaponBlackMarket
+5. Maybe later. -> ShopMenu
+
+[BuyPlasma]
+Comms: A reliable sidearm. Should handle most threats. -> ShopMenu
+
+[BuyBaton]
+Comms: Non-lethal but effective. Good for close quarters. -> ShopMenu
+
+[BuyRifle]
+Comms: Serious firepower. Draws attention, but packs a punch. -> ShopMenu
+
+[WeaponBlackMarket]
+Vendor: Under the counter? I don't know what you mean. But if you talk to Rook in the Cantina... -> ShopMenu
+
+[ToolShop]
+Vendor: Cutting torch, scanner kit, or mag-boots. Essential frontier gear. -> ToolChoice
+
+[ToolChoice]
+1. Cutting torch. 50 credits. -> BuyTorch
+2. Scanner kit. 70 credits. -> BuyScanner
+3. Mag-boots. 90 credits. -> BuyBoots
+4. All three. -> BuyAllTools
+5. Not today. -> ShopMenu
+
+[BuyTorch]
+Comms: Cuts through most alloys. Handy in a wreck. -> ShopMenu
+
+[BuyScanner]
+Comms: Multi-spectrum scanner. Detects energy signatures and life signs. -> ShopMenu
+
+[BuyBoots]
+Comms: Magnetic boots for zero-G work. -> ShopMenu
+
+[BuyAllTools]
+Vendor: Bundle deal! 180 credits for the lot. -> BuyAllToolsDeal
+
+[BuyAllToolsDeal]
+1. Deal. -> AllToolsBought
+2. Just the scanner then. -> BuyScanner
+
+[AllToolsBought]
+Comms: Your pack is heavy with gear. You feel prepared. -> ShopMenu
+
+[MedShop]
+Vendor: Basic med-kit, trauma kit, or stim injectors. -> MedChoice
+
+[MedChoice]
+1. Basic med-kit. 30 credits. -> BuyMedKit
+2. Trauma kit. 100 credits. -> BuyTrauma
+3. Stim injectors. 60 credits. -> BuyStims
+4. Pass. -> ShopMenu
+
+[BuyMedKit]
+Comms: Bandages, antiseptic, and painkillers. The basics. -> ShopMenu
+
+[BuyTrauma]
+Comms: Full surgical suite in a box. Could save a life. -> ShopMenu
+
+[BuyStims]
+Comms: Three injectors. Enhanced reflexes for about an hour each. -> ShopMenu
+
+[DataShop]
+Vendor: Station maps, cargo manifests, and... one encrypted data core. Found it in the recycler. -> DataChoice
+
+[DataChoice]
+1. Station maps. 10 credits. -> BuyMaps
+2. Cargo manifests. 25 credits. -> BuyManifests
+3. The encrypted data core. How much? -> DataCorePrice
+4. Not interested. -> ShopMenu
+
+[BuyMaps]
+Comms: Detailed layout of Vanguard Station. Including maintenance tunnels. -> ShopMenu
+
+[BuyManifests]
+Comms: Records of every shipment through the station for the past month. -> ShopMenu
+
+[DataCorePrice]
+Vendor: 150 credits. No idea what's on it, but the encryption screams "valuable." -> DataCoreDeal
+
+[DataCoreDeal]
+1. I'll take it. -> DataCoreBought
+2. [Haggle] 100 credits. -> DataCoreHaggle
+3. Too expensive. -> ShopMenu
+
+[DataCoreBought]
+Comms: The data core pulses faintly. Its secrets await decryption. -> ShopMenu
+
+[DataCoreHaggle]
+Vendor: 120. I've got overhead costs. -> DataCoreFinal
+
+[DataCoreFinal]
+1. Fine, 120. -> DataCoreBought
+2. Forget it. -> ShopMenu
+
+[BazaarInfo]
+Vendor: Information? I hear things. What do you want to know? -> BazaarInfoChoice
+
+[BazaarInfoChoice]
+1. What do you know about the crash in Bay 7? -> VendorCrash
+2. Ever heard of Project Chimera? -> VendorChimera
+3. Know anyone named Helena Voss? -> VendorVoss
+4. Never mind. -> HubChoice
+
+[VendorCrash]
+Vendor: Ship came in hot. No distress signal. Like it was running from something. Or someone. -> BazaarInfoChoice
+
+[VendorChimera]
+Vendor: Chimera? Keep your voice down. That name gets people killed around here. -> VendorChimeraWarning
+
+[VendorChimeraWarning]
+1. Tell me more. -> VendorChimeraSecret
+2. [Intimidate] I need answers. Now. -> VendorChimeraForced
+3. Sorry I asked. -> BazaarInfoChoice
+
+[VendorChimeraSecret]
+Vendor: All I know is whispers. Secret project. Military. Something about genetic modification. People who ask too many questions disappear. -> ChimeraLead
+
+[VendorChimeraForced]
+Vendor: Fine! It's some kind of weapons program. Nexus Command. Bio-weapons maybe. That's all I know, I swear! -> ChimeraLead
+
+[VendorVoss]
+Vendor: Voss? She bought supplies here two days ago. Seemed nervous. Kept looking over her shoulder. -> VendorVossMore
+
+[VendorVossMore]
+1. What did she buy? -> VossSupplies
+2. Did she say where she was going? -> VossDestination
+3. Thanks. -> BazaarInfoChoice
+
+[VossSupplies]
+Vendor: Emergency rations, a cutting torch, and a signal jammer. Sounds like someone planning to hide. -> BazaarInfoChoice
+
+[VossDestination]
+Vendor: She mentioned the lower levels. Maintenance tunnels. Said something about "the only safe place left." -> VossLowerLevels
+
+[VossLowerLevels]
+Comms: The maintenance tunnels beneath the station. Few go there voluntarily. -> HubChoice
+
+[BazaarUnusual]
+Vendor: Unusual? Well, there's an alien artifact in the back. No idea what it does. Glows sometimes. -> ArtifactChoice
+
+[ArtifactChoice]
+1. Let me see it. -> ArtifactExamine
+2. Where did you get it? -> ArtifactOrigin
+3. Not interested. -> BazaarGreet
+
+[ArtifactExamine]
+Comms: A crystalline object, roughly palm-sized. It hums when you touch it. -> ArtifactReaction
+
+[ArtifactReaction]
+1. Buy it. 200 credits. -> ArtifactBought
+2. [Science] Analyze its composition. -> ArtifactAnalysis
+3. Put it back. -> BazaarGreet
+
+[ArtifactBought]
+Comms: The crystal feels warm in your pocket. Faintly pulsing. Alive? -> HubChoice
+
+[ArtifactAnalysis]
+Comms: Unknown mineral structure. The energy signature matches nothing in known databases. It predates human expansion. -> ArtifactReaction
+
+[ArtifactOrigin]
+Vendor: Salvaged from a derelict in the asteroid belt. The crew who found it all had nightmares for weeks. -> ArtifactChoice
+
+[CantinaApproach]
+Comms: The Cantina is dim and smoky. Music plays from crackling speakers. -> CantinaGreet
+
+[CantinaGreet]
+1. Order a drink. -> DrinkOrder
+2. Look for the smuggler named Rook. -> RookApproach
+3. Find booth 7. -> Booth7
+4. [Observe] Scan the crowd. -> CantinaObserve
+5. Leave. -> HubChoice
+
+[DrinkOrder]
+Bartender: Synthale, Comet Dust, or Void Black? -> DrinkMenu
+
+[DrinkMenu]
+1. Synthale. -> OrderSynthale
+2. Comet Dust. -> OrderComet
+3. Void Black. -> OrderVoid
+4. Just water. -> OrderWater
+
+[OrderSynthale]
+Bartender: Classic pilot drink. 5 credits. -> DrinkReceived
+
+[OrderComet]
+Bartender: Sparkly and strong. 10 credits. -> DrinkReceived
+
+[OrderVoid]
+Bartender: You sure? Last guy who ordered that woke up in the cargo bay. -> VoidConfirm
+
+[VoidConfirm]
+1. [Constitution] I can handle it. -> DrinkReceived
+2. Make it a synthale instead. -> OrderSynthale
+3. Double it. -> VoidDouble
+
+[VoidDouble]
+Bartender: Your funeral, spacer. -> VoidBlackout
+
+[VoidBlackout]
+Comms: Colors blur. Sounds distort. You wake up in a storage closet, missing 75 credits. -> StorageWake
+
+[StorageWake]
+1. [Rage] WHO ROBBED ME?! -> StorageRage
+2. Check your belongings. -> StorageCheck
+3. [Calm] Assess the situation. -> StorageCalm
+
+[StorageRage]
+Comms: Your shout echoes off metal walls. A maintenance bot whirs past, indifferent. -> StorageCheck
+
+[StorageCheck]
+Comms: Your gear is intact. Credits missing. Could be worse. -> CantinaReturn
+
+[StorageCalm]
+Comms: Deep breaths. Still alive. Still armed. Just poorer. -> CantinaReturn
+
+[CantinaReturn]
+Comms: You stagger back to the Cantina. The bartender smirks. -> BartenderSmirk
+
+[BartenderSmirk]
+1. You let someone rob me! -> BartenderAccuse
+2. [Humor] Hit me again. -> BartenderLaugh
+3. Never again. -> CantinaGreet
+
+[BartenderAccuse]
+Bartender: I warned you about the Void Black. Not my problem you didn't listen. -> CantinaGreet
+
+[BartenderLaugh]
+Bartender: Ha! You've got guts, spacer. This one's free. -> DrinkReceived
+
+[DrinkReceived]
+Comms: The drink burns going down. The galaxy feels a little smaller. -> CantinaGreet
+
+[OrderWater]
+Bartender: Water? In a cantina? Fine. No charge. -> DrinkReceived
+
+[CantinaObserve]
+Comms: A hooded figure in the corner. A group of miners arguing. Someone alone in booth 7. -> CantinaObserveChoice
+
+[CantinaObserveChoice]
+1. Approach the hooded figure. -> RookApproach
+2. Listen to the miners. -> MinersTalk
+3. Check booth 7. -> Booth7
+4. Mind your own business. -> CantinaGreet
+
+[MinersTalk]
+Miner: I'm telling you, something's wrong in the deep shafts. Equipment malfunctioning. Strange noises. -> MinerChoice
+
+[MinerChoice]
+1. What kind of noises? -> MinerNoises
+2. Could be the same interference from Bay 7. -> MinerConnection
+3. Not my problem. -> CantinaGreet
+
+[MinerNoises]
+Miner: Like metal grinding. But rhythmic. Almost like... breathing. -> MinerCreepy
+
+[MinerCreepy]
+1. That's unsettling. -> MinerAgree
+2. Probably just ventilation. -> MinerDismiss
+3. I'll investigate if the pay's right. -> MinerJob
+
+[MinerAgree]
+Miner: You're telling me. Three crew members refused to go back down. -> CantinaGreet
+
+[MinerDismiss]
+Miner: That's what management said. Until the drill bit melted. -> MinerCreepy
+
+[MinerJob]
+Miner: 200 credits if you check it out and report back. -> MinerDeal
+
+[MinerDeal]
+1. Deal. -> MinerQuestAccept
+2. Make it 300. -> MinerNegotiate
+3. Find someone else. -> CantinaGreet
+
+[MinerQuestAccept]
+Miner: Good luck, spacer. Don't say I didn't warn you. -> CantinaGreet
+
+[MinerNegotiate]
+Miner: 250. That's all we pooled together. -> MinerFinalOffer
+
+[MinerFinalOffer]
+1. Fine. 250. -> MinerQuestAccept
+2. Not enough. -> CantinaGreet
+
+[MinerConnection]
+Miner: Bay 7? You know something about that crash? -> MinerCurious
+
+[MinerCurious]
+1. Maybe. -> MinerShare
+2. Just rumors. -> CantinaGreet
+
+[MinerShare]
+Miner: If there's a connection between our problems and that wreck, the commander needs to know. -> HubChoice
+
+[RookApproach]
+Comms: The hooded figure looks up. Sharp eyes assess you in a heartbeat. -> RookGreet
+
+[RookGreet]
+Rook: You've got the look of someone who needs something they can't get through proper channels. -> RookOffer
+
+[RookOffer]
+1. I hear you're the one to talk to for... special arrangements. -> RookBusiness
+2. I'm looking for Helena Voss. -> RookVoss
+3. [Direct] I have cargo that needs to move quietly. -> RookCargo
+4. Wrong person. Sorry. -> CantinaGreet
+
+[RookBusiness]
+Rook: Depends on what you need. Weapons? Passage? Information? I deal in all three. -> RookServices
+
+[RookServices]
+1. Weapons. -> RookWeapons
+2. Passage off the station. -> RookPassage
+3. Information about Project Chimera. -> RookChimera
+4. Never mind. -> CantinaGreet
+
+[RookWeapons]
+Rook: Military-grade hardware. Expensive but untraceable. 500 credits for the good stuff. -> RookWeaponDeal
+
+[RookWeaponDeal]
+1. Show me what you've got. -> RookArsenal
+2. [Haggle] 350. -> RookWeaponHaggle
+3. Too rich. -> RookServices
+
+[RookArsenal]
+Rook: Disruptor rifle, EMP grenades, and a personal shield generator. The works. -> RookArsenalChoice
+
+[RookArsenalChoice]
+1. I'll take the lot. -> RookWeaponsBought
+2. Just the EMP grenades. -> RookEMP
+3. The shield generator. -> RookShield
+4. I'll pass. -> RookServices
+
+[RookWeaponsBought]
+Rook: Pleasure doing business. These will be in your ship's hold within the hour. -> CantinaGreet
+
+[RookEMP]
+Rook: Smart choice. 150 credits. These'll knock out any electronic system within 20 meters. -> CantinaGreet
+
+[RookShield]
+Rook: 250 credits. Absorbs three direct hits before recharging. Saved my life twice. -> CantinaGreet
+
+[RookWeaponHaggle]
+Rook: 400. And that's because I like your face. -> RookWeaponFinal
+
+[RookWeaponFinal]
+1. Deal. -> RookWeaponsBought
+2. Still too much. -> RookServices
+
+[RookPassage]
+Rook: Leaving in a hurry? I've got a freighter departing tomorrow. 200 credits, no questions. -> RookPassageChoice
+
+[RookPassageChoice]
+1. Book me a seat. -> RookBooked
+2. Where's it headed? -> RookDestination
+3. I'm not leaving yet. -> RookServices
+
+[RookBooked]
+Rook: Done. Bay 12, 0600. Don't be late. -> StationDepart
+
+[RookDestination]
+Rook: Nexus Station. Three day jump. After that, you're on your own. -> RookPassageChoice
+
+[RookChimera]
+Rook: Chimera? You're either brave or stupid. Maybe both. -> RookChimeraReveal
+
+[RookChimeraReveal]
+Rook: It's a black ops program. Genetic enhancement for soldiers. The crash in Bay 7? That ship was carrying a test subject. -> RookChimeraMore
+
+[RookChimeraMore]
+1. A test subject? Alive? -> RookSubject
+2. How do you know this? -> RookSource
+3. [Skeptical] Sounds like conspiracy theory. -> RookProof
+
+[RookSubject]
+Rook: Was alive. Whether it still is... that's the question keeping the commander up at night. -> ChimeraSubjectLead
+
+[RookSource]
+Rook: I have contacts in Nexus Command. Not everyone there agrees with what they're doing. -> RookChimeraMore
+
+[RookProof]
+Rook: Conspiracy? Check the cargo logs. Ship registered as carrying "medical supplies." Since when do medical supplies need military escorts? -> RookChimeraMore
+
+[ChimeraSubjectLead]
+Comms: A genetically enhanced test subject, loose on the station. That would explain the commander's paranoia. -> HubChoice
+
+[RookVoss]
+Rook: Voss? Yeah, I know her. Knew her. She came to me two days ago. Scared out of her mind. -> RookVossInfo
+
+[RookVossInfo]
+1. What was she scared of? -> RookVossFear
+2. Where did she go? -> RookVossWhere
+3. Is she alive? -> RookVossAlive
+
+[RookVossFear]
+Rook: Said she saw something in Bay 7 before the crash. Something that wasn't human. -> RookVossInfo2
+
+[RookVossWhere]
+Rook: She asked about the maintenance tunnels. Wanted to know if there was a way off the station that security wouldn't monitor. -> RookVossInfo2
+
+[RookVossAlive]
+Rook: Last I saw her, yeah. But she was making plans like someone who expected not to be for long. -> RookVossInfo2
+
+[RookVossInfo2]
+Rook: Look, Voss was mixed up in something big. If you want to find her, check the lower maintenance tunnels. Section 7. -> VossTunnelLead
+
+[VossTunnelLead]
+Comms: The maintenance tunnels. Dark, cramped, and rarely patrolled. If Voss is hiding, that's where she'd be. -> HubChoice
+
+[RookCargo]
+Rook: Quiet cargo movement is my specialty. What are we talking about? -> RookCargoDetails
+
+[RookCargoDetails]
+1. A black box from the crashed ship. -> RookBlackBox
+2. Something I'd rather not describe. -> RookNoDetails
+3. Actually, forget it. -> CantinaGreet
+
+[RookBlackBox]
+Rook: A flight recorder? From Bay 7? That's worth serious credits to the right buyer. 1000, easy. -> RookBlackBoxDeal
+
+[RookBlackBoxDeal]
+1. Find me a buyer. -> RookBuyer
+2. I want 70% of the sale. -> RookSplit
+3. I've changed my mind. -> CantinaGreet
+
+[RookBuyer]
+Rook: Give me a day. I know someone on Nexus Station who'd pay top credit. -> CantinaGreet
+
+[RookSplit]
+Rook: 60/40. You wouldn't have a buyer without me. -> RookSplitFinal
+
+[RookSplitFinal]
+1. Fine. 60/40. -> RookBuyer
+2. 65/35 or I walk. -> RookSplitHard
+
+[RookSplitHard]
+Rook: You're tough. Alright, 65/35. Deal. -> RookBuyer
+
+[RookNoDetails]
+Rook: Mystery cargo? That costs extra. 500 credits, no inspection, no questions. -> RookNoDealChoice
+
+[RookNoDealChoice]
+1. Agreed. -> RookCargoBooked
+2. Too expensive. -> CantinaGreet
+
+[RookCargoBooked]
+Rook: Bay 12. Midnight. Bring the cargo, bring the credits. -> CantinaGreet
+
+[Booth7]
+Comms: A woman sits alone, nursing a drink. She looks up as you approach. -> Booth7Meet
+
+[Booth7Meet]
+Lyra: You saw the posting about Chimera. -> Booth7Talk
+
+[Booth7Talk]
+1. Who are you? -> LyraIdentity
+2. What do you know about Chimera? -> LyraChimera
+3. [Suspicious] How do I know this isn't a setup? -> LyraTrust
+
+[LyraIdentity]
+Lyra: Dr. Lyra Chen. Former Nexus Command scientist. I helped create Project Chimera. And now I'm trying to stop it. -> LyraBackground
+
+[LyraBackground]
+1. Why stop it? -> LyraMotivation
+2. What exactly is Chimera? -> LyraChimera
+3. Why should I trust you? -> LyraTrust
+
+[LyraMotivation]
+Lyra: Because what we created isn't a weapon. It's a living being. And they want to use it as a tool of war. -> LyraChimera
+
+[LyraChimera]
+Lyra: Genetic hybridization. Human DNA spliced with alien genome sequences. The result is... extraordinary. And terrifying. -> LyraChimeraDetails
+
+[LyraChimeraDetails]
+1. The test subject from Bay 7? -> LyraSubject
+2. How dangerous is it? -> LyraDanger
+3. What do you need from me? -> LyraRequest
+
+[LyraSubject]
+Lyra: Subject Seven. That's what they call it. The ship was transporting it here for further testing. But it escaped during the crash. -> LyraSubjectMore
+
+[LyraSubjectMore]
+1. It's loose on the station? -> LyraLoose
+2. Can it be reasoned with? -> LyraReason
+3. Can it be killed? -> LyraKill
+
+[LyraLoose]
+Lyra: Yes. And it's scared, confused, and incredibly powerful. A bad combination. -> LyraRequest
+
+[LyraReason]
+Lyra: It has human-level intelligence. Maybe higher. But it's been treated as a lab specimen its entire life. Trust won't come easy. -> LyraRequest
+
+[LyraKill]
+Lyra: Maybe. But I didn't come here to kill it. I came to save it. -> LyraRequest
+
+[LyraDanger]
+Lyra: Enhanced strength, speed, regeneration. It can interface with electronic systems. And we think it can survive in vacuum. -> LyraChimeraDetails
+
+[LyraRequest]
+Lyra: I need to find Subject Seven before Nexus Command does. They're sending a retrieval team. We have maybe 24 hours. -> LyraDecision
+
+[LyraDecision]
+1. I'll help you find it. -> LyraAlliance
+2. What's in it for me? -> LyraPayment
+3. This is too dangerous. -> LyraRefuse
+4. [Morality] It deserves freedom. -> LyraAlliance
+
+[LyraAlliance]
+Lyra: Thank you. We should start in the maintenance tunnels. That's where it would hide—dark, warm, close to power conduits. -> LyraTeamUp
+
+[LyraPayment]
+Lyra: I have Nexus Command research data worth millions on the black market. Help me, and it's yours. -> LyraPaymentChoice
+
+[LyraPaymentChoice]
+1. Deal. -> LyraAlliance
+2. Not worth dying for. -> LyraRefuse
+
+[LyraRefuse]
+Lyra: Then stay out of the way. I'll do it alone if I have to. -> CantinaGreet
+
+[LyraTeamUp]
+Comms: With Dr. Chen at your side, the mission takes shape. Find Subject Seven. Before anyone else does. -> MissionBegin
+
+[LyraTrust]
+Lyra: You can't know. But I can tell you that I walked away from everything—career, security, identity—to be here. -> Booth7Talk
+
+[CommandApproach]
+Comms: The command deck hums with activity. Officers monitor feeds from across the station. -> CommandGreet
+
+[CommandGreet]
+1. Request an audience with the commander. -> CommanderAudience
+2. [Stealth] Access a terminal while no one's looking. -> CommandTerminal
+3. Look for the comm array. -> CommArray
+4. Leave. -> HubChoice
+
+[CommanderAudience]
+Commander: You again? Make it quick. -> CommanderTalk
+
+[CommanderTalk]
+1. I know about Project Chimera. -> CommanderChimera
+2. The beacon in Bay 7 is military. -> CommanderBeacon
+3. Someone on this station is hiding Voss. -> CommanderVoss
+4. Just checking in. -> HubChoice
+
+[CommanderChimera]
+Commander: Where did you hear that name? -> CommanderChimeraReaction
+
+[CommanderChimeraReaction]
+1. Does it matter? It's loose on your station. -> CommanderPanic
+2. [Leverage] I know everything. Cooperate or I go public. -> CommanderThreat
+3. I want to help contain it. -> CommanderCooperate
+
+[CommanderPanic]
+Commander: You don't understand the situation. This station could be quarantined—or worse—if Nexus Command finds out we've lost control. -> CommanderDesperate
+
+[CommanderDesperate]
+1. Then let me help before they arrive. -> CommanderCooperate
+2. Maybe you should evacuate. -> CommanderEvac
+3. [Blackmail] Your secret is safe. For a price. -> CommanderBribe
+
+[CommanderCooperate]
+Commander: Fine. Full access. Find it, contain it, and keep this quiet. -> CommanderBadge
+
+[CommanderBadge]
+Comms: Full station clearance. Every door on Vanguard opens for you now. -> MissionBegin
+
+[CommanderEvac]
+Commander: And cause a panic? With 2,000 people? No. We handle this quietly. -> CommanderDesperate
+
+[CommanderBribe]
+Commander: You're playing a dangerous game, pilot. But fine. 1000 credits and my silence. -> CommanderBribeDeal
+
+[CommanderBribeDeal]
+1. Deal. -> CommanderBadge
+2. 2000. -> CommanderBribeHigh
+
+[CommanderBribeHigh]
+Commander: 1500. And if you breathe a word, I'll have you spaced. -> CommanderBribeFinal
+
+[CommanderBribeFinal]
+1. Agreed. -> CommanderBadge
+2. Your threat doesn't scare me. -> CommanderCooperate
+
+[CommanderThreat]
+Commander: You're bluffing. But I can't risk it. What do you want? -> CommanderBribeDeal
+
+[CommanderBeacon]
+Commander: I know. We traced it to Nexus Command's 4th Fleet. They're en route. ETA: 20 hours. -> CommanderUrgent
+
+[CommanderUrgent]
+Comms: The clock is ticking. Whatever needs to happen must happen before the fleet arrives. -> HubChoice
+
+[CommanderVoss]
+Commander: Voss is a person of interest in our investigation. If you find her, bring her to me. Not security. Me. -> HubChoice
+
+[CommandTerminal]
+Comms: You slip behind a console. Data scrolls across the screen. -> TerminalAccess
+
+[TerminalAccess]
+1. Search for Project Chimera files. -> TerminalChimera
+2. Check security camera logs. -> TerminalCameras
+3. Access personnel records. -> TerminalPersonnel
+4. [Hack] Download everything. -> TerminalDownload
+
+[TerminalChimera]
+Comms: Classified. Access denied. But the file headers are visible: "CHIMERA-7 Transport Protocol" and "Containment Failure Contingency." -> TerminalClue
+
+[TerminalClue]
+Comms: "Containment Failure Contingency: In the event of subject escape, initiate station-wide lockdown and deploy nerve agent in affected sectors." -> ChimeraLead
+
+[TerminalCameras]
+Comms: Camera feeds show normal activity. Except Bay 7—those cameras are offline. And Section 7 maintenance tunnels—also dark. -> TerminalClue2
+
+[TerminalClue2]
+Comms: Two blind spots on the station. Both potentially related to Subject Seven. -> HubChoice
+
+[TerminalPersonnel]
+Comms: Helena Voss: Freelance pilot. Contracted for cargo run. Current status: Missing. Last badge scan: Maintenance Level 3, Section 7. -> VossTunnelLead
+
+[TerminalDownload]
+Comms: Download in progress... 40%... 70%... A hand clamps on your shoulder. -> TerminalCaught
+
+[TerminalCaught]
+1. [Fight] Elbow strike and run. -> SecurityChase
+2. [Bluff] I have authorization. Check with the commander. -> TerminalBluff
+3. [Surrender] You got me. -> SecurityDetained
+
+[TerminalBluff]
+Commander: Let them go. I'll deal with this personally. -> CommanderTalk
+
+[CommArray]
+Comms: The communications array. A massive dish connected to banks of processing equipment. -> CommArrayChoice
+
+[CommArrayChoice]
+1. Search for unauthorized transmissions. -> CommSearch
+2. [Hack] Tap into Nexus Command frequencies. -> CommHack
+3. Help Dex trace the beacon. -> CommDexHelp
+4. Leave it alone. -> HubChoice
+
+[CommSearch]
+Comms: Multiple encrypted bursts detected over the past 48 hours. Source: Section 7, Maintenance Level 3. -> CommResult
+
+[CommResult]
+Comms: Someone—or something—has been transmitting from the tunnels. The signals are unlike any standard protocol. -> HubChoice
+
+[CommHack]
+Comms: Nexus Command chatter. "Retrieval team Alpha en route to Vanguard. Objective: Chimera-7. Lethal force authorized." -> CommHackReveal
+
+[CommHackReveal]
+Comms: Lethal force. They're not coming to recapture Subject Seven. They're coming to destroy it. -> HubChoice
+
+[CommDexHelp]
+Comms: With array access, Dex traces the beacon's manufacturing code. -> CommDexResult
+
+[CommDexResult]
+Engineer: Got it! The beacon was installed at Nexus Fleet Yards. Ship ID matches Orion's Wake. This was an official transport gone wrong. -> ChimeraLead
+
+[StationDepart]
+Comms: You board the freighter. Vanguard Station shrinks in the viewport. Whatever secrets it holds are no longer your concern. -> End
+
+[MissionBegin]
+Comms: The maintenance tunnels await. Somewhere in the depths of Vanguard Station, Subject Seven is hiding. And time is running out. -> End

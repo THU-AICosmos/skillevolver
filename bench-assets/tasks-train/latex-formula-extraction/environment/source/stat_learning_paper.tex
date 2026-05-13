@@ -1,0 +1,80 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsfonts}
+
+\title{A Brief Review of Core Concepts in Statistical Learning}
+\author{J.\ Doe \and A.\ Smith}
+\date{}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+We review several foundational quantities that recur throughout statistical
+learning: information divergences, the softmax output layer, empirical risk
+minimization via stochastic gradient updates, mutual information, and the
+Gaussian likelihood. The exposition is self-contained and standalone display
+equations are marked in the usual way.
+\end{abstract}
+
+\section{Information Divergences}
+
+The Kullback--Leibler divergence between two continuous probability
+distributions $P$ and $Q$ with densities $p$ and $q$ is given by
+
+\begin{equation}
+D_{\mathrm{KL}}(P \| Q) = \int_{-\infty}^{\infty} p(x) \ln \frac{p(x)}{q(x)} \, dx.
+\end{equation}
+
+It is non-negative and vanishes if and only if $P = Q$ almost everywhere. When
+comparing discrete categorical outputs, it is common to first squash logits
+$\mathbf{z} \in \mathbb{R}^K$ through the softmax function
+
+\begin{equation}
+\sigma(\mathbf{z})_k = \frac{e^{z_k}}{\sum_{j=1}^{K} e^{z_j}},
+\end{equation}
+
+which yields a point on the probability simplex.
+
+\section{Empirical Risk and SGD}
+
+For binary classification the negative log-likelihood reduces to the familiar
+cross-entropy loss,
+
+\begin{equation}
+\mathcal{L}(\theta) = -\frac{1}{N} \sum_{i=1}^{N} \left\{ y_i \log \hat{y}_i + (1 - y_i) \log(1 - \hat{y}_i) \right].
+\end{equation}
+
+Training then proceeds by stochastic gradient descent on the expected loss,
+
+\begin{equation}
+\theta_{t+1} = \theta_t - \eta \nabla_\theta \mathbb{E}_{(x,y) \sim \mathcal{D}} \left[ \ell(f_\theta(x), y) \right],
+\end{equation}
+
+where $\eta > 0$ is a step size and $\mathcal{D}$ is the data distribution.
+
+\section{Mutual Information}
+
+For a pair of discrete random variables $X$ and $Y$ with joint distribution
+$p(x,y)$, the mutual information quantifies the reduction in uncertainty of
+one when the other is observed:
+
+\begin{equation}
+I(X; Y) = \sum_{x \in \mathcal{X}} \sum_{y \in \mathcal{Y}} p(x, y) \log \frac{p(x, y)}{p(x)\, p(y)}.
+\end{equation}
+
+\section{The Gaussian Likelihood}
+
+Finally, many continuous models assume Gaussian residuals. The density of a
+univariate normal with mean $\mu$ and variance $\sigma^2$ is
+
+\begin{equation}
+f(x \mid \mu, \sigma^2) = \frac{1}{\sqrt{2\pi\sigma^2}} \exp\!\left( -\frac{(x - \mu)^2}{2\sigma^2} \right).
+\end{equation}
+
+Combined with i.i.d.\ assumptions this supports both maximum-likelihood
+estimation and Bayesian posterior inference.
+
+\end{document}

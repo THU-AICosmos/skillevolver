@@ -1,0 +1,21 @@
+{
+  "team": [
+    "eid_53ac2ab9",
+    "eid_610e6a64",
+    "eid_d4f8fd72",
+    "eid_14f7ce8d",
+    "eid_8a175dfe"
+  ],
+  "slack": [],
+  "documents": [
+    {
+      "id": "ScheduleGenie_doc_0",
+      "type": "Product Brief",
+      "author": "eid_53ac2ab9"
+    }
+  ],
+  "meeting_transcripts": [],
+  "meeting_chats": [],
+  "urls": [],
+  "prs": []
+}

@@ -1,0 +1,18 @@
+[
+  {
+    "email_text": "Dear Team,\nI need to book a 30-minute consultation call on February 10th, 2026.\nMy availability is between 2:00 PM and 5:00 PM PST.\n\nPlease confirm a time.\n\nRegards,\nMaria Garcia",
+    "from_email": "maria.garcia@example.designs.org"
+  },
+  {
+    "email_text": "Hello,\nCould we arrange a 2-hour strategy workshop sometime between February 11th and February 13th, 2026?\nI'm free from 9:00 AM to 1:00 PM.\n\nThanks,\nDavid Chen",
+    "from_email": "d.chen@example.techpartners.io"
+  },
+  {
+    "email_text": "Hi there,\nI'd like to schedule a one-hour design review on February 9th or 10th, 2026.\nPreferably between 10:00 AM and 12:30 PM PST.\n\nCheers,\nSophia Patel",
+    "from_email": "sophia.patel@example.creativeworks.net"
+  },
+  {
+    "email_text": "Good afternoon,\nPlease set up a 45-minute budget planning session on February 12th, 2026.\nI can meet between 3:00 PM and 6:00 PM.\n\nBest,\nJames Okafor",
+    "from_email": "j.okafor@example.finance-group.com"
+  }
+]

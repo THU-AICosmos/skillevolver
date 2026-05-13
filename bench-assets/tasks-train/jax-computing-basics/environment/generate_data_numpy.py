@@ -1,4 +1,9 @@
-"""Generate data and reference outputs using numpy only (no jax dependency)."""
+"""Numpy-only version of generate_data.py (for hosts without JAX installed).
+
+Produces byte-identical data files and numerically equivalent reference outputs
+for the 6 sub-task variant (adds grad_bce; swaps scan_cumsum -> scan_rnn_v;
+swaps jit_linear -> jit_mlp).
+"""
 import os
 import numpy as np
 
@@ -7,72 +12,81 @@ np.random.seed(42)
 os.makedirs("data", exist_ok=True)
 os.makedirs("reference", exist_ok=True)
 
-# 1. v.npy (7x4)
-v = np.random.randn(7, 4).astype(np.float32)
-np.save("data/v.npy", v)
+# 1. u.npy (6x8)
+u = np.random.standard_normal((6, 8)).astype(np.float32)
+np.save("data/u.npy", u)
 
-# 2. hinge loss data (15 samples, 6 features)
-N, D = 15, 6
-X_hin = np.random.randn(N, D).astype(np.float32)
-true_w = np.random.randn(D).astype(np.float32)
-logits = X_hin @ true_w
-y = np.sign(logits + 0.05 * np.random.randn(N)).astype(np.float32)
-np.savez("data/hinge.npz", x=X_hin, y=y, w=true_w)
+# 2. mse.npz (N=18, D=5)
+N_mse, D_mse = 18, 5
+X_mse = np.random.standard_normal((N_mse, D_mse)).astype(np.float32)
+w_mse = np.random.standard_normal(D_mse).astype(np.float32)
+noise_mse = (0.15 * np.random.standard_normal(N_mse)).astype(np.float32)
+t_mse = (X_mse @ w_mse + noise_mse).astype(np.float32)
+np.savez("data/mse.npz", x=X_mse, t=t_mse, w=w_mse)
 
-# 3. signal data for IIR filter (20 timesteps, 5 channels)
-signal = np.random.randn(20, 5).astype(np.float32)
-alpha = np.float32(0.8)
-beta = np.float32(0.2)
-np.savez("data/signal.npz", signal=signal, alpha=alpha, beta=beta)
+# 3. bce.npz (N=22, D=4, y in {0,1})
+N_bce, D_bce = 22, 4
+X_bce = np.random.standard_normal((N_bce, D_bce)).astype(np.float32)
+w_bce = (0.5 * np.random.standard_normal(D_bce)).astype(np.float32)
+logits_bce = X_bce @ w_bce
+probs_bce = 1.0 / (1.0 + np.exp(-logits_bce))
+y_bin = (probs_bce > np.median(probs_bce)).astype(np.float32)
+np.savez("data/bce.npz", x=X_bce, y_bin=y_bin, w=w_bce)
 
-# 4. Residual block (12x8)
-X_res = np.random.randn(12, 8).astype(np.float32)
-W1_res = np.random.randn(8, 8).astype(np.float32) * 0.1
-b1_res = np.random.randn(8).astype(np.float32) * 0.1
-W2_res = np.random.randn(8, 8).astype(np.float32) * 0.1
-b2_res = np.random.randn(8).astype(np.float32) * 0.1
-np.savez("data/resblock.npz", X=X_res, W1=W1_res, b1=b1_res, W2=W2_res, b2=b2_res)
+# 4. seq_rnn.npz (T=12, I=5, H=4) -- keys Ux/Uh/c
+T_seq, I_rnn, H_rnn = 12, 5, 4
+seq_rnn = np.random.standard_normal((T_seq, I_rnn)).astype(np.float32)
+init_rnn = np.zeros(H_rnn, dtype=np.float32)
+Ux = (0.3 * np.random.standard_normal((H_rnn, I_rnn))).astype(np.float32)
+Uh = (0.3 * np.random.standard_normal((H_rnn, H_rnn))).astype(np.float32)
+c = (0.1 * np.random.standard_normal(H_rnn)).astype(np.float32)
+np.savez("data/seq_rnn.npz", seq=seq_rnn, init=init_rnn, Ux=Ux, Uh=Uh, c=c)
 
-# 5. Outer product data (9 pairs, dim 3 and 4)
-A_outer = np.random.randn(9, 3).astype(np.float32)
-B_outer = np.random.randn(9, 4).astype(np.float32)
-np.savez("data/outer.npz", a=A_outer, b=B_outer)
+# 5. mlp.npz (B=9, Din=7, H=12, Dout=3)
+B_mlp, Din_mlp, H_mlp, Dout_mlp = 9, 7, 12, 3
+X_mlp = np.random.standard_normal((B_mlp, Din_mlp)).astype(np.float32)
+W1 = (0.2 * np.random.standard_normal((Din_mlp, H_mlp))).astype(np.float32)
+b1 = (0.1 * np.random.standard_normal(H_mlp)).astype(np.float32)
+W2 = (0.2 * np.random.standard_normal((H_mlp, Dout_mlp))).astype(np.float32)
+b2 = (0.1 * np.random.standard_normal(Dout_mlp)).astype(np.float32)
+np.savez("data/mlp.npz", X=X_mlp, W1=W1, b1=b1, W2=W2, b2=b2)
 
-# =========================================================
-# Generate reference outputs using numpy
-# =========================================================
+# ============================================================
+# Reference outputs (numpy formulas matching the JAX oracle)
+# ============================================================
 
-# reduce_prod: product along axis=0
-ref_prod = np.prod(v, axis=0)
-np.save("reference/reduce_prod.npy", ref_prod)
+# basic_sum
+ref_sum = np.sum(u, axis=0)
+np.save("reference/basic_sum.npy", ref_sum.astype(np.float32))
 
-# map_tanh
-ref_tanh = np.tanh(v)
-np.save("reference/map_tanh.npy", ref_tanh)
+# map_exp
+ref_exp = np.exp(u)
+np.save("reference/map_exp.npy", ref_exp.astype(np.float32))
 
-# grad_hinge: numerical gradient for verification
-# hinge_loss(w) = mean(max(0, 1 - y * (X @ w)))
-# gradient: for each sample, if 1 - y_i * (x_i @ w) > 0, contribute -y_i * x_i / N
-margins = 1 - y * (X_hin @ true_w)
-mask = (margins > 0).astype(np.float32)
-ref_grad = -np.mean((mask * y)[:, None] * X_hin, axis=0)
-np.save("reference/grad_hinge.npy", ref_grad)
+# grad_mse: dL/dw = (2/N) * X^T (X w - t) for L = mean((X w - t)^2)
+resid = X_mse @ w_mse - t_mse
+ref_grad_mse = (2.0 / N_mse) * (X_mse.T @ resid)
+np.save("reference/grad_mse.npy", ref_grad_mse.astype(np.float32))
 
-# scan_filter (IIR): h[t] = alpha * h[t-1] + beta * x[t]
-h = np.zeros((20, 5), dtype=np.float32)
-h_prev = np.zeros(5, dtype=np.float32)
-for t in range(20):
-    h[t] = alpha * h_prev + beta * signal[t]
-    h_prev = h[t]
-np.save("reference/scan_filter.npy", h)
+# grad_bce: for L = -mean(y log p + (1-y) log(1-p)) with p = sigmoid(Xw),
+# dL/dw = (1/N) * X^T (p - y). (eps term below threshold of numerical effect.)
+logits = X_bce @ w_bce
+probs = 1.0 / (1.0 + np.exp(-logits))
+ref_grad_bce = (1.0 / N_bce) * (X_bce.T @ (probs - y_bin))
+np.save("reference/grad_bce.npy", ref_grad_bce.astype(np.float32))
 
-# jit_residual: relu(x @ W1 + b1) @ W2 + b2 + x
-hidden = np.maximum(0, X_res @ W1_res + b1_res)
-ref_res = hidden @ W2_res + b2_res + X_res
-np.save("reference/jit_residual.npy", ref_res)
+# scan_rnn_v: iterate h_t = tanh(Ux @ x_t + Uh @ h + c), stack.
+h = init_rnn.copy()
+hs = []
+for t in range(T_seq):
+    h = np.tanh(Ux @ seq_rnn[t] + Uh @ h + c)
+    hs.append(h)
+ref_rnn = np.stack(hs).astype(np.float32)
+np.save("reference/scan_rnn_v.npy", ref_rnn)
 
-# vmap_outer: outer product of each pair
-ref_outer = np.array([np.outer(A_outer[i], B_outer[i]) for i in range(9)])
-np.save("reference/vmap_outer.npy", ref_outer)
+# jit_mlp: relu(X @ W1 + b1) @ W2 + b2
+h = np.maximum(0.0, X_mlp @ W1 + b1)
+ref_mlp = (h @ W2 + b2).astype(np.float32)
+np.save("reference/jit_mlp.npy", ref_mlp)
 
-print("Data and reference outputs generated (numpy only).")
+print("Data and reference outputs generated (numpy only, 6 sub-tasks).")

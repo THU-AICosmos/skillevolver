@@ -80,10 +80,7 @@ cosmic_idx = np.random.choice(np.where(quality == 0)[0], size=15, replace=False)
 flux[cosmic_idx] += np.random.choice([-1, 1], size=15) * np.random.uniform(0.005, 0.02, size=15)
 
 # === Write CSV file ===
-from pathlib import Path
-REPO_ROOT = Path(__file__).resolve().parents[3]
-output_path = REPO_ROOT / "Benchmarks/skillsbench/tasks-train/exoplanet-detection-period/environment/data/kepler_lightcurve.csv"
-output_path.parent.mkdir(parents=True, exist_ok=True)
+output_path = "/home/zhanggenrui/workplace/self-evolving-skills/Benchmarks/skillsbench/tasks-train/exoplanet-detection-period/environment/data/kepler_lightcurve.csv"
 with open(output_path, 'w') as f:
     f.write("bjd,relative_flux,flux_err,quality_flag\n")
     for i in range(n_points):

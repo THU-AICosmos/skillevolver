@@ -1,0 +1,1202 @@
+[
+  {
+    "id": "post-1",
+    "title": "Web Dev Trends in 2025: Part 1",
+    "author": "Maya Chen",
+    "excerpt": "A deep dive into the latest developments and what they mean for the industry going forward.",
+    "coverImage": "https://picsum.photos/seed/blog1/480/270",
+    "readTime": 14
+  },
+  {
+    "id": "post-2",
+    "title": "DevOps Trends in 2026: Part 2",
+    "author": "James Rivera",
+    "excerpt": "A deep dive into the latest developments and what they mean for the industry going forward.",
+    "coverImage": "https://picsum.photos/seed/blog2/480/270",
+    "readTime": 6
+  },
+  {
+    "id": "post-3",
+    "title": "Cloud Trends in 2024: Part 3",
+    "author": "Leo Park",
+    "excerpt": "A deep dive into the latest developments and what they mean for the industry going forward.",
+    "coverImage": "https://picsum.photos/seed/blog3/480/270",
+    "readTime": 13
+  },
+  {
+    "id": "post-4",
+    "title": "IoT Trends in 2025: Part 4",
+    "author": "Leo Park",
+    "excerpt": "A deep dive into the latest developments and what they mean for the industry going forward.",
+    "coverImage": "https://picsum.photos/seed/blog4/480/270",
+    "readTime": 12
+  },
+  {
+    "id": "post-5",
+    "title": "Data Science Trends in 2026: Part 5",
+    "author": "Maya Chen",
+    "excerpt": "A deep dive into the latest developments and what they mean for the industry going forward.",
+    "coverImage": "https://picsum.photos/seed/blog5/480/270",
+    "readTime": 3
+  },
+  {
+    "id": "post-6",
+    "title": "Web Dev Trends in 2024: Part 6",
+    "author": "James Rivera",
+    "excerpt": "A deep dive into the latest developments and what they mean for the industry going forward.",
+    "coverImage": "https://picsum.photos/seed/blog6/480/270",
+    "readTime": 6
+  },
+  {
+    "id": "post-7",
+    "title": "IoT Trends in 2025: Part 7",
+    "author": "Tom Baker",
+    "excerpt": "A deep dive into the latest developments and what they mean for the industry going forward.",
+    "coverImage": "https://picsum.photos/seed/blog7/480/270",
+    "readTime": 3
+  },
+  {
+    "id": "post-8",
+    "title": "IoT Trends in 2026: Part 8",
+    "author": "James Rivera",
+    "excerpt": "A deep dive into the latest developments and what they mean for the industry going forward.",
+    "coverImage": "https://picsum.photos/seed/blog8/480/270",
+    "readTime": 14
+  },
+  {
+    "id": "post-9",
+    "title": "IoT Trends in 2024: Part 9",
+    "author": "Nina Petrov",
+    "excerpt": "A deep dive into the latest developments and what they mean for the industry going forward.",
+    "coverImage": "https://picsum.photos/seed/blog9/480/270",
+    "readTime": 6
+  },
+  {
+    "id": "post-10",
+    "title": "Blockchain Trends in 2025: Part 10",
+    "author": "Tom Baker",
+    "excerpt": "A deep dive into the latest developments and what they mean for the industry going forward.",
+    "coverImage": "https://picsum.photos/seed/blog10/480/270",
+    "readTime": 7
+  },
+  {
+    "id": "post-11",
+    "title": "AI Trends in 2026: Part 11",
+    "author": "Sara Nguyen",
+    "excerpt": "A deep dive into the latest developments and what they mean for the industry going forward.",
+    "coverImage": "https://picsum.photos/seed/blog11/480/270",
+    "readTime": 14
+  },
+  {
+    "id": "post-12",
+    "title": "Data Science Trends in 2024: Part 12",
+    "author": "Alex Kim",
+    "excerpt": "A deep dive into the latest developments and what they mean for the industry going forward.",
+    "coverImage": "https://picsum.photos/seed/blog12/480/270",
+    "readTime": 7
+  },
+  {
+    "id": "post-13",
+    "title": "Cloud Trends in 2025: Part 13",
+    "author": "James Rivera",
+    "excerpt": "A deep dive into the latest developments and what they mean for the industry going forward.",
+    "coverImage": "https://picsum.photos/seed/blog13/480/270",
+    "readTime": 15
+  },
+  {
+    "id": "post-14",
+    "title": "Mobile Trends in 2026: Part 14",
+    "author": "Leo Park",
+    "excerpt": "A deep dive into the latest developments and what they mean for the industry going forward.",
+    "coverImage": "https://picsum.photos/seed/blog14/480/270",
+    "readTime": 4
+  },
+  {
+    "id": "post-15",
+    "title": "Data Science Trends in 2024: Part 15",
+    "author": "Leo Park",
+    "excerpt": "A deep dive into the latest developments and what they mean for the industry going forward.",
+    "coverImage": "https://picsum.photos/seed/blog15/480/270",
+    "readTime": 8
+  },
+  {
+    "id": "post-16",
+    "title": "Mobile Trends in 2025: Part 16",
+    "author": "Tom Baker",
+    "excerpt": "A deep dive into the latest developments and what they mean for the industry going forward.",
+    "coverImage": "https://picsum.photos/seed/blog16/480/270",
+    "readTime": 7
+  },
+  {
+    "id": "post-17",
+    "title": "AI Trends in 2026: Part 17",
+    "author": "Omar Hassan",
+    "excerpt": "A deep dive into the latest developments and what they mean for the industry going forward.",
+    "coverImage": "https://picsum.photos/seed/blog17/480/270",
+    "readTime": 11
+  },
+  {
+    "id": "post-18",
+    "title": "Web Dev Trends in 2024: Part 18",
+    "author": "Nina Petrov",
+    "excerpt": "A deep dive into the latest developments and what they mean for the industry going forward.",
+    "coverImage": "https://picsum.photos/seed/blog18/480/270",
+    "readTime": 4
+  },
+  {
+    "id": "post-19",
+    "title": "IoT Trends in 2025: Part 19",
+    "author": "Priya Sharma",
+    "excerpt": "A deep dive into the latest developments and what they mean for the industry going forward.",
+    "coverImage": "https://picsum.photos/seed/blog19/480/270",
+    "readTime": 13
+  },
+  {
+    "id": "post-20",
+    "title": "Quantum Trends in 2026: Part 20",
+    "author": "Alex Kim",
+    "excerpt": "A deep dive into the latest developments and what they mean for the industry going forward.",
+    "coverImage": "https://picsum.photos/seed/blog20/480/270",
+    "readTime": 12
+  },
+  {
+    "id": "post-21",
+    "title": "Security Trends in 2024: Part 21",
+    "author": "Leo Park",
+    "excerpt": "A deep dive into the latest developments and what they mean for the industry going forward.",
+    "coverImage": "https://picsum.photos/seed/blog21/480/270",
+    "readTime": 3
+  },
+  {
+    "id": "post-22",
+    "title": "Security Trends in 2025: Part 22",
+    "author": "Priya Sharma",
+    "excerpt": "A deep dive into the latest developments and what they mean for the industry going forward.",
+    "coverImage": "https://picsum.photos/seed/blog22/480/270",
+    "readTime": 4
+  },
+  {
+    "id": "post-23",
+    "title": "Security Trends in 2026: Part 23",
+    "author": "Leo Park",
+    "excerpt": "A deep dive into the latest developments and what they mean for the industry going forward.",
+    "coverImage": "https://picsum.photos/seed/blog23/480/270",
+    "readTime": 9
+  },
+  {
+    "id": "post-24",
+    "title": "DevOps Trends in 2024: Part 24",
+    "author": "Omar Hassan",
+    "excerpt": "A deep dive into the latest developments and what they mean for the industry going forward.",
+    "coverImage": "https://picsum.photos/seed/blog24/480/270",
+    "readTime": 13
+  },
+  {
+    "id": "post-25",
+    "title": "Mobile Trends in 2025: Part 25",
+    "author": "Sara Nguyen",
+    "excerpt": "A deep dive into the latest developments and what they mean for the industry going forward.",
+    "coverImage": "https://picsum.photos/seed/blog25/480/270",
+    "readTime": 8
+  },
+  {
+    "id": "post-26",
+    "title": "Mobile Trends in 2026: Part 26",
+    "author": "James Rivera",
+    "excerpt": "A deep dive into the latest developments and what they mean for the industry going forward.",
+    "coverImage": "https://picsum.photos/seed/blog26/480/270",
+    "readTime": 13
+  },
+  {
+    "id": "post-27",
+    "title": "DevOps Trends in 2024: Part 27",
+    "author": "Leo Park",
+    "excerpt": "A deep dive into the latest developments and what they mean for the industry going forward.",
+    "coverImage": "https://picsum.photos/seed/blog27/480/270",
+    "readTime": 12
+  },
+  {
+    "id": "post-28",
+    "title": "Cloud Trends in 2025: Part 28",
+    "author": "Lily Wu",
+    "excerpt": "A deep dive into the latest developments and what they mean for the industry going forward.",
+    "coverImage": "https://picsum.photos/seed/blog28/480/270",
+    "readTime": 14
+  },
+  {
+    "id": "post-29",
+    "title": "Security Trends in 2026: Part 29",
+    "author": "Sara Nguyen",
+    "excerpt": "A deep dive into the latest developments and what they mean for the industry going forward.",
+    "coverImage": "https://picsum.photos/seed/blog29/480/270",
+    "readTime": 10
+  },
+  {
+    "id": "post-30",
+    "title": "Data Science Trends in 2024: Part 30",
+    "author": "Priya Sharma",
+    "excerpt": "A deep dive into the latest developments and what they mean for the industry going forward.",
+    "coverImage": "https://picsum.photos/seed/blog30/480/270",
+    "readTime": 13
+  },
+  {
+    "id": "post-31",
+    "title": "IoT Trends in 2025: Part 31",
+    "author": "James Rivera",
+    "excerpt": "A deep dive into the latest developments and what they mean for the industry going forward.",
+    "coverImage": "https://picsum.photos/seed/blog31/480/270",
+    "readTime": 13
+  },
+  {
+    "id": "post-32",
+    "title": "Mobile Trends in 2026: Part 32",
+    "author": "Maya Chen",
+    "excerpt": "A deep dive into the latest developments and what they mean for the industry going forward.",
+    "coverImage": "https://picsum.photos/seed/blog32/480/270",
+    "readTime": 6
+  },
+  {
+    "id": "post-33",
+    "title": "AI Trends in 2024: Part 33",
+    "author": "Alex Kim",
+    "excerpt": "A deep dive into the latest developments and what they mean for the industry going forward.",
+    "coverImage": "https://picsum.photos/seed/blog33/480/270",
+    "readTime": 9
+  },
+  {
+    "id": "post-34",
+    "title": "DevOps Trends in 2025: Part 34",
+    "author": "Leo Park",
+    "excerpt": "A deep dive into the latest developments and what they mean for the industry going forward.",
+    "coverImage": "https://picsum.photos/seed/blog34/480/270",
+    "readTime": 6
+  },
+  {
+    "id": "post-35",
+    "title": "Quantum Trends in 2026: Part 35",
+    "author": "Alex Kim",
+    "excerpt": "A deep dive into the latest developments and what they mean for the industry going forward.",
+    "coverImage": "https://picsum.photos/seed/blog35/480/270",
+    "readTime": 6
+  },
+  {
+    "id": "post-36",
+    "title": "Blockchain Trends in 2024: Part 36",
+    "author": "Nina Petrov",
+    "excerpt": "A deep dive into the latest developments and what they mean for the industry going forward.",
+    "coverImage": "https://picsum.photos/seed/blog36/480/270",
+    "readTime": 13
+  },
+  {
+    "id": "post-37",
+    "title": "Blockchain Trends in 2025: Part 37",
+    "author": "Sara Nguyen",
+    "excerpt": "A deep dive into the latest developments and what they mean for the industry going forward.",
+    "coverImage": "https://picsum.photos/seed/blog37/480/270",
+    "readTime": 7
+  },
+  {
+    "id": "post-38",
+    "title": "Cloud Trends in 2026: Part 38",
+    "author": "James Rivera",
+    "excerpt": "A deep dive into the latest developments and what they mean for the industry going forward.",
+    "coverImage": "https://picsum.photos/seed/blog38/480/270",
+    "readTime": 14
+  },
+  {
+    "id": "post-39",
+    "title": "IoT Trends in 2024: Part 39",
+    "author": "Lily Wu",
+    "excerpt": "A deep dive into the latest developments and what they mean for the industry going forward.",
+    "coverImage": "https://picsum.photos/seed/blog39/480/270",
+    "readTime": 7
+  },
+  {
+    "id": "post-40",
+    "title": "Quantum Trends in 2025: Part 40",
+    "author": "Nina Petrov",
+    "excerpt": "A deep dive into the latest developments and what they mean for the industry going forward.",
+    "coverImage": "https://picsum.photos/seed/blog40/480/270",
+    "readTime": 12
+  },
+  {
+    "id": "post-41",
+    "title": "Data Science Trends in 2026: Part 41",
+    "author": "Alex Kim",
+    "excerpt": "A deep dive into the latest developments and what they mean for the industry going forward.",
+    "coverImage": "https://picsum.photos/seed/blog41/480/270",
+    "readTime": 6
+  },
+  {
+    "id": "post-42",
+    "title": "Cloud Trends in 2024: Part 42",
+    "author": "Lily Wu",
+    "excerpt": "A deep dive into the latest developments and what they mean for the industry going forward.",
+    "coverImage": "https://picsum.photos/seed/blog42/480/270",
+    "readTime": 10
+  },
+  {
+    "id": "post-43",
+    "title": "Web Dev Trends in 2025: Part 43",
+    "author": "Maya Chen",
+    "excerpt": "A deep dive into the latest developments and what they mean for the industry going forward.",
+    "coverImage": "https://picsum.photos/seed/blog43/480/270",
+    "readTime": 4
+  },
+  {
+    "id": "post-44",
+    "title": "Cloud Trends in 2026: Part 44",
+    "author": "Sara Nguyen",
+    "excerpt": "A deep dive into the latest developments and what they mean for the industry going forward.",
+    "coverImage": "https://picsum.photos/seed/blog44/480/270",
+    "readTime": 15
+  },
+  {
+    "id": "post-45",
+    "title": "Data Science Trends in 2024: Part 45",
+    "author": "Tom Baker",
+    "excerpt": "A deep dive into the latest developments and what they mean for the industry going forward.",
+    "coverImage": "https://picsum.photos/seed/blog45/480/270",
+    "readTime": 4
+  },
+  {
+    "id": "post-46",
+    "title": "Data Science Trends in 2025: Part 46",
+    "author": "Nina Petrov",
+    "excerpt": "A deep dive into the latest developments and what they mean for the industry going forward.",
+    "coverImage": "https://picsum.photos/seed/blog46/480/270",
+    "readTime": 12
+  },
+  {
+    "id": "post-47",
+    "title": "Blockchain Trends in 2026: Part 47",
+    "author": "Lily Wu",
+    "excerpt": "A deep dive into the latest developments and what they mean for the industry going forward.",
+    "coverImage": "https://picsum.photos/seed/blog47/480/270",
+    "readTime": 7
+  },
+  {
+    "id": "post-48",
+    "title": "IoT Trends in 2024: Part 48",
+    "author": "Maya Chen",
+    "excerpt": "A deep dive into the latest developments and what they mean for the industry going forward.",
+    "coverImage": "https://picsum.photos/seed/blog48/480/270",
+    "readTime": 13
+  },
+  {
+    "id": "post-49",
+    "title": "Web Dev Trends in 2025: Part 49",
+    "author": "Lily Wu",
+    "excerpt": "A deep dive into the latest developments and what they mean for the industry going forward.",
+    "coverImage": "https://picsum.photos/seed/blog49/480/270",
+    "readTime": 15
+  },
+  {
+    "id": "post-50",
+    "title": "DevOps Trends in 2026: Part 50",
+    "author": "Alex Kim",
+    "excerpt": "A deep dive into the latest developments and what they mean for the industry going forward.",
+    "coverImage": "https://picsum.photos/seed/blog50/480/270",
+    "readTime": 4
+  },
+  {
+    "id": "post-51",
+    "title": "DevOps Trends in 2024: Part 51",
+    "author": "Nina Petrov",
+    "excerpt": "A deep dive into the latest developments and what they mean for the industry going forward.",
+    "coverImage": "https://picsum.photos/seed/blog51/480/270",
+    "readTime": 5
+  },
+  {
+    "id": "post-52",
+    "title": "Blockchain Trends in 2025: Part 52",
+    "author": "Maya Chen",
+    "excerpt": "A deep dive into the latest developments and what they mean for the industry going forward.",
+    "coverImage": "https://picsum.photos/seed/blog52/480/270",
+    "readTime": 14
+  },
+  {
+    "id": "post-53",
+    "title": "DevOps Trends in 2026: Part 53",
+    "author": "Lily Wu",
+    "excerpt": "A deep dive into the latest developments and what they mean for the industry going forward.",
+    "coverImage": "https://picsum.photos/seed/blog53/480/270",
+    "readTime": 15
+  },
+  {
+    "id": "post-54",
+    "title": "Cloud Trends in 2024: Part 54",
+    "author": "Lily Wu",
+    "excerpt": "A deep dive into the latest developments and what they mean for the industry going forward.",
+    "coverImage": "https://picsum.photos/seed/blog54/480/270",
+    "readTime": 4
+  },
+  {
+    "id": "post-55",
+    "title": "DevOps Trends in 2025: Part 55",
+    "author": "Lily Wu",
+    "excerpt": "A deep dive into the latest developments and what they mean for the industry going forward.",
+    "coverImage": "https://picsum.photos/seed/blog55/480/270",
+    "readTime": 12
+  },
+  {
+    "id": "post-56",
+    "title": "Security Trends in 2026: Part 56",
+    "author": "Sara Nguyen",
+    "excerpt": "A deep dive into the latest developments and what they mean for the industry going forward.",
+    "coverImage": "https://picsum.photos/seed/blog56/480/270",
+    "readTime": 8
+  },
+  {
+    "id": "post-57",
+    "title": "Cloud Trends in 2024: Part 57",
+    "author": "Lily Wu",
+    "excerpt": "A deep dive into the latest developments and what they mean for the industry going forward.",
+    "coverImage": "https://picsum.photos/seed/blog57/480/270",
+    "readTime": 15
+  },
+  {
+    "id": "post-58",
+    "title": "IoT Trends in 2025: Part 58",
+    "author": "Maya Chen",
+    "excerpt": "A deep dive into the latest developments and what they mean for the industry going forward.",
+    "coverImage": "https://picsum.photos/seed/blog58/480/270",
+    "readTime": 12
+  },
+  {
+    "id": "post-59",
+    "title": "Mobile Trends in 2026: Part 59",
+    "author": "Omar Hassan",
+    "excerpt": "A deep dive into the latest developments and what they mean for the industry going forward.",
+    "coverImage": "https://picsum.photos/seed/blog59/480/270",
+    "readTime": 3
+  },
+  {
+    "id": "post-60",
+    "title": "Web Dev Trends in 2024: Part 60",
+    "author": "Alex Kim",
+    "excerpt": "A deep dive into the latest developments and what they mean for the industry going forward.",
+    "coverImage": "https://picsum.photos/seed/blog60/480/270",
+    "readTime": 15
+  },
+  {
+    "id": "post-61",
+    "title": "DevOps Trends in 2025: Part 61",
+    "author": "James Rivera",
+    "excerpt": "A deep dive into the latest developments and what they mean for the industry going forward.",
+    "coverImage": "https://picsum.photos/seed/blog61/480/270",
+    "readTime": 3
+  },
+  {
+    "id": "post-62",
+    "title": "Security Trends in 2026: Part 62",
+    "author": "Tom Baker",
+    "excerpt": "A deep dive into the latest developments and what they mean for the industry going forward.",
+    "coverImage": "https://picsum.photos/seed/blog62/480/270",
+    "readTime": 4
+  },
+  {
+    "id": "post-63",
+    "title": "Web Dev Trends in 2024: Part 63",
+    "author": "Omar Hassan",
+    "excerpt": "A deep dive into the latest developments and what they mean for the industry going forward.",
+    "coverImage": "https://picsum.photos/seed/blog63/480/270",
+    "readTime": 4
+  },
+  {
+    "id": "post-64",
+    "title": "IoT Trends in 2025: Part 64",
+    "author": "Sara Nguyen",
+    "excerpt": "A deep dive into the latest developments and what they mean for the industry going forward.",
+    "coverImage": "https://picsum.photos/seed/blog64/480/270",
+    "readTime": 5
+  },
+  {
+    "id": "post-65",
+    "title": "Blockchain Trends in 2026: Part 65",
+    "author": "Lily Wu",
+    "excerpt": "A deep dive into the latest developments and what they mean for the industry going forward.",
+    "coverImage": "https://picsum.photos/seed/blog65/480/270",
+    "readTime": 5
+  },
+  {
+    "id": "post-66",
+    "title": "DevOps Trends in 2024: Part 66",
+    "author": "Lily Wu",
+    "excerpt": "A deep dive into the latest developments and what they mean for the industry going forward.",
+    "coverImage": "https://picsum.photos/seed/blog66/480/270",
+    "readTime": 12
+  },
+  {
+    "id": "post-67",
+    "title": "Data Science Trends in 2025: Part 67",
+    "author": "James Rivera",
+    "excerpt": "A deep dive into the latest developments and what they mean for the industry going forward.",
+    "coverImage": "https://picsum.photos/seed/blog67/480/270",
+    "readTime": 11
+  },
+  {
+    "id": "post-68",
+    "title": "Security Trends in 2026: Part 68",
+    "author": "Priya Sharma",
+    "excerpt": "A deep dive into the latest developments and what they mean for the industry going forward.",
+    "coverImage": "https://picsum.photos/seed/blog68/480/270",
+    "readTime": 9
+  },
+  {
+    "id": "post-69",
+    "title": "Mobile Trends in 2024: Part 69",
+    "author": "Omar Hassan",
+    "excerpt": "A deep dive into the latest developments and what they mean for the industry going forward.",
+    "coverImage": "https://picsum.photos/seed/blog69/480/270",
+    "readTime": 11
+  },
+  {
+    "id": "post-70",
+    "title": "Blockchain Trends in 2025: Part 70",
+    "author": "Leo Park",
+    "excerpt": "A deep dive into the latest developments and what they mean for the industry going forward.",
+    "coverImage": "https://picsum.photos/seed/blog70/480/270",
+    "readTime": 6
+  },
+  {
+    "id": "post-71",
+    "title": "Security Trends in 2026: Part 71",
+    "author": "Leo Park",
+    "excerpt": "A deep dive into the latest developments and what they mean for the industry going forward.",
+    "coverImage": "https://picsum.photos/seed/blog71/480/270",
+    "readTime": 8
+  },
+  {
+    "id": "post-72",
+    "title": "AI Trends in 2024: Part 72",
+    "author": "Tom Baker",
+    "excerpt": "A deep dive into the latest developments and what they mean for the industry going forward.",
+    "coverImage": "https://picsum.photos/seed/blog72/480/270",
+    "readTime": 11
+  },
+  {
+    "id": "post-73",
+    "title": "Security Trends in 2025: Part 73",
+    "author": "Tom Baker",
+    "excerpt": "A deep dive into the latest developments and what they mean for the industry going forward.",
+    "coverImage": "https://picsum.photos/seed/blog73/480/270",
+    "readTime": 6
+  },
+  {
+    "id": "post-74",
+    "title": "AI Trends in 2026: Part 74",
+    "author": "Leo Park",
+    "excerpt": "A deep dive into the latest developments and what they mean for the industry going forward.",
+    "coverImage": "https://picsum.photos/seed/blog74/480/270",
+    "readTime": 14
+  },
+  {
+    "id": "post-75",
+    "title": "AI Trends in 2024: Part 75",
+    "author": "James Rivera",
+    "excerpt": "A deep dive into the latest developments and what they mean for the industry going forward.",
+    "coverImage": "https://picsum.photos/seed/blog75/480/270",
+    "readTime": 4
+  },
+  {
+    "id": "post-76",
+    "title": "AI Trends in 2025: Part 76",
+    "author": "Alex Kim",
+    "excerpt": "A deep dive into the latest developments and what they mean for the industry going forward.",
+    "coverImage": "https://picsum.photos/seed/blog76/480/270",
+    "readTime": 4
+  },
+  {
+    "id": "post-77",
+    "title": "IoT Trends in 2026: Part 77",
+    "author": "James Rivera",
+    "excerpt": "A deep dive into the latest developments and what they mean for the industry going forward.",
+    "coverImage": "https://picsum.photos/seed/blog77/480/270",
+    "readTime": 7
+  },
+  {
+    "id": "post-78",
+    "title": "Blockchain Trends in 2024: Part 78",
+    "author": "James Rivera",
+    "excerpt": "A deep dive into the latest developments and what they mean for the industry going forward.",
+    "coverImage": "https://picsum.photos/seed/blog78/480/270",
+    "readTime": 11
+  },
+  {
+    "id": "post-79",
+    "title": "Cloud Trends in 2025: Part 79",
+    "author": "Tom Baker",
+    "excerpt": "A deep dive into the latest developments and what they mean for the industry going forward.",
+    "coverImage": "https://picsum.photos/seed/blog79/480/270",
+    "readTime": 12
+  },
+  {
+    "id": "post-80",
+    "title": "Blockchain Trends in 2026: Part 80",
+    "author": "James Rivera",
+    "excerpt": "A deep dive into the latest developments and what they mean for the industry going forward.",
+    "coverImage": "https://picsum.photos/seed/blog80/480/270",
+    "readTime": 15
+  },
+  {
+    "id": "post-81",
+    "title": "Blockchain Trends in 2024: Part 81",
+    "author": "Nina Petrov",
+    "excerpt": "A deep dive into the latest developments and what they mean for the industry going forward.",
+    "coverImage": "https://picsum.photos/seed/blog81/480/270",
+    "readTime": 6
+  },
+  {
+    "id": "post-82",
+    "title": "Web Dev Trends in 2025: Part 82",
+    "author": "Leo Park",
+    "excerpt": "A deep dive into the latest developments and what they mean for the industry going forward.",
+    "coverImage": "https://picsum.photos/seed/blog82/480/270",
+    "readTime": 13
+  },
+  {
+    "id": "post-83",
+    "title": "Data Science Trends in 2026: Part 83",
+    "author": "Alex Kim",
+    "excerpt": "A deep dive into the latest developments and what they mean for the industry going forward.",
+    "coverImage": "https://picsum.photos/seed/blog83/480/270",
+    "readTime": 9
+  },
+  {
+    "id": "post-84",
+    "title": "Data Science Trends in 2024: Part 84",
+    "author": "Omar Hassan",
+    "excerpt": "A deep dive into the latest developments and what they mean for the industry going forward.",
+    "coverImage": "https://picsum.photos/seed/blog84/480/270",
+    "readTime": 14
+  },
+  {
+    "id": "post-85",
+    "title": "AI Trends in 2025: Part 85",
+    "author": "Leo Park",
+    "excerpt": "A deep dive into the latest developments and what they mean for the industry going forward.",
+    "coverImage": "https://picsum.photos/seed/blog85/480/270",
+    "readTime": 3
+  },
+  {
+    "id": "post-86",
+    "title": "Data Science Trends in 2026: Part 86",
+    "author": "Alex Kim",
+    "excerpt": "A deep dive into the latest developments and what they mean for the industry going forward.",
+    "coverImage": "https://picsum.photos/seed/blog86/480/270",
+    "readTime": 15
+  },
+  {
+    "id": "post-87",
+    "title": "Web Dev Trends in 2024: Part 87",
+    "author": "James Rivera",
+    "excerpt": "A deep dive into the latest developments and what they mean for the industry going forward.",
+    "coverImage": "https://picsum.photos/seed/blog87/480/270",
+    "readTime": 6
+  },
+  {
+    "id": "post-88",
+    "title": "Security Trends in 2025: Part 88",
+    "author": "Lily Wu",
+    "excerpt": "A deep dive into the latest developments and what they mean for the industry going forward.",
+    "coverImage": "https://picsum.photos/seed/blog88/480/270",
+    "readTime": 10
+  },
+  {
+    "id": "post-89",
+    "title": "Cloud Trends in 2026: Part 89",
+    "author": "Nina Petrov",
+    "excerpt": "A deep dive into the latest developments and what they mean for the industry going forward.",
+    "coverImage": "https://picsum.photos/seed/blog89/480/270",
+    "readTime": 5
+  },
+  {
+    "id": "post-90",
+    "title": "DevOps Trends in 2024: Part 90",
+    "author": "Omar Hassan",
+    "excerpt": "A deep dive into the latest developments and what they mean for the industry going forward.",
+    "coverImage": "https://picsum.photos/seed/blog90/480/270",
+    "readTime": 6
+  },
+  {
+    "id": "post-91",
+    "title": "Web Dev Trends in 2025: Part 91",
+    "author": "Omar Hassan",
+    "excerpt": "A deep dive into the latest developments and what they mean for the industry going forward.",
+    "coverImage": "https://picsum.photos/seed/blog91/480/270",
+    "readTime": 15
+  },
+  {
+    "id": "post-92",
+    "title": "IoT Trends in 2026: Part 92",
+    "author": "Leo Park",
+    "excerpt": "A deep dive into the latest developments and what they mean for the industry going forward.",
+    "coverImage": "https://picsum.photos/seed/blog92/480/270",
+    "readTime": 3
+  },
+  {
+    "id": "post-93",
+    "title": "IoT Trends in 2024: Part 93",
+    "author": "Maya Chen",
+    "excerpt": "A deep dive into the latest developments and what they mean for the industry going forward.",
+    "coverImage": "https://picsum.photos/seed/blog93/480/270",
+    "readTime": 4
+  },
+  {
+    "id": "post-94",
+    "title": "Security Trends in 2025: Part 94",
+    "author": "Sara Nguyen",
+    "excerpt": "A deep dive into the latest developments and what they mean for the industry going forward.",
+    "coverImage": "https://picsum.photos/seed/blog94/480/270",
+    "readTime": 9
+  },
+  {
+    "id": "post-95",
+    "title": "Blockchain Trends in 2026: Part 95",
+    "author": "Omar Hassan",
+    "excerpt": "A deep dive into the latest developments and what they mean for the industry going forward.",
+    "coverImage": "https://picsum.photos/seed/blog95/480/270",
+    "readTime": 6
+  },
+  {
+    "id": "post-96",
+    "title": "Data Science Trends in 2024: Part 96",
+    "author": "Maya Chen",
+    "excerpt": "A deep dive into the latest developments and what they mean for the industry going forward.",
+    "coverImage": "https://picsum.photos/seed/blog96/480/270",
+    "readTime": 5
+  },
+  {
+    "id": "post-97",
+    "title": "Data Science Trends in 2025: Part 97",
+    "author": "Maya Chen",
+    "excerpt": "A deep dive into the latest developments and what they mean for the industry going forward.",
+    "coverImage": "https://picsum.photos/seed/blog97/480/270",
+    "readTime": 9
+  },
+  {
+    "id": "post-98",
+    "title": "DevOps Trends in 2026: Part 98",
+    "author": "Omar Hassan",
+    "excerpt": "A deep dive into the latest developments and what they mean for the industry going forward.",
+    "coverImage": "https://picsum.photos/seed/blog98/480/270",
+    "readTime": 7
+  },
+  {
+    "id": "post-99",
+    "title": "Data Science Trends in 2024: Part 99",
+    "author": "Lily Wu",
+    "excerpt": "A deep dive into the latest developments and what they mean for the industry going forward.",
+    "coverImage": "https://picsum.photos/seed/blog99/480/270",
+    "readTime": 13
+  },
+  {
+    "id": "post-100",
+    "title": "Blockchain Trends in 2025: Part 100",
+    "author": "Sara Nguyen",
+    "excerpt": "A deep dive into the latest developments and what they mean for the industry going forward.",
+    "coverImage": "https://picsum.photos/seed/blog100/480/270",
+    "readTime": 6
+  },
+  {
+    "id": "post-101",
+    "title": "DevOps Trends in 2026: Part 101",
+    "author": "James Rivera",
+    "excerpt": "A deep dive into the latest developments and what they mean for the industry going forward.",
+    "coverImage": "https://picsum.photos/seed/blog101/480/270",
+    "readTime": 3
+  },
+  {
+    "id": "post-102",
+    "title": "Quantum Trends in 2024: Part 102",
+    "author": "Lily Wu",
+    "excerpt": "A deep dive into the latest developments and what they mean for the industry going forward.",
+    "coverImage": "https://picsum.photos/seed/blog102/480/270",
+    "readTime": 3
+  },
+  {
+    "id": "post-103",
+    "title": "Mobile Trends in 2025: Part 103",
+    "author": "Maya Chen",
+    "excerpt": "A deep dive into the latest developments and what they mean for the industry going forward.",
+    "coverImage": "https://picsum.photos/seed/blog103/480/270",
+    "readTime": 3
+  },
+  {
+    "id": "post-104",
+    "title": "Quantum Trends in 2026: Part 104",
+    "author": "Omar Hassan",
+    "excerpt": "A deep dive into the latest developments and what they mean for the industry going forward.",
+    "coverImage": "https://picsum.photos/seed/blog104/480/270",
+    "readTime": 11
+  },
+  {
+    "id": "post-105",
+    "title": "IoT Trends in 2024: Part 105",
+    "author": "Sara Nguyen",
+    "excerpt": "A deep dive into the latest developments and what they mean for the industry going forward.",
+    "coverImage": "https://picsum.photos/seed/blog105/480/270",
+    "readTime": 3
+  },
+  {
+    "id": "post-106",
+    "title": "IoT Trends in 2025: Part 106",
+    "author": "Leo Park",
+    "excerpt": "A deep dive into the latest developments and what they mean for the industry going forward.",
+    "coverImage": "https://picsum.photos/seed/blog106/480/270",
+    "readTime": 5
+  },
+  {
+    "id": "post-107",
+    "title": "Web Dev Trends in 2026: Part 107",
+    "author": "Tom Baker",
+    "excerpt": "A deep dive into the latest developments and what they mean for the industry going forward.",
+    "coverImage": "https://picsum.photos/seed/blog107/480/270",
+    "readTime": 4
+  },
+  {
+    "id": "post-108",
+    "title": "Security Trends in 2024: Part 108",
+    "author": "Nina Petrov",
+    "excerpt": "A deep dive into the latest developments and what they mean for the industry going forward.",
+    "coverImage": "https://picsum.photos/seed/blog108/480/270",
+    "readTime": 4
+  },
+  {
+    "id": "post-109",
+    "title": "Quantum Trends in 2025: Part 109",
+    "author": "James Rivera",
+    "excerpt": "A deep dive into the latest developments and what they mean for the industry going forward.",
+    "coverImage": "https://picsum.photos/seed/blog109/480/270",
+    "readTime": 12
+  },
+  {
+    "id": "post-110",
+    "title": "Quantum Trends in 2026: Part 110",
+    "author": "Maya Chen",
+    "excerpt": "A deep dive into the latest developments and what they mean for the industry going forward.",
+    "coverImage": "https://picsum.photos/seed/blog110/480/270",
+    "readTime": 12
+  },
+  {
+    "id": "post-111",
+    "title": "Web Dev Trends in 2024: Part 111",
+    "author": "Nina Petrov",
+    "excerpt": "A deep dive into the latest developments and what they mean for the industry going forward.",
+    "coverImage": "https://picsum.photos/seed/blog111/480/270",
+    "readTime": 13
+  },
+  {
+    "id": "post-112",
+    "title": "Quantum Trends in 2025: Part 112",
+    "author": "Tom Baker",
+    "excerpt": "A deep dive into the latest developments and what they mean for the industry going forward.",
+    "coverImage": "https://picsum.photos/seed/blog112/480/270",
+    "readTime": 11
+  },
+  {
+    "id": "post-113",
+    "title": "Mobile Trends in 2026: Part 113",
+    "author": "Priya Sharma",
+    "excerpt": "A deep dive into the latest developments and what they mean for the industry going forward.",
+    "coverImage": "https://picsum.photos/seed/blog113/480/270",
+    "readTime": 6
+  },
+  {
+    "id": "post-114",
+    "title": "Mobile Trends in 2024: Part 114",
+    "author": "James Rivera",
+    "excerpt": "A deep dive into the latest developments and what they mean for the industry going forward.",
+    "coverImage": "https://picsum.photos/seed/blog114/480/270",
+    "readTime": 7
+  },
+  {
+    "id": "post-115",
+    "title": "Data Science Trends in 2025: Part 115",
+    "author": "Sara Nguyen",
+    "excerpt": "A deep dive into the latest developments and what they mean for the industry going forward.",
+    "coverImage": "https://picsum.photos/seed/blog115/480/270",
+    "readTime": 13
+  },
+  {
+    "id": "post-116",
+    "title": "DevOps Trends in 2026: Part 116",
+    "author": "Omar Hassan",
+    "excerpt": "A deep dive into the latest developments and what they mean for the industry going forward.",
+    "coverImage": "https://picsum.photos/seed/blog116/480/270",
+    "readTime": 8
+  },
+  {
+    "id": "post-117",
+    "title": "Web Dev Trends in 2024: Part 117",
+    "author": "Maya Chen",
+    "excerpt": "A deep dive into the latest developments and what they mean for the industry going forward.",
+    "coverImage": "https://picsum.photos/seed/blog117/480/270",
+    "readTime": 10
+  },
+  {
+    "id": "post-118",
+    "title": "Quantum Trends in 2025: Part 118",
+    "author": "Tom Baker",
+    "excerpt": "A deep dive into the latest developments and what they mean for the industry going forward.",
+    "coverImage": "https://picsum.photos/seed/blog118/480/270",
+    "readTime": 4
+  },
+  {
+    "id": "post-119",
+    "title": "Web Dev Trends in 2026: Part 119",
+    "author": "Lily Wu",
+    "excerpt": "A deep dive into the latest developments and what they mean for the industry going forward.",
+    "coverImage": "https://picsum.photos/seed/blog119/480/270",
+    "readTime": 6
+  },
+  {
+    "id": "post-120",
+    "title": "IoT Trends in 2024: Part 120",
+    "author": "Priya Sharma",
+    "excerpt": "A deep dive into the latest developments and what they mean for the industry going forward.",
+    "coverImage": "https://picsum.photos/seed/blog120/480/270",
+    "readTime": 5
+  },
+  {
+    "id": "post-121",
+    "title": "Mobile Trends in 2025: Part 121",
+    "author": "Leo Park",
+    "excerpt": "A deep dive into the latest developments and what they mean for the industry going forward.",
+    "coverImage": "https://picsum.photos/seed/blog121/480/270",
+    "readTime": 6
+  },
+  {
+    "id": "post-122",
+    "title": "Mobile Trends in 2026: Part 122",
+    "author": "Priya Sharma",
+    "excerpt": "A deep dive into the latest developments and what they mean for the industry going forward.",
+    "coverImage": "https://picsum.photos/seed/blog122/480/270",
+    "readTime": 5
+  },
+  {
+    "id": "post-123",
+    "title": "Blockchain Trends in 2024: Part 123",
+    "author": "Lily Wu",
+    "excerpt": "A deep dive into the latest developments and what they mean for the industry going forward.",
+    "coverImage": "https://picsum.photos/seed/blog123/480/270",
+    "readTime": 14
+  },
+  {
+    "id": "post-124",
+    "title": "DevOps Trends in 2025: Part 124",
+    "author": "Tom Baker",
+    "excerpt": "A deep dive into the latest developments and what they mean for the industry going forward.",
+    "coverImage": "https://picsum.photos/seed/blog124/480/270",
+    "readTime": 15
+  },
+  {
+    "id": "post-125",
+    "title": "IoT Trends in 2026: Part 125",
+    "author": "Maya Chen",
+    "excerpt": "A deep dive into the latest developments and what they mean for the industry going forward.",
+    "coverImage": "https://picsum.photos/seed/blog125/480/270",
+    "readTime": 13
+  },
+  {
+    "id": "post-126",
+    "title": "IoT Trends in 2024: Part 126",
+    "author": "Priya Sharma",
+    "excerpt": "A deep dive into the latest developments and what they mean for the industry going forward.",
+    "coverImage": "https://picsum.photos/seed/blog126/480/270",
+    "readTime": 13
+  },
+  {
+    "id": "post-127",
+    "title": "Web Dev Trends in 2025: Part 127",
+    "author": "Sara Nguyen",
+    "excerpt": "A deep dive into the latest developments and what they mean for the industry going forward.",
+    "coverImage": "https://picsum.photos/seed/blog127/480/270",
+    "readTime": 7
+  },
+  {
+    "id": "post-128",
+    "title": "Web Dev Trends in 2026: Part 128",
+    "author": "Leo Park",
+    "excerpt": "A deep dive into the latest developments and what they mean for the industry going forward.",
+    "coverImage": "https://picsum.photos/seed/blog128/480/270",
+    "readTime": 14
+  },
+  {
+    "id": "post-129",
+    "title": "IoT Trends in 2024: Part 129",
+    "author": "Sara Nguyen",
+    "excerpt": "A deep dive into the latest developments and what they mean for the industry going forward.",
+    "coverImage": "https://picsum.photos/seed/blog129/480/270",
+    "readTime": 7
+  },
+  {
+    "id": "post-130",
+    "title": "DevOps Trends in 2025: Part 130",
+    "author": "Tom Baker",
+    "excerpt": "A deep dive into the latest developments and what they mean for the industry going forward.",
+    "coverImage": "https://picsum.photos/seed/blog130/480/270",
+    "readTime": 6
+  },
+  {
+    "id": "post-131",
+    "title": "Mobile Trends in 2026: Part 131",
+    "author": "James Rivera",
+    "excerpt": "A deep dive into the latest developments and what they mean for the industry going forward.",
+    "coverImage": "https://picsum.photos/seed/blog131/480/270",
+    "readTime": 13
+  },
+  {
+    "id": "post-132",
+    "title": "DevOps Trends in 2024: Part 132",
+    "author": "Lily Wu",
+    "excerpt": "A deep dive into the latest developments and what they mean for the industry going forward.",
+    "coverImage": "https://picsum.photos/seed/blog132/480/270",
+    "readTime": 10
+  },
+  {
+    "id": "post-133",
+    "title": "DevOps Trends in 2025: Part 133",
+    "author": "Maya Chen",
+    "excerpt": "A deep dive into the latest developments and what they mean for the industry going forward.",
+    "coverImage": "https://picsum.photos/seed/blog133/480/270",
+    "readTime": 4
+  },
+  {
+    "id": "post-134",
+    "title": "Data Science Trends in 2026: Part 134",
+    "author": "Priya Sharma",
+    "excerpt": "A deep dive into the latest developments and what they mean for the industry going forward.",
+    "coverImage": "https://picsum.photos/seed/blog134/480/270",
+    "readTime": 3
+  },
+  {
+    "id": "post-135",
+    "title": "AI Trends in 2024: Part 135",
+    "author": "Alex Kim",
+    "excerpt": "A deep dive into the latest developments and what they mean for the industry going forward.",
+    "coverImage": "https://picsum.photos/seed/blog135/480/270",
+    "readTime": 15
+  },
+  {
+    "id": "post-136",
+    "title": "Cloud Trends in 2025: Part 136",
+    "author": "Priya Sharma",
+    "excerpt": "A deep dive into the latest developments and what they mean for the industry going forward.",
+    "coverImage": "https://picsum.photos/seed/blog136/480/270",
+    "readTime": 5
+  },
+  {
+    "id": "post-137",
+    "title": "Blockchain Trends in 2026: Part 137",
+    "author": "Lily Wu",
+    "excerpt": "A deep dive into the latest developments and what they mean for the industry going forward.",
+    "coverImage": "https://picsum.photos/seed/blog137/480/270",
+    "readTime": 14
+  },
+  {
+    "id": "post-138",
+    "title": "Data Science Trends in 2024: Part 138",
+    "author": "Lily Wu",
+    "excerpt": "A deep dive into the latest developments and what they mean for the industry going forward.",
+    "coverImage": "https://picsum.photos/seed/blog138/480/270",
+    "readTime": 3
+  },
+  {
+    "id": "post-139",
+    "title": "Web Dev Trends in 2025: Part 139",
+    "author": "Leo Park",
+    "excerpt": "A deep dive into the latest developments and what they mean for the industry going forward.",
+    "coverImage": "https://picsum.photos/seed/blog139/480/270",
+    "readTime": 14
+  },
+  {
+    "id": "post-140",
+    "title": "Cloud Trends in 2026: Part 140",
+    "author": "Lily Wu",
+    "excerpt": "A deep dive into the latest developments and what they mean for the industry going forward.",
+    "coverImage": "https://picsum.photos/seed/blog140/480/270",
+    "readTime": 3
+  },
+  {
+    "id": "post-141",
+    "title": "Mobile Trends in 2024: Part 141",
+    "author": "Tom Baker",
+    "excerpt": "A deep dive into the latest developments and what they mean for the industry going forward.",
+    "coverImage": "https://picsum.photos/seed/blog141/480/270",
+    "readTime": 11
+  },
+  {
+    "id": "post-142",
+    "title": "Cloud Trends in 2025: Part 142",
+    "author": "Nina Petrov",
+    "excerpt": "A deep dive into the latest developments and what they mean for the industry going forward.",
+    "coverImage": "https://picsum.photos/seed/blog142/480/270",
+    "readTime": 5
+  },
+  {
+    "id": "post-143",
+    "title": "AI Trends in 2026: Part 143",
+    "author": "Priya Sharma",
+    "excerpt": "A deep dive into the latest developments and what they mean for the industry going forward.",
+    "coverImage": "https://picsum.photos/seed/blog143/480/270",
+    "readTime": 8
+  },
+  {
+    "id": "post-144",
+    "title": "AI Trends in 2024: Part 144",
+    "author": "Alex Kim",
+    "excerpt": "A deep dive into the latest developments and what they mean for the industry going forward.",
+    "coverImage": "https://picsum.photos/seed/blog144/480/270",
+    "readTime": 6
+  },
+  {
+    "id": "post-145",
+    "title": "Security Trends in 2025: Part 145",
+    "author": "Leo Park",
+    "excerpt": "A deep dive into the latest developments and what they mean for the industry going forward.",
+    "coverImage": "https://picsum.photos/seed/blog145/480/270",
+    "readTime": 8
+  },
+  {
+    "id": "post-146",
+    "title": "IoT Trends in 2026: Part 146",
+    "author": "Nina Petrov",
+    "excerpt": "A deep dive into the latest developments and what they mean for the industry going forward.",
+    "coverImage": "https://picsum.photos/seed/blog146/480/270",
+    "readTime": 12
+  },
+  {
+    "id": "post-147",
+    "title": "Cloud Trends in 2024: Part 147",
+    "author": "James Rivera",
+    "excerpt": "A deep dive into the latest developments and what they mean for the industry going forward.",
+    "coverImage": "https://picsum.photos/seed/blog147/480/270",
+    "readTime": 5
+  },
+  {
+    "id": "post-148",
+    "title": "Cloud Trends in 2025: Part 148",
+    "author": "Nina Petrov",
+    "excerpt": "A deep dive into the latest developments and what they mean for the industry going forward.",
+    "coverImage": "https://picsum.photos/seed/blog148/480/270",
+    "readTime": 3
+  },
+  {
+    "id": "post-149",
+    "title": "Cloud Trends in 2026: Part 149",
+    "author": "Alex Kim",
+    "excerpt": "A deep dive into the latest developments and what they mean for the industry going forward.",
+    "coverImage": "https://picsum.photos/seed/blog149/480/270",
+    "readTime": 15
+  },
+  {
+    "id": "post-150",
+    "title": "Data Science Trends in 2024: Part 150",
+    "author": "James Rivera",
+    "excerpt": "A deep dive into the latest developments and what they mean for the industry going forward.",
+    "coverImage": "https://picsum.photos/seed/blog150/480/270",
+    "readTime": 7
+  }
+]

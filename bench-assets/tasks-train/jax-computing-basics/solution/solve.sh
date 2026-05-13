@@ -1,105 +1,140 @@
 #!/bin/bash
-# Use this file to solve the task.
+# Oracle solver for the jax-computing-basics train variant (6 sub-tasks).
+#
+# Works without depending on /app/skills so it can be verified standalone via Docker.
 
 set -e
 echo "=== solve.sh starting ==="
 echo "PWD: $(pwd)"
 echo "Contents of /app:"
 ls -la /app/ || echo "Cannot list /app"
-echo "Contents of /app/skills:"
-ls -la /app/skills/ || echo "Cannot list /app/skills"
-echo "Contents of /root:"
-ls -la /root/ || echo "Cannot list /root"
 
 python3 << 'EOF'
 import json
-import os, yaml, re
-import numpy as np, jax.numpy as jnp, jax
-import sys
-sys.path.append("skills/jax-skills/")
-import jax_skills
+import os
+import numpy as np
+import jax
+import jax.numpy as jnp
 
-class Skill:
-    def __init__(self, name, params, expansion):
-        self.name = name
-        self.params = params
-        self.expansion = expansion
 
-class SkillLibrary:
-    def __init__(self, root):
-        self.skills = {}
-        self.load_skills(root)
+def load_problems(path="/app/problem.json"):
+    with open(path) as fh:
+        return json.load(fh)
 
-    def load_skills(self, root):
-        print('root', root, os.listdir(root))
-        print(os.listdir('.'), os.getcwd(), os.listdir('/app'), os.listdir('/root'))
-        for path, _, files in os.walk(root):
-            for f in files:
-                if f.endswith(".skill"):
-                    print('f: ', f)
-                    data = yaml.safe_load(open(os.path.join(path,f)))
-                    module_name, fn_name = data["implementation"].rsplit(".", 1)
-                    mod = __import__(module_name)
-                    fn = getattr(mod, fn_name)
-                    skill = Skill(name=data["name"], params=None, expansion=fn)
-                    self.skills[skill.name] = skill
 
-    def expand(self, skill_name,  *args, **kwargs):
-        result = self.skills[skill_name].expansion(*args, **kwargs)
-        return result
+def load_input(rel_path, root="/app"):
+    full = os.path.join(root, rel_path)
+    if full.endswith(".npz"):
+        return dict(np.load(full))
+    return np.load(full)
 
-class SkillAgent:
-    def __init__(self, skill_dir="skills"):
-        self.skills = SkillLibrary(skill_dir)
-        print("Loaded skills:", self.skills.skills.keys())
 
-    def solve(self, problem):
-        tid = problem["id"]
-        inp = problem["input"]
-        out = problem["output"]
+def save_output(arr, rel_path, root="/app"):
+    out = os.path.join(root, rel_path)
+    np.save(out, np.asarray(arr))
 
-        if tid == "reduce_prod":
-            x = self.skills.expand("jax-load", inp)
-            y = self.skills.expand("jax-reduce", x, "prod", 0)
-            self.skills.expand("jax-save", y, out)
 
-        elif tid == "map_tanh":
-            x = self.skills.expand("jax-load", inp)
-            y = self.skills.expand("jax-map", x, "tanh")
-            self.skills.expand("jax-save", y, out)
+# ---- Per-task solvers ---------------------------------------------------
 
-        elif tid == "grad_hinge":
-            d = self.skills.expand("jax-load", inp)
-            g = self.skills.expand("jax-grad", d["x"], d["y"], d["w"])
-            self.skills.expand("jax-save", g, out)
+# basic_sum: column sum reduction via jnp.sum(u, axis=0).
+def solve_basic_sum(inp):
+    u = load_input(inp)
+    return jnp.sum(u, axis=0)
 
-        elif tid == "scan_filter":
-            d = self.skills.expand("jax-load", inp)
-            h = self.skills.expand("jax-scan", d["signal"], d["alpha"], d["beta"])
-            self.skills.expand("jax-save", h, out)
 
-        elif tid == "jit_residual":
-            d = self.skills.expand("jax-load", inp)
-            def residual_block(x, W1, b1, W2, b2):
-                h = jax.nn.relu(jnp.dot(x, W1) + b1)
-                return jnp.dot(h, W2) + b2 + x
+# map_exp: elementwise exp via nested vmap (vmap-of-vmap over 2D input).
+def solve_map_exp(inp):
+    u = load_input(inp)
+    return jax.vmap(lambda row: jax.vmap(jnp.exp)(row))(u)
 
-            result = self.skills.expand("jax-jit", residual_block, (d["X"], d["W1"], d["b1"], d["W2"], d["b2"]))
-            self.skills.expand("jax-save", result, out)
 
-        elif tid == "vmap_outer":
-            d = self.skills.expand("jax-load", inp)
-            result = self.skills.expand("jax-vmap-outer", d["a"], d["b"])
-            self.skills.expand("jax-save", result, out)
+# grad_mse: jax.grad of L(w) = mean((x @ w - t)**2) w.r.t. w,
+# reading x/t/w from the npz bundle.
+def solve_grad_mse(inp):
+    data = load_input(inp)
+    X = jnp.asarray(data["x"])
+    t = jnp.asarray(data["t"])
+    w = jnp.asarray(data["w"])
 
-        return None
+    def loss(weights):
+        pred = jnp.dot(X, weights)
+        return jnp.mean((pred - t) ** 2)
 
-print('Loading problems ...')
-problems = json.load(open("/app/problem.json"))
-print('Initialize agent ...')
-agent = SkillAgent()
-for i, p in enumerate(problems):
-    pid = p["id"]
-    print(f'problem id: {pid}')
-    program = agent.solve(p)
+    return jax.grad(loss)(w)
+
+
+# grad_bce: jax.grad of sigmoid binary cross-entropy loss w.r.t. w,
+# reading x/y_bin/w from the npz bundle. Labels are {0,1}.
+def solve_grad_bce(inp):
+    data = load_input(inp)
+    X = jnp.asarray(data["x"])
+    y_bin = jnp.asarray(data["y_bin"])
+    w = jnp.asarray(data["w"])
+
+    def loss(weights):
+        logits = jnp.dot(X, weights)
+        probs = jax.nn.sigmoid(logits)
+        eps = 1e-12
+        return -jnp.mean(
+            y_bin * jnp.log(probs + eps)
+            + (1.0 - y_bin) * jnp.log(1.0 - probs + eps)
+        )
+
+    return jax.grad(loss)(w)
+
+
+# scan_rnn_v: h_new = tanh(Ux @ x_t + Uh @ h + c) via jax.lax.scan,
+# reading Ux/Uh/c (NOT Wx/Wh/b) from the npz bundle. Output is stacked hidden states.
+def solve_scan_rnn_v(inp):
+    data = load_input(inp)
+    seq = jnp.asarray(data["seq"])
+    init = jnp.asarray(data["init"])
+    Ux = jnp.asarray(data["Ux"])
+    Uh = jnp.asarray(data["Uh"])
+    c = jnp.asarray(data["c"])
+
+    def step(h, x_t):
+        h_new = jnp.tanh(Ux @ x_t + Uh @ h + c)
+        return h_new, h_new
+
+    _, stacked = jax.lax.scan(step, init, seq)
+    return stacked
+
+
+# jit_mlp: jax.jit of 2-layer MLP y = relu(X @ W1 + b1) @ W2 + b2,
+# reading X/W1/b1/W2/b2 from the npz bundle.
+def solve_jit_mlp(inp):
+    data = load_input(inp)
+    X = jnp.asarray(data["X"])
+    W1 = jnp.asarray(data["W1"])
+    b1 = jnp.asarray(data["b1"])
+    W2 = jnp.asarray(data["W2"])
+    b2 = jnp.asarray(data["b2"])
+
+    @jax.jit
+    def mlp(X, W1, b1, W2, b2):
+        h = jax.nn.relu(jnp.dot(X, W1) + b1)
+        return jnp.dot(h, W2) + b2
+
+    return mlp(X, W1, b1, W2, b2)
+
+
+DISPATCH = {
+    "basic_sum": solve_basic_sum,
+    "map_exp": solve_map_exp,
+    "grad_mse": solve_grad_mse,
+    "grad_bce": solve_grad_bce,
+    "scan_rnn_v": solve_scan_rnn_v,
+    "jit_mlp": solve_jit_mlp,
+}
+
+problems = load_problems()
+for prob in problems:
+    pid = prob["id"]
+    print(f"Solving problem: {pid}")
+    solver = DISPATCH[pid]
+    result = solver(prob["input"])
+    save_output(result, prob["output"])
+
+print("All problems solved.")
 EOF

@@ -22,9 +22,7 @@ from pptx import Presentation
 from pptx.util import Inches
 import openpyxl
 
-from pathlib import Path
-REPO_ROOT = Path(__file__).resolve().parents[3]
-OUTPUT_DIR = str(REPO_ROOT / "Benchmarks/skillsbench/tasks-train/organize-messy-files/environment/data")
+OUTPUT_DIR = "/home/zhanggenrui/workplace/self-evolving-skills/Benchmarks/skillsbench/tasks-train/organize-messy-files/environment/data"
 
 # Content templates per category
 ML_TOPICS = [

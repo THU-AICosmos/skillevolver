@@ -1,0 +1,21 @@
+{
+  "team": [
+    "eid_d97dc9cd",
+    "eid_d284476c",
+    "eid_1b049863",
+    "eid_f5f62c97",
+    "eid_d4262982"
+  ],
+  "slack": [],
+  "documents": [
+    {
+      "id": "DeployGenie_doc_0",
+      "type": "Product Brief",
+      "author": "eid_d97dc9cd"
+    }
+  ],
+  "meeting_transcripts": [],
+  "meeting_chats": [],
+  "urls": [],
+  "prs": []
+}

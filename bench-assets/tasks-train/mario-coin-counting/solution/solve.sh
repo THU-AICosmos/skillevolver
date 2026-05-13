@@ -48,13 +48,15 @@ print(len(uniq_points), end='')
 
 PYTHON_SCRIPT
 
-out_f=$wd/replay_analysis.csv
-echo "frame_id,coins,turtles" > $out_f
+out_f=$wd/counting_results.csv
+echo "frame_id,coins,enemies,turtles" > $out_f
 for img in `ls $wd/keyframes_*.png`; do
     echo "Processing $img"
     echo -n "$img" >> $out_f
     echo -n , >> $out_f
     $PYTHON /tmp/count_obj.py $img $wd/coin.png 0.9 >> $out_f
+    echo -n , >> $out_f
+    $PYTHON /tmp/count_obj.py $img $wd/enemy.png 0.9 >> $out_f
     echo -n , >> $out_f
     $PYTHON /tmp/count_obj.py $img $wd/turtle.png 0.9 >> $out_f
     echo "" >> $out_f

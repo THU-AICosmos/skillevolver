@@ -1,0 +1,88 @@
+{
+  "deleted_products": [
+    "PROD0279",
+    "PROD1159",
+    "PROD1170",
+    "PROD1299",
+    "PROD1347",
+    "PROD1675",
+    "PROD2231",
+    "PROD2276",
+    "PROD2473",
+    "PROD2917"
+  ],
+  "modified_products": [
+    {
+      "id": "PROD0082",
+      "field": "UnitPrice",
+      "old_value": 476.98,
+      "new_value": 549.14
+    },
+    {
+      "id": "PROD0578",
+      "field": "Quantity",
+      "old_value": 635,
+      "new_value": 931
+    },
+    {
+      "id": "PROD0719",
+      "field": "Category",
+      "old_value": "Auto",
+      "new_value": "Office"
+    },
+    {
+      "id": "PROD0766",
+      "field": "Warehouse",
+      "old_value": "WH-South",
+      "new_value": "WH-West"
+    },
+    {
+      "id": "PROD0816",
+      "field": "UnitPrice",
+      "old_value": 164.99,
+      "new_value": 182.88
+    },
+    {
+      "id": "PROD0887",
+      "field": "Quantity",
+      "old_value": 245,
+      "new_value": 329
+    },
+    {
+      "id": "PROD1337",
+      "field": "Category",
+      "old_value": "Garden",
+      "new_value": "Electronics"
+    },
+    {
+      "id": "PROD1393",
+      "field": "UnitPrice",
+      "old_value": 472.87,
+      "new_value": 500.04
+    },
+    {
+      "id": "PROD2116",
+      "field": "Quantity",
+      "old_value": 989,
+      "new_value": 1247
+    },
+    {
+      "id": "PROD2139",
+      "field": "Warehouse",
+      "old_value": "WH-Central",
+      "new_value": "WH-North"
+    },
+    {
+      "id": "PROD2586",
+      "field": "UnitPrice",
+      "old_value": 335.95,
+      "new_value": 408.59
+    },
+    {
+      "id": "PROD2983",
+      "field": "Category",
+      "old_value": "Tools",
+      "new_value": "Food"
+    }
+  ]
+}

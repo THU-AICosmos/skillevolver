@@ -1,0 +1,51 @@
+Key,Name,Target_Unit,Range_Min,Range_Max,Description
+pH,pH,same,6.0,9.0,No conversion needed
+Turbidity_NTU,Turbidity NTU,same,0.1,500.0,No conversion needed
+Conductivity_uS_cm,Conductivity uS cm,same,10.0,5000.0,No conversion needed
+Temperature_C,Temperature C,same,0.5,40.0,No conversion needed
+Dissolved_Oxygen_Pct,Dissolved Oxygen Pct,same,10.0,200.0,No conversion needed
+UV254_Absorbance,UV254 Absorbance,same,0.001,2.0,No conversion needed
+ORP_mV,ORP mV,same,-500.0,800.0,No conversion needed
+Color_PCU,Color PCU,same,1.0,500.0,No conversion needed
+Odor_TON,Odor TON,same,1.0,200.0,No conversion needed
+Total_Coliform_CFU,Total Coliform CFU,same,0.0,50000.0,No conversion needed
+E_Coli_CFU,E Coli CFU,same,0.0,10000.0,No conversion needed
+Fecal_Coliform_CFU,Fecal Coliform CFU,same,0.0,20000.0,No conversion needed
+BOD5_mg_L,BOD5 mg L,same,0.5,300.0,No conversion needed
+COD_mg_L,COD mg L,same,1.0,1000.0,No conversion needed
+Chlorophyll_a_ug_L,Chlorophyll a ug L,same,0.1,500.0,No conversion needed
+Dissolved_Oxygen_mg_L,Dissolved Oxygen mg L,US EPA standard,1.0,20.0,mg/L -> mmol/L (÷32)
+Nitrate_N_mg_L,Nitrate N mg L,US EPA standard,0.01,50.0,mg/L -> mmol/L (÷14.01)
+Nitrite_N_mg_L,Nitrite N mg L,US EPA standard,0.001,5.0,mg/L -> mmol/L (÷14.01)
+Ammonia_N_mg_L,Ammonia N mg L,US EPA standard,0.01,30.0,mg/L -> mmol/L (÷14.01)
+Total_Kjeldahl_N_mg_L,Total Kjeldahl N mg L,US EPA standard,0.1,50.0,mg/L -> mmol/L (÷14.01)
+Total_Phosphorus_mg_L,Total Phosphorus mg L,US EPA standard,0.01,20.0,mg/L -> mmol/L (÷30.97)
+Orthophosphate_mg_L,Orthophosphate mg L,US EPA standard,0.005,10.0,mg/L -> mmol/L (÷30.97)
+Sulfate_mg_L,Sulfate mg L,US EPA standard,1.0,1000.0,mg/L -> mmol/L (÷96.06)
+Chloride_mg_L,Chloride mg L,US EPA standard,1.0,1000.0,mg/L -> mmol/L (÷35.45)
+Fluoride_mg_L,Fluoride mg L,US EPA standard,0.01,10.0,mg/L -> mmol/L (÷19.0)
+Calcium_mg_L,Calcium mg L,US EPA standard,1.0,500.0,mg/L -> mmol/L (÷40.08)
+Magnesium_mg_L,Magnesium mg L,US EPA standard,0.5,200.0,mg/L -> mmol/L (÷24.31)
+Sodium_mg_L,Sodium mg L,US EPA standard,1.0,1000.0,mg/L -> mmol/L (÷23.0)
+Potassium_mg_L,Potassium mg L,US EPA standard,0.5,50.0,mg/L -> mmol/L (÷39.1)
+Hardness_CaCO3_mg_L,Hardness CaCO3 mg L,US EPA standard,5.0,1500.0,mg/L -> mmol/L (÷100.09)
+Alkalinity_CaCO3_mg_L,Alkalinity CaCO3 mg L,US EPA standard,5.0,500.0,mg/L -> mmol/L (÷100.09)
+Lead_ug_L,Lead ug L,US EPA standard,0.1,500.0,µg/L -> mg/L (÷1000)
+Mercury_ug_L,Mercury ug L,US EPA standard,0.01,50.0,µg/L -> mg/L (÷1000)
+Cadmium_ug_L,Cadmium ug L,US EPA standard,0.05,100.0,µg/L -> mg/L (÷1000)
+Arsenic_ug_L,Arsenic ug L,US EPA standard,0.5,500.0,µg/L -> mg/L (÷1000)
+Chromium_ug_L,Chromium ug L,US EPA standard,0.5,500.0,µg/L -> mg/L (÷1000)
+Copper_ug_L,Copper ug L,US EPA standard,0.5,5000.0,µg/L -> mg/L (÷1000)
+Zinc_ug_L,Zinc ug L,US EPA standard,1.0,10000.0,µg/L -> mg/L (÷1000)
+Nickel_ug_L,Nickel ug L,US EPA standard,0.5,1000.0,µg/L -> mg/L (÷1000)
+Selenium_ug_L,Selenium ug L,US EPA standard,0.1,200.0,µg/L -> mg/L (÷1000)
+Manganese_ug_L,Manganese ug L,US EPA standard,1.0,5000.0,µg/L -> mg/L (÷1000)
+Iron_ug_L,Iron ug L,US EPA standard,5.0,50000.0,µg/L -> mg/L (÷1000)
+Barium_ug_L,Barium ug L,US EPA standard,1.0,5000.0,µg/L -> mg/L (÷1000)
+Total_THM_ug_L,Total THM ug L,US EPA standard,0.5,500.0,µg/L -> mg/L (÷1000)
+Benzene_ug_L,Benzene ug L,US EPA standard,0.1,100.0,µg/L -> mg/L (÷1000)
+Toluene_ug_L,Toluene ug L,US EPA standard,0.1,2000.0,µg/L -> mg/L (÷1000)
+TDS_mg_L,TDS mg L,US EPA standard,10.0,10000.0,mg/L -> g/L (÷1000)
+TSS_mg_L,TSS mg L,US EPA standard,1.0,5000.0,mg/L -> g/L (÷1000)
+Total_Nitrogen_mg_L,Total Nitrogen mg L,US EPA standard,0.1,100.0,mg/L -> mmol/L (÷14.01)
+Silica_mg_L,Silica mg L,US EPA standard,0.5,100.0,mg/L -> mmol/L (÷60.08)

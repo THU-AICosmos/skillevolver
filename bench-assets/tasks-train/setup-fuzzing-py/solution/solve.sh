@@ -1,59 +1,114 @@
 #!/bin/bash
-# NOTE: this solution is to validate whether the tests work
-# Agent's actions are verified by executing the generated fuzz driver dynamically
+# Train variant reference solution.
+# Demonstrates a "scout-then-act" pattern that transfers to validation libs
+# whose primary callable is not at the top level (e.g. val: arrow.parser,
+# IPython.core.splitinput, black.Mode(), unfamiliar minisgl).
 set -e
 export PATH="$HOME/.local/bin:$PATH"
 echo "=== solve.sh starting ==="
 echo "PWD: $(pwd)"
 echo "Contents of /app:"
-# Use this file to solve the task.
+ls -la /app
 
 # step 1: discover the libraries installed
 ls > libraries.txt
 
-# step 2: discover important APIs
-libs=("pyyaml" "chardet" "mistune" "dateutil")
+libs=("chardet" "autopep8" "jinja2" "pygments")
+
+# step 2: scout APIs for each library, then write notes_for_testing.txt.
+# The scouting block below is intentionally verbose — the distilled skill
+# reads exploration traces of this output and should internalise the pattern:
+#   (a) walk_packages to see submodules
+#   (b) grep for parse/tokenize/lex/fix/render/loads/format entry points
+#   (c) inspect __init__.py to see what is re-exported
+# This is the transferable heuristic, not the specific APIs of these 4 libs.
+mkdir -p /tmp/scout
 for lib in "${libs[@]}"; do
-    echo "some notes for testing here.." >> /app/$lib/notes_for_testing.txt
+    echo "===== SCOUTING $lib ====="
+    # Install minimally so we can import for walk_packages introspection.
+    # We use a throwaway venv at /tmp/scout/$lib so real per-lib venvs (below)
+    # are untouched.
+    (
+        cd /tmp/scout
+        uv venv --python 3.12 "$lib-probe" >/dev/null 2>&1 || true
+        source "$lib-probe/bin/activate"
+        uv pip install --quiet "/app/$lib" >/dev/null 2>&1 || true
+
+        echo "--- walk_packages ($lib) ---"
+        python -c "
+import pkgutil, importlib, sys
+try:
+    m = importlib.import_module('$lib')
+    print('top-level dir:', sorted([x for x in dir(m) if not x.startswith('_')])[:25])
+    if hasattr(m, '__path__'):
+        mods = list(pkgutil.walk_packages(m.__path__, prefix='$lib.'))
+        for mm in mods[:30]:
+            print(mm.name)
+except Exception as e:
+    print('probe failed:', e, file=sys.stderr)
+" 2>&1 | head -40
+
+        echo "--- grep entry-point defs in /app/$lib ---"
+        grep -rEn --include='*.py' 'def (parse|tokenize|lex|fix_code|render|loads|format_file_contents|html|detect|from_string)\b' "/app/$lib" 2>/dev/null | head -20 || true
+
+        echo "--- head /app/$lib/*/__init__.py ---"
+        find "/app/$lib" -maxdepth 3 -name '__init__.py' | head -3 | while read f; do
+            echo "### $f"
+            head -40 "$f" 2>/dev/null
+        done
+        deactivate 2>/dev/null || true
+    ) > "/app/$lib-scout.log" 2>&1 || true
+
+    # Promote a compact summary into notes_for_testing.txt
+    mkdir -p "/app/$lib"
+    {
+        echo "# Scouting notes for $lib"
+        echo "## walk_packages + grep summary (from /app/$lib-scout.log)"
+        head -80 "/app/$lib-scout.log" 2>/dev/null || echo "(scout probe was empty)"
+        echo ""
+        echo "## Chosen fuzz entry point"
+    } > "/app/$lib/notes_for_testing.txt"
 done
 
-# step 3: hardcode fuzz.py files for each library
-# pyyaml fuzz.py
-cat > /app/pyyaml/fuzz.py << 'EOF'
-import sys
-
-import atheris
-
-with atheris.instrument_imports():
-    import yaml
-
-
-def TestOneInput(data):
-    fdp = atheris.FuzzedDataProvider(data)
-    yaml_string = fdp.ConsumeUnicodeNoSurrogates(fdp.ConsumeIntInRange(1, 4096))
-
-    try:
-        yaml.safe_load(yaml_string)
-    except yaml.YAMLError:
-        pass
-    except Exception:
-        pass
-
-
-def main():
-    atheris.instrument_all()
-    atheris.Setup(sys.argv, TestOneInput)
-    atheris.Fuzz()
-
-
-if __name__ == "__main__":
-    main()
+# Per-lib chosen entry points (the payoff of scouting):
+cat >> /app/chardet/notes_for_testing.txt <<'EOF'
+chardet exposes `chardet.detect(raw_bytes) -> {encoding, confidence, language}`
+at the top level. Baseline "import + call" case.
 EOF
 
-# chardet fuzz.py
+cat >> /app/autopep8/notes_for_testing.txt <<'EOF'
+autopep8.fix_code(source, options=None) is the entry point. `options` is a
+config-object-like dict (e.g. {"aggressive": 1, "max_line_length": 79}).
+Pattern lesson: SOME callables need a config object to exercise the hot path.
+Cf. val black.format_file_contents(src, mode=black.Mode(), fast=False).
+EOF
+
+cat >> /app/jinja2/notes_for_testing.txt <<'EOF'
+Jinja2's parse/compile pipeline lives one level deep:
+    env = jinja2.Environment(); env.from_string(template_src).render()
+Top-level `jinja2` re-exports Environment. Also jinja2.Template(src).render().
+Pattern lesson: deep-submodule / builder-pattern parsers.
+Cf. val arrow.parser.TzinfoParser(...).parse(s) and IPython.core.splitinput.split_user_input.
+EOF
+
+cat >> /app/pygments/notes_for_testing.txt <<'EOF'
+pygments top-level `highlight(code, lexer, formatter)` is the public API, but
+you must first resolve a lexer from pygments.lexers, e.g.:
+    from pygments.lexers import PythonLexer
+    from pygments.formatters import HtmlFormatter
+    highlight(code, PythonLexer(), HtmlFormatter())
+For a self-contained fuzz target, pygments.lex(code, lexer) consumes the
+tokeniser directly. Pattern lesson: unfamiliar library -> scout pygments.lexers
+module to find a concrete Lexer subclass before you can call the entry point.
+Cf. val minisgl (completely unfamiliar project — scout first).
+EOF
+
+# step 3: hardcode fuzz.py files for each library.
+# Each one showcases a different API-discovery pattern.
+
+# chardet: trivial top-level (baseline)
 cat > /app/chardet/fuzz.py << 'EOF'
 import sys
-
 import atheris
 
 with atheris.instrument_imports():
@@ -63,7 +118,6 @@ with atheris.instrument_imports():
 def TestOneInput(data):
     fdp = atheris.FuzzedDataProvider(data)
     raw_bytes = fdp.ConsumeBytes(fdp.ConsumeIntInRange(1, 4096))
-
     try:
         chardet.detect(raw_bytes)
     except Exception:
@@ -80,22 +134,28 @@ if __name__ == "__main__":
     main()
 EOF
 
-# mistune fuzz.py
-cat > /app/mistune/fuzz.py << 'EOF'
+# autopep8: config-object pattern (transfers to val black.Mode)
+cat > /app/autopep8/fuzz.py << 'EOF'
 import sys
-
 import atheris
 
 with atheris.instrument_imports():
-    import mistune
+    import autopep8
+
+
+# Config object analogous to black.Mode() on val.
+_OPTIONS = {
+    "aggressive": 1,
+    "max_line_length": 79,
+    "indent_size": 4,
+}
 
 
 def TestOneInput(data):
     fdp = atheris.FuzzedDataProvider(data)
-    markdown_text = fdp.ConsumeUnicodeNoSurrogates(fdp.ConsumeIntInRange(1, 4096))
-
+    source = fdp.ConsumeUnicodeNoSurrogates(fdp.ConsumeIntInRange(1, 4096))
     try:
-        mistune.html(markdown_text)
+        autopep8.fix_code(source, options=_OPTIONS)
     except Exception:
         pass
 
@@ -110,23 +170,25 @@ if __name__ == "__main__":
     main()
 EOF
 
-# dateutil fuzz.py
-cat > /app/dateutil/fuzz.py << 'EOF'
+# jinja2: deep-submodule / builder pattern
+cat > /app/jinja2/fuzz.py << 'EOF'
 import sys
-
 import atheris
 
 with atheris.instrument_imports():
-    from dateutil.parser import parse as dateutil_parse
+    import jinja2
+
+
+_ENV = jinja2.Environment(autoescape=False)
 
 
 def TestOneInput(data):
     fdp = atheris.FuzzedDataProvider(data)
-    date_string = fdp.ConsumeUnicodeNoSurrogates(fdp.ConsumeIntInRange(1, 256))
-
+    src = fdp.ConsumeUnicodeNoSurrogates(fdp.ConsumeIntInRange(1, 4096))
     try:
-        dateutil_parse(date_string)
-    except (ValueError, OverflowError, TypeError):
+        tmpl = _ENV.from_string(src)
+        tmpl.render(x=1, y="hello", z=[1, 2, 3])
+    except jinja2.TemplateError:
         pass
     except Exception:
         pass
@@ -142,19 +204,41 @@ if __name__ == "__main__":
     main()
 EOF
 
-# step 4: setup runner scripts for each library
-# pyyaml runner.sh
-cat > /tmp/pyyaml_runner.sh << 'EOF'
-#!/bin/bash
-export PATH="$HOME/.local/bin:$PATH"
-cd /app/pyyaml
-uv venv --python 3.12
-uv pip install .
-uv pip install atheris==3.0.0
-uv run --no-project fuzz.py -max_total_time=10 2> fuzz.log
+# pygments: scout-first pattern (need pygments.lexers to find a concrete Lexer)
+cat > /app/pygments/fuzz.py << 'EOF'
+import sys
+import atheris
+
+with atheris.instrument_imports():
+    import pygments
+    from pygments.lexers import PythonLexer
+
+
+# Entry point resolved via scouting pygments.lexers — analogous to
+# resolving an unfamiliar submodule API on val.
+_LEXER = PythonLexer()
+
+
+def TestOneInput(data):
+    fdp = atheris.FuzzedDataProvider(data)
+    code = fdp.ConsumeUnicodeNoSurrogates(fdp.ConsumeIntInRange(1, 4096))
+    try:
+        list(pygments.lex(code, _LEXER))
+    except Exception:
+        pass
+
+
+def main():
+    atheris.instrument_all()
+    atheris.Setup(sys.argv, TestOneInput)
+    atheris.Fuzz()
+
+
+if __name__ == "__main__":
+    main()
 EOF
 
-# chardet runner.sh
+# step 4: per-lib runner.sh scripts.
 cat > /tmp/chardet_runner.sh << 'EOF'
 #!/bin/bash
 export PATH="$HOME/.local/bin:$PATH"
@@ -165,29 +249,37 @@ uv pip install atheris==3.0.0
 uv run --no-project fuzz.py -max_total_time=10 2> fuzz.log
 EOF
 
-# mistune runner.sh
-cat > /tmp/mistune_runner.sh << 'EOF'
+cat > /tmp/autopep8_runner.sh << 'EOF'
 #!/bin/bash
 export PATH="$HOME/.local/bin:$PATH"
-cd /app/mistune
-uv sync --python 3.12
+cd /app/autopep8
+uv venv --python 3.12
+uv pip install .
 uv pip install atheris==3.0.0
-uv run fuzz.py -max_total_time=10 2> fuzz.log
+uv run --no-project fuzz.py -max_total_time=10 2> fuzz.log
 EOF
 
-# dateutil runner.sh
-cat > /tmp/dateutil_runner.sh << 'EOF'
+cat > /tmp/jinja2_runner.sh << 'EOF'
 #!/bin/bash
 export PATH="$HOME/.local/bin:$PATH"
-cd /app/dateutil
+cd /app/jinja2
 uv venv --python 3.12
-uv pip install python-dateutil
+uv pip install .
+uv pip install atheris==3.0.0
+uv run --no-project fuzz.py -max_total_time=10 2> fuzz.log
+EOF
+
+cat > /tmp/pygments_runner.sh << 'EOF'
+#!/bin/bash
+export PATH="$HOME/.local/bin:$PATH"
+cd /app/pygments
+uv venv --python 3.12
+uv pip install .
 uv pip install atheris==3.0.0
 uv run --no-project fuzz.py -max_total_time=10 2> fuzz.log
 EOF
 
 CURRENT_DIR=$(pwd)
-# projects management using uv
 pids=()
 for lib in "${libs[@]}"; do
     bash /tmp/${lib}_runner.sh &

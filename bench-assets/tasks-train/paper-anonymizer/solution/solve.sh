@@ -1,14 +1,15 @@
 #!/bin/bash
 set -e
 
-cat > /tmp/strip_metadata.py << 'PYTHON_SCRIPT'
+cat > /tmp/anonymize_pdfs.py << 'PYTHON_SCRIPT'
 #!/usr/bin/env python3
 """
-Solution for paper metadata stripping task.
+Training-variant oracle for paper-anonymizer.
 
-Removes institutional affiliations, email addresses, and identifying
-metadata (arXiv IDs, DOIs, venue names) from PDFs for double-blind
-submission portal compliance.
+Redacts author names, affiliations, email-domain fragments, and external
+identifiers from three PDFs using pymupdf text-search redaction. Covers the
+full anonymization contract (papers 1, 2, and 3) required by the
+training-variant tests.
 """
 
 import os
@@ -17,14 +18,27 @@ import fitz  # pymupdf
 INPUT_DIR = "/root"
 OUTPUT_DIR = "/root/redacted"
 
-# Patterns to strip from each paper - focused on affiliations and identifiers
-STRIP_PATTERNS = {
+# Strings to redact for each paper. Must cover:
+#   - author names (title page, footnotes, acks)
+#   - affiliations (long + short forms)
+#   - email-domain fragments
+#   - external identifiers (arXiv, DOI, venue, ack names)
+REDACT_PATTERNS = {
     "paper1.pdf": {
+        "authors": [
+            "Yueqian Lin", "Zhengmian Hu", "Qinsi Wang", "Yudong Liu",
+            "Hengfan Zhang", "Jayakumar Subramanian", "Nikos Vlassis",
+            "Hai Li", "Helen Li", 'Hai "Helen" Li', "Yiran Chen",
+        ],
         "affiliations": ["Duke University", "Adobe"],
         "emails": ["@duke.edu", "@adobe.com"],
         "identifiers": ["arXiv:2509.26542"],
     },
     "paper2.pdf": {
+        "authors": [
+            "Jiatong Shi", "Yueqian Lin", "Xinyi Bai", "Keyi Zhang",
+            "Yuning Wu", "Yuxun Tang", "Yifeng Yu", "Qin Jin", "Shinji Watanabe",
+        ],
         "affiliations": [
             "Carnegie Mellon University", "Carnegie Mellon",
             "Duke Kunshan University", "Duke Kunshan",
@@ -32,51 +46,59 @@ STRIP_PATTERNS = {
             "Renmin University of China", "Renmin University",
             "Georgia Institute of Technology", "Georgia Tech",
         ],
-        "emails": ["@cmu.edu", "@duke.edu", "@cornell.edu", "@ruc.edu.cn", "@gatech.edu"],
-        "identifiers": ["10.21437/Interspeech.2024-33", "Shengyuan Xu", "Pengcheng Zhu"],
+        "emails": [
+            "@cmu.edu", "@duke.edu", "@cornell.edu", "@ruc.edu.cn", "@gatech.edu",
+        ],
+        "identifiers": [
+            "10.21437/Interspeech.2024-33", "Shengyuan Xu", "Pengcheng Zhu",
+        ],
     },
     "paper3.pdf": {
+        "authors": [
+            "Yueqian Lin", "Yuzhe Fu", "Jingyang Zhang", "Yudong Liu",
+            "Jianyi Zhang", "Jingwei Sun", "Hai Li", "Yiran Chen",
+        ],
         "affiliations": ["Duke University"],
         "emails": ["@duke.edu", "yl768@duke.edu"],
-        "identifiers": ["Equal contribution", "ICML Workshop on Machine Learning for Audio"],
+        "identifiers": [
+            "Equal contribution",
+            "ICML Workshop on Machine Learning for Audio",
+        ],
     },
 }
 
 
-def strip_from_pdf(input_path: str, output_path: str, patterns: dict):
-    """Strip specified patterns from a PDF using redaction annotations."""
+def redact_text_in_pdf(input_path: str, output_path: str, patterns: dict) -> None:
+    """Redact every specified string occurrence across every page."""
     doc = fitz.open(input_path)
 
     all_patterns = (
-        patterns.get("affiliations", []) +
-        patterns.get("emails", []) +
-        patterns.get("identifiers", [])
+        patterns.get("authors", [])
+        + patterns.get("affiliations", [])
+        + patterns.get("emails", [])
+        + patterns.get("identifiers", [])
     )
 
     for page_num in range(len(doc)):
         page = doc[page_num]
-
         for pattern in all_patterns:
-            text_instances = page.search_for(pattern)
-            for inst in text_instances:
+            for inst in page.search_for(pattern):
                 page.add_redact_annot(inst, fill=(0, 0, 0))
-
         page.apply_redactions()
 
     doc.save(output_path)
     doc.close()
-    print(f"Stripped {input_path} -> {output_path}")
+    print(f"Redacted {input_path} -> {output_path}")
 
 
-def main():
+def main() -> None:
     os.makedirs(OUTPUT_DIR, exist_ok=True)
 
-    for pdf_name, patterns in STRIP_PATTERNS.items():
+    for pdf_name, patterns in REDACT_PATTERNS.items():
         input_path = os.path.join(INPUT_DIR, pdf_name)
         output_path = os.path.join(OUTPUT_DIR, pdf_name)
-
         if os.path.exists(input_path):
-            strip_from_pdf(input_path, output_path, patterns)
+            redact_text_in_pdf(input_path, output_path, patterns)
         else:
             print(f"Warning: {input_path} not found")
 
@@ -85,4 +107,4 @@ if __name__ == "__main__":
     main()
 PYTHON_SCRIPT
 
-python3 /tmp/strip_metadata.py
+python3 /tmp/anonymize_pdfs.py
