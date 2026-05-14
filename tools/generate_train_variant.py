@@ -52,7 +52,7 @@ SUBTASK_SPLIT_TASKS = {
     "dynamic-object-aware-egomotion",
 }
 
-# No tasks skipped — full 87-task dataset needed for paper completeness
+# No tasks skipped — full training-variant set needed for paper completeness
 SKIP_TASKS: set[str] = set()
 
 

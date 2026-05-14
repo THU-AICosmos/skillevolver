@@ -1,184 +1,129 @@
 """
-Test suite for video dead air trimmer task.
+Test suite for lecture video content analyzer task.
 
-Reduced test set focusing on:
-  1. Output validity (trimmed video exists and is playable, edit log is well-formed)
-  2. Segment detection precision against ground truth
-  3. Trimmed video duration within expected range
-  4. Audio-to-edit-log correspondence via waveform correlation
+Validates the content analysis report and trimmed video output.
 """
 
 import json
 import os
 import subprocess
-import tempfile
 
-import numpy as np
 import pytest
-from scipy.io import wavfile
-
-GROUND_TRUTH_FILE = "/tests/ground_truth.json"
-EDIT_LOG_FILE = "edit_log.json"
-TRIMMED_VIDEO_FILE = "trimmed_lecture.mp4"
 
 
-def probe_duration(path):
-    """Return duration in seconds of a media file via ffprobe."""
+ANALYSIS_PATH = "content_analysis.json"
+TRIMMED_VIDEO_PATH = "trimmed_lecture.mp4"
+INPUT_VIDEO_PATH = "/root/data/input_video.mp4"
+
+
+def ffprobe_duration(video_path):
+    """Get video duration in seconds via ffprobe."""
     proc = subprocess.run(
         [
             "ffprobe", "-v", "error",
             "-show_entries", "format=duration",
             "-of", "default=noprint_wrappers=1:nokey=1",
-            path,
+            video_path,
         ],
         capture_output=True, text=True, check=True,
     )
     return float(proc.stdout.strip())
 
 
-def read_ground_truth():
-    with open(GROUND_TRUTH_FILE) as fh:
+def read_analysis():
+    """Load the content analysis JSON."""
+    with open(ANALYSIS_PATH) as fh:
         return json.load(fh)
 
 
-def read_edit_log():
-    with open(EDIT_LOG_FILE) as fh:
-        return json.load(fh)
+# =============================================================================
+# 1. Output files exist and are well-formed
+# =============================================================================
 
+def test_analysis_file_valid():
+    """Both output files must exist; the JSON must parse and the video must be playable."""
+    assert os.path.exists(ANALYSIS_PATH), f"{ANALYSIS_PATH} missing"
+    assert os.path.getsize(ANALYSIS_PATH) > 0, f"{ANALYSIS_PATH} is empty"
 
-def _iou(a, b):
-    """Intersection-over-union for two time spans given as dicts with start/end or from_sec/to_sec."""
-    a_start = a.get("start", a.get("from_sec"))
-    a_end = a.get("end", a.get("to_sec"))
-    b_start = b.get("start", b.get("from_sec"))
-    b_end = b.get("end", b.get("to_sec"))
-    overlap = max(0, min(a_end, b_end) - max(a_start, b_start))
-    union = (a_end - a_start) + (b_end - b_start) - overlap
-    return overlap / union if union > 0 else 0
+    report = read_analysis()
+    assert isinstance(report, dict), "Analysis must be a JSON object"
 
+    # Check all required top-level keys
+    for key in ("source_length_sec", "trimmed_length_sec", "cut_total_sec",
+                "cut_ratio_pct", "non_content_intervals"):
+        assert key in report, f"Missing key: {key}"
 
-# ── Test 1: output validity ──────────────────────────────────────────────────
+    # Intervals must have correct sub-keys
+    intervals = report["non_content_intervals"]
+    assert isinstance(intervals, list) and len(intervals) > 0, \
+        "non_content_intervals must be a non-empty list"
+    for iv in intervals:
+        for field in ("from", "to", "length"):
+            assert field in iv, f"Interval missing '{field}': {iv}"
 
-def test_outputs_valid():
-    """Trimmed video must exist, be playable, and edit_log.json must have the right keys."""
-    # Video checks
-    assert os.path.isfile(TRIMMED_VIDEO_FILE), f"{TRIMMED_VIDEO_FILE} missing"
-    assert os.path.getsize(TRIMMED_VIDEO_FILE) > 0, f"{TRIMMED_VIDEO_FILE} is empty"
+    # Trimmed video must be playable
+    assert os.path.exists(TRIMMED_VIDEO_PATH), f"{TRIMMED_VIDEO_PATH} missing"
     probe = subprocess.run(
-        ["ffprobe", "-v", "error", "-show_entries", "format=duration", TRIMMED_VIDEO_FILE],
+        ["ffprobe", "-v", "error", "-show_entries", "format=duration", TRIMMED_VIDEO_PATH],
         capture_output=True,
     )
-    assert probe.returncode == 0, "Trimmed video is not a valid media file"
-
-    # Edit log checks
-    assert os.path.isfile(EDIT_LOG_FILE), f"{EDIT_LOG_FILE} missing"
-    log = read_edit_log()
-    for key in ("source_length_sec", "output_length_sec", "dead_air_total_sec",
-                "cut_ratio_percent", "cuts"):
-        assert key in log, f"edit_log.json missing key: {key}"
-    assert isinstance(log["cuts"], list) and len(log["cuts"]) > 0, "cuts list must be non-empty"
-    for c in log["cuts"]:
-        assert "from_sec" in c and "to_sec" in c and "length_sec" in c, \
-            f"Cut entry missing required fields: {c}"
+    assert probe.returncode == 0, "Trimmed video is not playable"
 
 
-# ── Test 2: segment detection precision ──────────────────────────────────────
+# =============================================================================
+# 2. Source duration matches actual input
+# =============================================================================
 
-def test_cut_precision():
-    """At least 60 % of reported cuts must match a ground-truth segment (IoU > 0.3)."""
-    gt = read_ground_truth()
-    log = read_edit_log()
-
-    gt_segs = gt["segments_to_remove"]
-    reported_cuts = log["cuts"]
-
-    hits = 0
-    for cut in reported_cuts:
-        for gt_seg in gt_segs:
-            if _iou(cut, gt_seg) > 0.3:
-                hits += 1
-                break
-
-    precision = hits / len(reported_cuts) if reported_cuts else 1.0
-    assert precision >= 0.6, (
-        f"Cut precision {precision:.0%} below 60 % "
-        f"({hits}/{len(reported_cuts)} cuts matched ground truth)"
-    )
+def test_source_duration_matches_input():
+    """The reported source_length_sec must be within 2 s of the real input duration."""
+    actual = ffprobe_duration(INPUT_VIDEO_PATH)
+    reported = read_analysis()["source_length_sec"]
+    assert abs(actual - reported) < 2.0, \
+        f"Reported source duration {reported}s differs from actual {actual:.1f}s by more than 2s"
 
 
-# ── Test 3: trimmed video duration ──────────────────────────────────────────
+# =============================================================================
+# 3. Intervals are ordered, non-overlapping, and reasonable in count
+# =============================================================================
 
-def test_trimmed_duration_in_range():
-    """Trimmed video duration should be within 20 % of the expected value."""
-    gt = read_ground_truth()
-    expected = gt["video"]["expected_compressed_duration_seconds"]
-    actual = probe_duration(TRIMMED_VIDEO_FILE)
+def test_intervals_ordered_and_nonoverlapping():
+    """Non-content intervals must be sorted by start time and must not overlap."""
+    report = read_analysis()
+    intervals = report["non_content_intervals"]
 
-    lo = expected * 0.80
-    hi = expected * 1.20
-    assert lo <= actual <= hi, (
-        f"Trimmed duration {actual:.1f}s outside [{lo:.0f}, {hi:.0f}]s "
-        f"(expected ~{expected}s)"
-    )
+    prev_end = -1.0
+    for iv in intervals:
+        assert iv["from"] >= 0, f"Interval starts before 0: {iv}"
+        assert iv["to"] > iv["from"], f"Interval end <= start: {iv}"
+        assert iv["length"] > 0, f"Interval has non-positive length: {iv}"
+        assert abs(iv["length"] - (iv["to"] - iv["from"])) < 1.0, \
+            f"Interval length doesn't match to-from: {iv}"
+        assert iv["from"] >= prev_end - 0.5, \
+            f"Intervals overlap or out of order: interval starting at {iv['from']} but previous ended at {prev_end}"
+        prev_end = iv["to"]
+
+    # There should be at least 3 non-content intervals (intro + some pauses)
+    assert len(intervals) >= 3, \
+        f"Expected at least 3 non-content intervals, got {len(intervals)}"
 
 
-# ── Test 4: audio waveform correlation ──────────────────────────────────────
+# =============================================================================
+# 4. Trimmed video duration is in the expected range
+# =============================================================================
 
-def test_audio_correlation():
-    """Reconstruct audio from the original using the edit log's cut list,
-    then check Pearson correlation with the trimmed video's actual audio (>0.95)."""
-    log = read_edit_log()
-    cuts = sorted(log["cuts"], key=lambda c: c["from_sec"])
-    src_video = "/root/data/input_video.mp4"
-    total_dur = log["source_length_sec"]
+def test_trimmed_video_duration_range():
+    """The trimmed video should be between 280 and 420 seconds (ground truth ~346s, ±20%)."""
+    actual_trimmed = ffprobe_duration(TRIMMED_VIDEO_PATH)
+    report = read_analysis()
 
-    # Build keep-intervals (complement of cuts)
-    keeps = []
-    pos = 0
-    for c in cuts:
-        if c["from_sec"] > pos:
-            keeps.append((pos, c["from_sec"]))
-        pos = c["to_sec"]
-    if pos < total_dur:
-        keeps.append((pos, total_dur))
+    # Verify report's trimmed_length_sec roughly matches actual video
+    assert abs(actual_trimmed - report["trimmed_length_sec"]) < 2.0, \
+        f"Reported trimmed duration {report['trimmed_length_sec']}s != actual {actual_trimmed:.1f}s"
 
-    assert keeps, "No audio left after applying all cuts"
-
-    with tempfile.TemporaryDirectory() as td:
-        # ffmpeg filter: trim + concat the kept intervals
-        parts = []
-        for idx, (s, e) in enumerate(keeps):
-            parts.append(f"[0:a]atrim=start={s}:end={e},asetpts=PTS-STARTPTS[k{idx}]")
-        labels = "".join(f"[k{i}]" for i in range(len(keeps)))
-        fc = ";".join(parts) + f";{labels}concat=n={len(keeps)}:v=0:a=1[out]"
-
-        r1 = subprocess.run(
-            ["ffmpeg", "-y", "-i", src_video, "-filter_complex", fc,
-             "-map", "[out]", "-ar", "16000", "-ac", "1", f"{td}/ref.wav"],
-            capture_output=True,
-        )
-        assert r1.returncode == 0, f"ffmpeg reconstruct failed: {r1.stderr.decode()}"
-
-        r2 = subprocess.run(
-            ["ffmpeg", "-y", "-i", TRIMMED_VIDEO_FILE, "-vn",
-             "-ar", "16000", "-ac", "1", f"{td}/actual.wav"],
-            capture_output=True,
-        )
-        assert r2.returncode == 0, f"ffmpeg extract failed: {r2.stderr.decode()}"
-
-        _, ref_wav = wavfile.read(f"{td}/ref.wav")
-        _, act_wav = wavfile.read(f"{td}/actual.wav")
-
-        ref_f = ref_wav.astype(np.float32) / 32768.0
-        act_f = act_wav.astype(np.float32) / 32768.0
-
-        n = min(len(ref_f), len(act_f))
-        corr = np.corrcoef(ref_f[:n], act_f[:n])[0, 1]
-
-        assert corr > 0.95, (
-            f"Audio correlation {corr:.3f} is below 0.95 — "
-            "trimmed audio does not match the described cuts"
-        )
+    # Expected trimmed duration based on ground truth is ~346s
+    lower, upper = 280.0, 420.0
+    assert lower <= actual_trimmed <= upper, \
+        f"Trimmed video duration {actual_trimmed:.1f}s outside expected range [{lower}, {upper}]"
 
 
 if __name__ == "__main__":

@@ -1,74 +1,86 @@
 #!/bin/bash
 set -e
 
+pip install --no-cache-dir seisbench==0.10.2
+
 python3 << 'PYEOF'
-import os
 import numpy as np
 import pandas as pd
 import obspy
 import seisbench.models as sbm
 from obspy import Stream, Trace, UTCDateTime
 from pathlib import Path
+from glob import glob
 
+# ---- Configuration ----
 DATA_DIR = Path("/root/data")
-OUTPUT_PATH = Path("/root/results.csv")
+OUTPUT_PATH = Path("/root/wave_detections.csv")
+SCALE_FACTOR = 1e10
 
-# ---------- helpers ----------
+# ---- Helper: build ObsPy stream from npz ----
+def npz_to_stream(npz_path):
+    d = np.load(npz_path, allow_pickle=False)
+    for key in ("data", "dt", "start_time", "network", "station", "channels"):
+        if key not in d:
+            return None
 
-def npz_to_stream(fpath):
-    """Convert a single .npz file into an obspy Stream."""
-    arr = np.load(fpath, allow_pickle=False)
-    waveform = arr["data"].astype(np.float64) * 1e10
-    sr = 1.0 / float(arr["dt"])
-    chan_str = str(arr["channels"])
-    chans = chan_str.split(",") if "," in chan_str else [f"HH{c}" for c in "ENZ"]
+    waveform = d["data"] * SCALE_FACTOR
+    sr = 1.0 / float(d["dt"])
+    ch_str = str(d["channels"])
+    ch_list = ch_str.split(",") if "," in ch_str else [f"HH{c}" for c in "ENZ"]
+
     try:
-        t0 = UTCDateTime(str(arr["start_time"]))
+        t0 = UTCDateTime(str(d["start_time"]))
     except Exception:
         t0 = UTCDateTime(0)
+
     st = Stream()
-    for idx, ch in enumerate(chans):
+    for idx, ch_name in enumerate(ch_list):
         if idx >= waveform.shape[1]:
             break
-        tr = Trace(data=waveform[:, idx])
-        tr.stats.network = str(arr["network"])
-        tr.stats.station = str(arr["station"])
-        tr.stats.channel = ch if len(ch) >= 2 else f"HH{ch}"
+        tr = Trace(data=waveform[:, idx].astype(np.float64))
+        tr.stats.network = str(d["network"])
+        tr.stats.station = str(d["station"])
+        tr.stats.channel = ch_name if len(ch_name) >= 2 else f"HH{ch_name}"
         tr.stats.sampling_rate = sr
         tr.stats.starttime = t0
         st.append(tr)
     return st
 
-# ---------- main pipeline ----------
+# ---- Load all data ----
+npz_files = sorted(glob(str(DATA_DIR / "*.npz")))
+streams = {}
+for fpath in npz_files:
+    fname = Path(fpath).name
+    st = npz_to_stream(fpath)
+    if st is not None:
+        streams[fname] = st
+        print(f"Loaded {fname}")
 
-print("Loading PhaseNet model …")
+print(f"Total loaded: {len(streams)}")
+
+# ---- Load model ----
 picker = sbm.PhaseNet.from_pretrained("original")
 picker.to_preferred_device()
 
-rows = []
-npz_files = sorted(DATA_DIR.glob("*.npz"))
-print(f"Processing {len(npz_files)} waveform files …")
-
-for fpath in npz_files:
-    fname = fpath.name
+# ---- Run detection ----
+detections = []
+for fname, st in streams.items():
+    sr = st[0].stats.sampling_rate
+    t0 = st[0].stats.starttime
     try:
-        stream = npz_to_stream(fpath)
-    except Exception as exc:
-        print(f"  SKIP {fname}: {exc}")
-        continue
-
-    sr = stream[0].stats.sampling_rate
-    t0 = stream[0].stats.starttime
-
-    try:
-        result = picker.classify(stream)
+        result = picker.classify(st)
         for pk in result.picks:
-            idx = int((pk.peak_time - t0) * sr)
-            rows.append({"file_name": fname, "phase": pk.phase, "pick_idx": idx})
+            sample_idx = int((pk.peak_time - t0) * sr)
+            detections.append({
+                "file_name": fname,
+                "phase": pk.phase,
+                "pick_idx": sample_idx,
+            })
     except Exception as exc:
-        print(f"  ERROR {fname}: {exc}")
+        print(f"Error on {fname}: {exc}")
 
-df = pd.DataFrame(rows, columns=["file_name", "phase", "pick_idx"])
-df.to_csv(OUTPUT_PATH, index=False)
-print(f"Wrote {len(df)} picks to {OUTPUT_PATH}")
+# ---- Save output ----
+pd.DataFrame(detections).to_csv(OUTPUT_PATH, index=False)
+print(f"Wrote {len(detections)} detections to {OUTPUT_PATH}")
 PYEOF

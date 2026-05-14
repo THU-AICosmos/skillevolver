@@ -4,7 +4,7 @@ A thin Harbor-compatible wrapper around selected
 [KernelBench](https://github.com/ScalingIntelligence/KernelBench) problems.
 
 The goal is not to rewrite KernelBench. Instead, it packages a KernelBench
-problem as a Harbor task so the self-evolving-skills pipeline can:
+problem as a Harbor task so the SkillEvolver pipeline can:
 
 - load a problem as a task directory
 - ask an agent to produce a `ModelNew` implementation

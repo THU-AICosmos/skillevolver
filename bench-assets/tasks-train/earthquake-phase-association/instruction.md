@@ -1,23 +1,21 @@
-You have seismic waveform recordings stored at `/root/data/wave.mseed` and a station inventory at `/root/data/stations.csv`.
+You have seismic waveform recordings at `/root/data/wave.mseed` (MiniSEED format) and a station metadata file at `/root/data/stations.csv`.
 
-Your goal is to build an automated earthquake catalog by detecting and locating seismic events from the continuous waveform data.
+Your goal is to build an automated seismic event detector: analyze the waveforms to detect individual earthquake occurrences and output a catalog of detected events.
 
-The waveform data is in standard MSEED format.
+The station CSV contains per-channel rows with columns:
+- `network`, `station`: identifiers for the seismic network and station
+- `channel`: instrument channel code (e.g., BHZ)
+- `longitude`, `latitude`: geographic coordinates in degrees
+- `elevation_m`: station elevation in meters
+- `response`: instrument sensitivity
 
-Each row of the station inventory represents ONE channel of a seismic sensor, with the following columns:
-1. `network`, `station`: identifiers of the seismic network and sensor
-2. `channel`: channel code e.g. BHE
-3. `longitude`, `latitude`: geographic coordinates of the sensor in degrees
-4. `elevation_m`: sensor elevation in meters
-5. `response`: instrument sensitivity
+Use a 1D uniform velocity model with P-wave velocity `vp = 6 km/s` and S-wave velocity `vs = vp / 1.75`.
 
-You should assume a uniform velocity model with `vp=6km/s` and `vs=vp/1.75` for wave propagation.
+Workflow:
+1. Read the waveforms and station metadata.
+2. Apply a deep-learning seismic phase picker (e.g., from SeisBench) to detect P and S wave arrivals across all traces.
+3. Associate the detected arrivals across stations to identify coherent earthquake events, producing event origin times.
+4. Save the detected event catalog to `/root/event_catalog.csv`. The file must have a `time` column with event timestamps in ISO format (no timezone). Additional columns are allowed but ignored during evaluation.
 
-Steps:
-1. Read the waveform recordings and the station inventory.
-2. Apply a deep-learning seismic phase picker (available in SeisBench) to detect P-wave and S-wave arrivals across all stations.
-3. Cluster the detected arrivals into coherent earthquake events using a phase association algorithm, and estimate each event's origin time.
-4. Save the resulting earthquake catalog to `/root/earthquake_catalog.csv`. Each row must represent one detected earthquake. The file must contain a column named `event_time` with the origin time in ISO format (no timezone). Additional columns are allowed but will be ignored during evaluation.
-
-Evaluation (reduced scope):
-Your catalog will be compared to a human-reviewed reference catalog. An event is considered correctly detected if its origin time matches a reference event within 5 seconds. You need to achieve an F1 score >= 0.4 to pass. Additionally, your catalog must contain at least 50 detected events within the evaluation time window.
+Grading:
+Your detected catalog will be compared against a reference catalog of known events. A detection is considered correct if it falls within 5 seconds of a reference event. You need to achieve a precision score above 0.5 to pass.

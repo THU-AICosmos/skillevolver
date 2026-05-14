@@ -1,13 +1,11 @@
-In this task, you are given a screen recording of a Super Mario game session. Your goal is to perform a game replay analysis by extracting keyframes, processing them, and counting **collectibles (coins)**, **hazards (enemies)**, and **creatures (turtles)** visible in each frame. Write the results to a CSV file at `/root/counting_results.csv`.
+You have a screen recording of a Super Mario gameplay session. Your objective is to extract keyframes from the video, convert them to grayscale, and then detect how many gold coins and shell creatures (turtles) appear in each frame using template matching. You do NOT need to count enemies for this task.
 
-Step 1. The video file is located at `/root/super-mario.mp4`. Extract the I-frames (keyframes) from the video and save them as `/root/keyframes_001.png`, `/root/keyframes_002.png`, etc., in timeline order.
+1. The gameplay video is at `/root/super-mario.mp4`. Use ffmpeg to pull out the I-frames (keyframes) and save them as `/root/frame_001.png`, `/root/frame_002.png`, etc. (use the pattern `/root/frame_%03d.png`).
 
-Step 2. Verify that the template images exist at `/root/coin.png`, `/root/enemy.png`, and `/root/turtle.png`. These serve as reference templates for object detection.
+2. Template images for matching are already provided at `/root/coin.png` and `/root/turtle.png`.
 
-Step 3. Convert each extracted keyframe to grayscale IN-PLACE, overwriting the original color image files.
+3. Convert every extracted keyframe to grayscale IN PLACE, overwriting the original color image.
 
-Step 4. For each grayscale keyframe, use template matching to count the number of coins visible in the frame.
+4. For each grayscale keyframe, use OpenCV template matching to count the number of gold coins and shell creatures visible, using the respective template images.
 
-Step 5. Repeat the template matching process to count the number of enemies and turtles in each frame.
-
-Step 6. Generate a CSV file at `/root/counting_results.csv` with exactly 4 columns: "frame_id", "coins", "enemies", and "turtles". The frame_id column should contain the keyframe file paths (e.g., `/root/keyframes_001.png`), formatted as `/root/keyframes_%03d.png`. The coins, enemies, and turtles columns contain the respective counts per frame.
+5. Write all results to `/root/detection_summary.csv` with three columns: `frame`, `gold_coins`, `shell_creatures`. The `frame` column should contain the full path like `/root/frame_001.png`. Rows should be ordered by frame number.

@@ -1,67 +1,89 @@
 import json
 import os
-import shutil
+import subprocess
+
+# The input video is ~270s with ~127 filler words
+# After removing fillers (~50s worth), cleaned video should be ~190-250s
+MIN_CLEANED_DURATION = 170.0
+MAX_CLEANED_DURATION = 255.0
+
+# We expect roughly 80-160 filler detections
+MIN_FILLER_COUNT = 60
+MAX_FILLER_COUNT = 180
+
+VALID_FILLERS = {
+    "um", "uh", "hum", "hmm", "mhm",
+    "like", "yeah", "so", "well", "okay", "basically",
+    "you know", "i mean", "kind of", "i guess",
+}
 
 
-def copy_artifacts():
-    """Copy output files to /logs/verifier/ for trajectory inspection."""
-    os.makedirs("/logs/verifier", exist_ok=True)
-    for name in ("detected_fillers.json", "filler_report.txt"):
-        src = f"/root/{name}"
-        if os.path.exists(src):
-            shutil.copy(src, f"/logs/verifier/{name}")
+def probe_duration(filepath):
+    """Return duration of a media file in seconds via ffprobe."""
+    proc = subprocess.run(
+        [
+            "ffprobe", "-v", "error",
+            "-show_entries", "format=duration",
+            "-of", "default=noprint_wrappers=1:nokey=1",
+            filepath,
+        ],
+        capture_output=True, text=True,
+    )
+    return float(proc.stdout.strip())
 
 
-def load_detections():
-    with open("/root/detected_fillers.json") as f:
-        return json.load(f)
+def read_fillers():
+    with open("/root/detected_fillers.json") as fh:
+        return json.load(fh)
 
 
-class TestSpeechCoachOutputs:
-    """Reduced test suite for the speech-coaching filler detection variant."""
+class TestCleanedVideo:
+    """Tests for the cleaned-video variant of the filler-word task."""
 
-    def test_detections_file_format(self):
-        """Verify detected_fillers.json exists and every entry has the
-        required fields with correct types (phrase=str, start_time=number)."""
-        assert os.path.exists("/root/detected_fillers.json"), (
-            "/root/detected_fillers.json not found"
+    def test_detected_fillers_file_exists(self):
+        """The filler annotations file must be present."""
+        assert os.path.exists("/root/detected_fillers.json"), \
+            "/root/detected_fillers.json was not created"
+
+    def test_detected_fillers_schema(self):
+        """Each entry must contain 'filler' and 'start_time' keys."""
+        entries = read_fillers()
+        assert isinstance(entries, list) and len(entries) > 0, \
+            "detected_fillers.json should be a non-empty JSON array"
+        for entry in entries:
+            assert "filler" in entry, "Missing 'filler' key in entry"
+            assert "start_time" in entry, "Missing 'start_time' key in entry"
+            assert isinstance(entry["start_time"], (int, float)), \
+                "start_time must be numeric"
+
+    def test_filler_count_in_range(self):
+        """Number of detected fillers should be in a plausible range."""
+        entries = read_fillers()
+        assert len(entries) >= MIN_FILLER_COUNT, (
+            f"Too few fillers detected ({len(entries)}). "
+            f"Expected at least {MIN_FILLER_COUNT}."
         )
-        detections = load_detections()
-        assert isinstance(detections, list), "Top-level value must be a JSON array"
-        assert len(detections) > 0, "Detections array must not be empty"
-
-        for entry in detections:
-            assert "phrase" in entry, "Each entry must contain a 'phrase' key"
-            assert isinstance(entry["phrase"], str), "'phrase' must be a string"
-            assert "start_time" in entry, "Each entry must contain a 'start_time' key"
-            assert isinstance(entry["start_time"], (int, float)), (
-                "'start_time' must be a number"
-            )
-
-    def test_detection_count_and_diversity(self):
-        """Check that the total number of detections and the variety of
-        filler types are within a plausible range for the input video."""
-        detections = load_detections()
-        total = len(detections)
-
-        # The ground-truth has ~127 fillers; allow broad but bounded range
-        assert 60 <= total <= 200, (
-            f"Expected between 60 and 200 detected fillers, got {total}"
+        assert len(entries) <= MAX_FILLER_COUNT, (
+            f"Too many fillers detected ({len(entries)}). "
+            f"Expected at most {MAX_FILLER_COUNT}."
         )
 
-        distinct_phrases = {e["phrase"].lower().strip() for e in detections}
-        assert len(distinct_phrases) >= 5, (
-            f"Expected at least 5 distinct filler phrase types, found "
-            f"{len(distinct_phrases)}: {distinct_phrases}"
+    def test_cleaned_video_duration(self):
+        """Cleaned video should be shorter than input but not too short."""
+        assert os.path.exists("/root/cleaned.mp4"), \
+            "/root/cleaned.mp4 was not created"
+        input_dur = probe_duration("/root/input.mp4")
+        cleaned_dur = probe_duration("/root/cleaned.mp4")
+
+        assert cleaned_dur < input_dur, (
+            f"Cleaned video ({cleaned_dur:.1f}s) must be shorter "
+            f"than the input ({input_dur:.1f}s)"
         )
-
-    def test_summary_report_exists(self):
-        """Verify that filler_report.txt was created and is non-empty."""
-        path = "/root/filler_report.txt"
-        assert os.path.exists(path), f"{path} not found"
-        content = open(path).read()
-        assert len(content.strip()) > 0, "filler_report.txt is empty"
-
-    def test_z_copy_artifacts(self):
-        """Copy outputs to /logs/verifier/ for inspection."""
-        copy_artifacts()
+        assert cleaned_dur >= MIN_CLEANED_DURATION, (
+            f"Cleaned video too short ({cleaned_dur:.1f}s). "
+            f"Expected >= {MIN_CLEANED_DURATION}s."
+        )
+        assert cleaned_dur <= MAX_CLEANED_DURATION, (
+            f"Cleaned video too long ({cleaned_dur:.1f}s). "
+            f"Expected <= {MAX_CLEANED_DURATION}s."
+        )

@@ -11,7 +11,6 @@ def timestamp(dt):
 
 
 def calc_detection_performance(t_pred, t_true, time_accuracy_threshold=3):
-    # time_accuracy_threshold = 3 #s
     evaluation_matrix = np.abs(t_pred[np.newaxis, :] - t_true[:, np.newaxis]) < time_accuracy_threshold  # s
     recalls = np.sum(evaluation_matrix, axis=1) > 0
     num_recall = np.sum(recalls)
@@ -35,7 +34,7 @@ def filter_catalog(catalog, start_datetime, end_datetime):
     return t_event, selected_catalog
 
 
-def load_catalog(fname, time_col="time"):
+def load_catalog(fname):
     catalog = pd.read_csv(fname)
-    catalog["date"] = catalog[time_col].map(datetime.fromisoformat)
+    catalog["date"] = catalog["time"].map(datetime.fromisoformat)
     return catalog

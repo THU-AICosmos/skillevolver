@@ -14,8 +14,8 @@ PYTEST_EXIT_CODE=$?
 if [ -f "/root/trimmed_lecture.mp4" ]; then
   cp /root/trimmed_lecture.mp4 /logs/verifier/trimmed_lecture.mp4
 fi
-if [ -f "/root/edit_log.json" ]; then
-  cp /root/edit_log.json /logs/verifier/edit_log.json
+if [ -f "/root/content_analysis.json" ]; then
+  cp /root/content_analysis.json /logs/verifier/content_analysis.json
 fi
 
 # Write reward file based on pytest exit code

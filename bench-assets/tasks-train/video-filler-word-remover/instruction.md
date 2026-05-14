@@ -1,32 +1,22 @@
-You are building a speech coaching tool that analyzes interview recordings to identify hesitation patterns. The input recording is located at `/root/input.mp4`.
+You have a recorded interview at `/root/input.mp4` that contains many verbal hesitations and filler expressions. Your goal is to produce a polished version of this video by removing those fillers.
 
-Your goal is to transcribe the audio and detect the following hesitation markers (filler phrases):
-- um, uh, hum, hmm, mhm
-- like
-- you know
-- i mean
-- yeah
-- so
-- kind of
-- basically
-- I guess
-- well
-- okay
+Your task has two parts:
 
-Save the detection results to `/root/detected_fillers.json` as a JSON array. Each entry must include:
-- `phrase`: the filler phrase that was detected
-- `start_time`: the timestamp in seconds where it occurs
+1. **Transcribe and identify fillers**: Use speech recognition to transcribe the audio and locate all instances of the following filler words/phrases (with timestamps in seconds):
+   - Hesitation sounds: um, uh, hum, hmm, mhm
+   - Filler words: like, yeah, so, well, okay, basically
+   - Filler phrases: you know, i mean, kind of, I guess
 
-Example format:
-```json
-[
-  {"phrase": "um", "start_time": 3.5},
-  {"phrase": "like", "start_time": 12.2},
-  {"phrase": "you know", "start_time": 25.8}
-]
-```
+   Save the results to `/root/detected_fillers.json` as a JSON array where each element has:
+   - `filler`: the detected filler word/phrase
+   - `start_time`: the timestamp in seconds when the filler begins
 
-Additionally, generate a plain-text summary report at `/root/filler_report.txt` containing:
-1. The total number of filler phrases detected
-2. A breakdown showing how many times each distinct filler phrase appears (one line per phrase type, formatted as `<phrase>: <count>`)
-3. The number of distinct filler phrase types found
+   Example:
+   ```json
+   [
+     {"filler": "um", "start_time": 3.5},
+     {"filler": "you know", "start_time": 25.8}
+   ]
+   ```
+
+2. **Produce a cleaned video**: Remove all detected filler segments from the original video and concatenate the remaining (non-filler) portions into a single cleaned video saved at `/root/cleaned.mp4`. The cleaned video should contain only the meaningful speech with fillers cut out.

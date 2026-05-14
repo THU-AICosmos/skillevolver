@@ -34,3 +34,6 @@ Benchmarks/skillsbench/
 
 # KernelBench generated tasks
 Benchmarks/kernelbench/generated/
+
+# Regen script output log
+scripts/train_variant_results.json

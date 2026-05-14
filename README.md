@@ -1,4 +1,4 @@
-# Self-Evolving Skills
+# SkillEvolver
 
 An iterative trace-distillation pipeline that lets a Claude agent generate
 high-quality, reusable agent skills by exploring a benchmark task, reading
@@ -7,7 +7,7 @@ single Agent SDK session.
 
 The same `skill-evolver` pipeline handles both:
 
-- **SkillsBench** (87 tasks) — discrete pass/fail tasks across domains
+- **SkillsBench** — discrete pass/fail tasks across domains (we ship 86 training variants; see [coverage notes](#skillsbench-coverage))
 - **KernelBench** — GPU kernel optimization (continuous reward)
 
 Both run on Harbor, so the agent runner is the same. **The two benchmarks
@@ -17,8 +17,8 @@ see the table further down.
 ## Common setup (do this once)
 
 ```bash
-git clone <repo-url> self-evolving-skills
-cd self-evolving-skills
+git clone <repo-url> skillevolver
+cd skillevolver
 
 # Install
 conda env create -f environment.yml
@@ -99,12 +99,29 @@ to extend the verifier for GPU performance scoring.
 |------|------------|
 | `agent/` | Thin runner using `claude-agent-sdk`. Sets up an isolated workspace, applies a PreToolUse path guard, launches one agent session per task. |
 | `skill-evolver/` | The pipeline: `SKILL.md`, the shared `benchmarks/harbor/` runner, and skill-writing references. |
-| `Benchmarks/skillsbench/` | SkillsBench (87 tasks). Not tracked here — cloned into place by `scripts/setup.sh`. |
+| `Benchmarks/skillsbench/` | SkillsBench submodule. Not tracked here — cloned into place by `scripts/setup.sh`. |
 | `Benchmarks/kernelbench/` | KernelBench → Harbor converter and verifier. |
 | `bench-assets/tasks-train/` | Source of truth for SkillsBench training variants; `scripts/setup.sh` mirrors it into `Benchmarks/skillsbench/tasks-train/`. |
 | `scripts/` | The six commands you'll actually run: `setup.sh`, `doctor.sh`, `prepare_tmux.sh`, `run_eval.sh`, `apply_harbor_patches.py`, `aggregate_results.py`. |
 | `tools/` | Optional helpers (e.g. `generate_train_variant.py` for creating new training variants of a task). |
 | `docs/` | Pipeline and benchmark-specific docs. |
+
+## SkillsBench coverage
+
+This release ships 86 training variants in `bench-assets/tasks-train/`. The
+pipeline runs on any upstream SkillsBench task that has both a `tasks/<name>/`
+and a `tasks-train/<name>/` directory. Two notes on what we did and didn't
+evaluate:
+
+- **`tasks_excluded/`** — upstream SkillsBench keeps 4 tasks in
+  `tasks_excluded/` because they require external credentials or have
+  integration constraints. We didn't evaluate them in our experiments, but
+  three of the four have training variants in this repo and should be
+  runnable if you provide the required credentials.
+- **Recent upstream additions** — upstream SkillsBench has continued to add
+  tasks since our evaluation cutoff. Those won't have training variants in
+  this repo; use `tools/generate_train_variant.py` to create one if you want
+  to extend the sweep.
 
 ## Documentation
 

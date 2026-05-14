@@ -1,8 +1,10 @@
 # Running SkillsBench
 
-SkillsBench is a 87-task benchmark covering discrete pass/fail tasks across
-domains (document processing, data analysis, scheduling, etc.). It lives as a
-submodule under `Benchmarks/skillsbench/`.
+SkillsBench covers discrete pass/fail tasks across domains (document
+processing, data analysis, scheduling, etc.). It lives as a submodule under
+`Benchmarks/skillsbench/`. This release ships 86 training variants in
+`bench-assets/tasks-train/`; see the README's "SkillsBench coverage" section
+for what we did and didn't evaluate.
 
 ## One task
 
