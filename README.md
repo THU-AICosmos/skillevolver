@@ -5,14 +5,22 @@ high-quality, reusable agent skills by exploring a benchmark task, reading
 its own execution traces, and refining the skill across rounds — all in a
 single Agent SDK session.
 
-The same `skill-evolver` pipeline handles both:
+The same `skill-evolver` pipeline drives two benchmarks via the Harbor runner:
 
 - **SkillsBench** — discrete pass/fail tasks across domains (we ship 86 training variants; see [coverage notes](#skillsbench-coverage))
 - **KernelBench** — GPU kernel optimization (continuous reward)
 
-Both run on Harbor, so the agent runner is the same. **The two benchmarks
-differ in how tasks come into the pipeline and what the reward looks like** —
-see the table further down.
+The conceptual differences (operational details — exact commands, build steps —
+appear in each quick-start below):
+
+|  | SkillsBench | KernelBench |
+|---|---|---|
+| Reward | discrete (pass / fail) | continuous (speedup vs reference) |
+| Tasks | curated submodule auto-cloned by `setup.sh`; 86 training variants shipped in `bench-assets/` | one upstream KernelBench problem at a time, packaged via `harbor_converter.py` |
+| Train / val split | yes — `tasks-train/` variants vs canonical `tasks/` | none — explore + validate on the same problem |
+| Skill identity | each task evolves its own skill | all `kb-*` tasks share one `kernel-optim` skill (designed for cross-kernel transfer) |
+| Verifier | task-specific, baked into each Harbor task | CPU-only correctness by default; extend the generated verifier for GPU performance scoring |
+| Task naming | domain slugs (`offer-letter-generator`) | `kb-l<level>-p<id>-<slug>` (prefix triggers KernelBench-specific behavior) |
 
 ## Common setup (do this once)
 
@@ -78,20 +86,6 @@ python -m agent.run \
 
 See [docs/kernelbench.md](docs/kernelbench.md) for converter details and how
 to extend the verifier for GPU performance scoring.
-
-## Benchmark differences (read before running)
-
-| Aspect | SkillsBench | KernelBench |
-|--------|-------------|-------------|
-| Reward signal | Discrete (pass / fail) | Continuous (speedup ratio over reference) |
-| Where tasks come from | Submodule, auto-cloned by `scripts/setup.sh` | You clone KernelBench upstream, then `harbor_converter.py` packages one problem at a time |
-| Task naming | Domain slugs (`offer-letter-generator`, `court-form-filling`) | `kb-l<level>-p<id>-<slug>` (prefix triggers KernelBench-specific behavior) |
-| Skill identity | Each task evolves its own skill | All `kb-*` tasks share one skill name (`kernel-optim`), designed for cross-kernel transfer |
-| Train / test split | Yes — `tasks-train/` (variants) vs `tasks/` (canonical) | None — explore and validate on the same problem |
-| Verifier | Task-specific, baked into each Harbor task | OSS default is CPU-only correctness; for GPU performance scoring you extend the generated verifier |
-| Extra build step | None | `Benchmarks/kernelbench/build_image.sh` builds the Docker image for each converted task |
-| Default `--reward-signal-mode` | `auto` → discrete | `continuous` (set explicitly; `auto` would also pick this up after the first trial) |
-| Run command | `python -m agent.run --task <slug> --train-split` | `python -m agent.run --task kb-l1-p1-... --reward-signal-mode continuous` |
 
 ## What's inside
 
