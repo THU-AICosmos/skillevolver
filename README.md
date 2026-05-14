@@ -128,7 +128,6 @@ evaluate:
 - Python 3.12
 - Docker Desktop (Harbor runs each trial in a container)
 - An Anthropic API key with access to Claude Opus 4.6
-- ~30 GB free disk (Harbor images ≈ 2.5 GB per trial; clean periodically)
 
 ## License
 
