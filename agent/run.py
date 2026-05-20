@@ -111,7 +111,7 @@ async def run_skill_creator(
     max_turns: int = MAX_TURNS,
     max_budget: float = MAX_BUDGET,
     version: str = "evolver",
-    tmux_window: str = "skillsbench:1",
+    tmux_window: str = "harbor:0",
     use_train_split: bool = False,
     iterations: int = 2,
     seed_skill_dir: str | None = None,
@@ -438,7 +438,7 @@ async def main():
         default=None,
         help=f"Number of loop iterations (default: {EVOLVER_DEFAULT_ITERATIONS}). N=1 is the no-refinement ablation.",
     )
-    parser.add_argument("--tmux-window", default="skillsbench:1", help="Tmux target window for Harbor (default: skillsbench:1)")
+    parser.add_argument("--tmux-window", default="harbor:0", help="Tmux target window for Harbor (default: harbor:0)")
     parser.add_argument(
         "--train-split",
         action="store_true",

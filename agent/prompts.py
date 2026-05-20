@@ -41,7 +41,7 @@ def build_user_prompt_evolver(
     n_exploration: int = EVOLVER_N_EXPLORATION,
     n_validation: int = EVOLVER_N_VALIDATION,
     max_iterations: int = EVOLVER_MAX_ITERATIONS,
-    tmux_window: str = "skillsbench:1",
+    tmux_window: str = "harbor:0",
     use_train_split: bool = True,
     seed_skill_dir: str | None = None,
     reward_signal_mode: str = "auto",

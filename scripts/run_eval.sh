@@ -7,8 +7,8 @@
 #
 # Usage:
 #   bash scripts/run_eval.sh <harbor_tmux_window> [start_idx] [end_idx]
-#   TASKS=offer-letter-generator,court-form-filling bash scripts/run_eval.sh skillsbench:0
-#   bash scripts/run_eval.sh --iterations 1 skillsbench:0     # N=1 ablation (no refinement)
+#   TASKS=offer-letter-generator,court-form-filling bash scripts/run_eval.sh harbor:0
+#   bash scripts/run_eval.sh --iterations 1 harbor:0     # N=1 ablation (no refinement)
 #
 # Launch convention: open two tmux windows. Run THIS script from the *agent*
 # window. The first positional arg names the *Harbor* window — run_and_wait.py

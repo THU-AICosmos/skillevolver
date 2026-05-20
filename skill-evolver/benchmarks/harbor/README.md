@@ -116,7 +116,7 @@ python <skill-evolver>/benchmarks/harbor/scripts/run_and_wait.py \
   --skill-dir strategy-hints/<skill-name> \
   --model claude-opus-4-6 \
   --n-attempts 4 \
-  --tmux-window skillsbench:1 \
+  --tmux-window harbor:0 \
   --tasks-dir tasks-train
 ```
 
@@ -138,7 +138,7 @@ python <skill-evolver>/benchmarks/harbor/scripts/run_and_wait.py \
   --skill-dir output/skills/<skill-name> \
   --model claude-opus-4-6 \
   --n-attempts 5 \
-  --tmux-window skillsbench:1
+  --tmux-window harbor:0
 ```
 
 ## Workspace Layout
