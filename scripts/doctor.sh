@@ -28,10 +28,8 @@ fi
 [ -f "$ROOT/Benchmarks/skillsbench/.venv/bin/harbor" ] && pass "skillsbench uv env present" || fail "skillsbench .venv missing"
 if [ -n "${ANTHROPIC_API_KEY:-}" ]; then
   pass "ANTHROPIC_API_KEY exported"
-elif [ -n "${CLAUDE_CODE_OAUTH_TOKEN:-}" ]; then
-  pass "CLAUDE_CODE_OAUTH_TOKEN exported (Claude Max subscription auth)"
 else
-  fail "neither ANTHROPIC_API_KEY nor CLAUDE_CODE_OAUTH_TOKEN is set (need one)"
+  fail "ANTHROPIC_API_KEY is not set"
 fi
 
 if [ -f "$ROOT/Benchmarks/skillsbench/.venv/lib/python3.12/site-packages/harbor/models/trial/config.py" ]; then

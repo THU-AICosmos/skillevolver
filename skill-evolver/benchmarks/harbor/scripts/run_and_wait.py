@@ -277,7 +277,7 @@ def run_and_wait(
     model: str,
     n_attempts: int,
     skill_dir: Optional[Path] = None,
-    tmux_window: str = "skillsbench:1",
+    tmux_window: str = "harbor:0",
     tasks_dir: Optional[str] = None,
 ) -> dict:
     """Full flow: optionally deploy skill, run Harbor, collect + preprocess results.
@@ -342,7 +342,6 @@ def run_and_wait(
         "NO_PROXY",
         "no_proxy",
         "ANTHROPIC_API_KEY",
-        "ANTHROPIC_AUTH_TOKEN",
     ):
         value = os.environ.get(key)
         if value:
@@ -576,8 +575,8 @@ def _main():
     parser.add_argument(
         "--tmux-window",
         type=str,
-        default="skillsbench:1",
-        help="Tmux target window for Harbor commands (default: skillsbench:1)",
+        default="harbor:0",
+        help="Tmux target window for Harbor commands (default: harbor:0)",
     )
     args = parser.parse_args()
 
