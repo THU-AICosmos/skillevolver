@@ -150,20 +150,27 @@ to extend the verifier for GPU performance scoring.
 
 ## SkillsBench coverage
 
-This release ships 86 training variants in `bench-assets/tasks-train/`. The
-pipeline runs on any upstream SkillsBench task that has both a `tasks/<name>/`
-and a `tasks-train/<name>/` directory. Two notes on what we did and didn't
-evaluate:
+The paper reports headline results on **83 tasks**. That number comes from
+the intersection of (a) the 86 training variants we ship in
+`bench-assets/tasks-train/` and (b) the canonical `tasks/<name>/` set in
+upstream SkillsBench at the pinned commit. A few numbers that look
+inconsistent at first glance but aren't:
 
-- **`tasks_excluded/`** — upstream SkillsBench keeps 4 tasks in
-  `tasks_excluded/` because they require external credentials or have
-  integration constraints. We didn't evaluate them in our experiments, but
-  three of the four have training variants in this repo and should be
-  runnable if you provide the required credentials.
-- **Recent upstream additions** — upstream SkillsBench has continued to add
-  tasks since our evaluation cutoff. Those won't have training variants in
-  this repo; use `tools/generate_train_variant.py` to create one if you want
-  to extend the sweep.
+- **86 shipped train variants vs. 83 evaluated.** Three of the 86
+  (`mhc-layer-impl`, `scheduling-email-assistant`, `speaker-diarization-subtitles`)
+  live upstream in `tasks_excluded/` rather than `tasks/` because they
+  require external credentials or have integration constraints. We
+  shipped their training variants for completeness, but didn't include
+  them in the paper sweep. They are runnable if you provide the required
+  credentials and move them out of `tasks_excluded/`.
+- **Upstream has more tasks than we evaluated.** SkillsBench has continued
+  to add tasks since our cutoff (94 in `tasks/` at the pinned commit, and
+  more on upstream main). Those don't have training variants in this repo
+  — use `tools/generate_train_variant.py` to create one if you want to
+  extend the sweep.
+
+Bottom line: 83 tasks were evaluated end-to-end in the paper; that's also
+what `bash scripts/run_eval.sh` runs by default at the pin.
 
 ## Documentation
 
