@@ -1,22 +1,72 @@
+<div align="center">
+
 # SkillEvolver
 
-An iterative trace-distillation pipeline that lets a Claude agent generate
-high-quality, reusable agent skills by exploring a benchmark task, reading
-its own execution traces, and refining the skill across rounds — all in a
-single Agent SDK session.
+**A meta-skill that lets a Claude agent author its own reusable skills — from a handful of trials, on demand.**
 
-The same `skill-evolver` pipeline drives two benchmarks via the Harbor runner:
+No fine-tuning. No offline trajectory pool. Just an iterative explore → distill → deploy → refine loop, run end-to-end in a single Agent SDK session.
 
-- **SkillsBench** — discrete pass/fail tasks across domains (we ship 86 training variants; see [coverage notes](#skillsbench-coverage))
-- **KernelBench** — GPU kernel optimization (continuous reward)
+[![Python 3.12](https://img.shields.io/badge/python-3.12-blue.svg)](https://www.python.org/)
+[![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
+[![Model: Claude Opus 4.6](https://img.shields.io/badge/model-Claude%20Opus%204.6-orange.svg)](https://www.anthropic.com/)
+[![Benchmarks: SkillsBench · KernelBench](https://img.shields.io/badge/benchmarks-SkillsBench%20%C2%B7%20KernelBench-purple.svg)](#)
 
-The conceptual differences (operational details — exact commands, build steps —
-appear in each quick-start below):
+</div>
+
+---
+
+## Headline results
+
+<div align="center">
+
+| Condition | SkillsBench (83 tasks) |
+|---|:---:|
+| No skill | 29.9% |
+| Self-generated (one-shot) | 32.0% |
+| Human-curated | 43.6% |
+| **SkillEvolver (R=2)** | **56.9%** |
+
+**+13.3pp over human-curated skills.** On 74.7% of tasks SkillEvolver ≥ human-curated.
+Transfers to continuous-reward tasks: KernelBench (H100) mean speedup **1.16 → 1.51**.
+Evolved skills make the downstream agent **−19% tokens · −15% turns · −24% wall-clock**.
+End-to-end cost: **~$4/task**.
+
+</div>
+
+---
+
+## What you get
+
+<p align="center">
+  <img src="figs/deployment-view.png" alt="SkillEvolver deployment view: meta-skill drives a CLI agent to produce an optimized domain skill, then the same CLI agent activates that skill on a new task." width="780"/>
+</p>
+
+SkillEvolver is a single `SKILL.md` (a *meta-skill*) that any CLI agent — Claude Code, Codex, or another protocol agent — can activate. The agent reads the meta-skill, runs the loop on a target task, and writes out an **optimized domain skill**: a tight `SKILL.md` plus any helper scripts, references, and probes the loop discovered are worth keeping. That artifact then plugs into a fresh agent session on a new instance of the task — no SkillEvolver needed at deploy time.
+
+## How it works
+
+<p align="center">
+  <img src="figs/explore-refine-loop.png" alt="Two-stage loop: Exploration (Strategize K diverse strategies → spawn K domain-skill agents that run Harbor trials → collect success/failure trajectories) followed by Refinement (Analyze success vs failure → Synthesize a targeted patch → Auditor independently verifies → accept or revise)." width="820"/>
+</p>
+
+Each round `r = 0 … R−1` operates on the training task `τ_train` only:
+
+- 🔍 **Strategize.** The agent brainstorms *K* diverse strategies and writes them as separate domain-skill variants `s_{r,1} … s_{r,K}`.
+- 🚀 **Explore.** It spawns *K* downstream agents in parallel Harbor trials, each loading one variant of the current skill `v_r`. Trajectories `τ_1 … τ_K` come back with reward signals `(r⁺, r⁻)`.
+- 🔬 **Analyze.** The success vs failure contrast → `Δ_r`: the missing guidance that separated the winners.
+- ✏️ **Synthesize.** A targeted patch is applied to produce a candidate `ṽ_{r+1}`.
+- 🛡️ **Audit.** An independent fresh-session auditor verifies the candidate before it becomes `v_{r+1}`.
+
+Refinement is **deployment-grounded**, not self-reflective: a candidate skill can fail by being silently bypassed, omitting a needed step, or misleading the next agent — none of which show up in the author's own trace. So each version is tested on a fresh downstream agent before promotion.
+
+---
+
+The same pipeline drives two benchmarks via the Harbor runner:
 
 |  | SkillsBench | KernelBench |
 |---|---|---|
 | Reward | discrete (pass / fail) | continuous (speedup vs reference) |
-| Tasks | curated submodule auto-cloned by `setup.sh`; 86 training variants shipped in `bench-assets/` | one upstream KernelBench problem at a time, packaged via `harbor_converter.py` |
+| Tasks | curated submodule auto-cloned by `setup.sh`; 86 training variants in `bench-assets/` | one upstream KernelBench problem at a time, packaged via `harbor_converter.py` |
 | Train / val split | yes — `tasks-train/` variants vs canonical `tasks/` | none — explore + validate on the same problem |
 | Skill identity | each task evolves its own skill | all `kb-*` tasks share one `kernel-optim` skill (designed for cross-kernel transfer) |
 | Verifier | task-specific, baked into each Harbor task | CPU-only correctness by default; extend the generated verifier for GPU performance scoring |
@@ -31,11 +81,8 @@ cd skillevolver
 # Install
 conda env create -f environment.yml
 conda activate skillsbench
-# Auth — set one of these:
-#   API key (any Anthropic account):
+# Auth
 export ANTHROPIC_API_KEY="<your-api-key>"
-#   OR OAuth token (Claude Max subscribers, generated by `claude auth token`):
-# export CLAUDE_CODE_OAUTH_TOKEN="<your-oauth-token>"
 
 # One-shot setup: clones SkillsBench, installs Harbor, applies the 3 Harbor
 # patches required by the runner, runs health checks
@@ -98,6 +145,7 @@ to extend the verifier for GPU performance scoring.
 | `bench-assets/tasks-train/` | Source of truth for SkillsBench training variants; `scripts/setup.sh` mirrors it into `Benchmarks/skillsbench/tasks-train/`. |
 | `scripts/` | The six commands you'll actually run: `setup.sh`, `doctor.sh`, `prepare_tmux.sh`, `run_eval.sh`, `apply_harbor_patches.py`, `aggregate_results.py`. |
 | `tools/` | Optional helpers (e.g. `generate_train_variant.py` for creating new training variants of a task). |
+| `figs/` | Method and deployment diagrams used in this README and the paper. |
 | `docs/` | Pipeline and benchmark-specific docs. |
 
 ## SkillsBench coverage
