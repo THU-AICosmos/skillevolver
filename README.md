@@ -26,7 +26,7 @@ No fine-tuning. No offline trajectory pool. Just an iterative explore → distil
 | Human-curated | 43.6% |
 | **SkillEvolver (R=2)** | **56.9%** |
 
-**+13.3pp over human-curated skills.** On 74.7% of tasks SkillEvolver ≥ human-curated.
+**+13.3% over human-curated skills.** On 74.7% of tasks SkillEvolver ≥ human-curated.
 Transfers to continuous-reward tasks: KernelBench (H100) mean speedup **1.16 → 1.51**.
 Evolved skills make the downstream agent **−19% tokens · −15% turns · −24% wall-clock**.
 End-to-end cost: **~$4/task**.
