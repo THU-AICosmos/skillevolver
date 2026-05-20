@@ -224,16 +224,27 @@ def patch_compose_yaml(text: str) -> str:
 
 
 def patch_claude_code(text: str) -> str:
-    # Skip if chmod patch is already present (upstreamed in newer Harbor versions)
-    if "chmod -R a+r $CLAUDE_CONFIG_DIR" in text:
+    # Append `chmod -R a+rX $CLAUDE_CONFIG_DIR` to the SAME ExecInput as the
+    # claude command, joined with `;`. Two reasons it has to be the same shell,
+    # not a separate ExecInput: (1) Harbor short-circuits the ExecInput sequence
+    # on non-zero exit, so a follow-up chmod is silently skipped whenever the
+    # agent hits budget / Claude CLI crashes / network errors, leaving the
+    # session JSONL files mode 600 root:root and the trajectory unreadable from
+    # the host ("Failed to convert Claude Code events to trajectory: Permission
+    # denied"). (2) `a+rX` (capital X) adds traversal on directories without
+    # making regular files executable; plain `a+r` leaves the dir un-traversable.
+    if "chmod -R a+rX $CLAUDE_CONFIG_DIR" in text:
         return text
-    anchor = "            ExecInput(\n                command=claude_cmd,\n                env=env,\n            ),\n"
+    anchor = '"/logs/agent/claude-code.txt"'
     if anchor not in text:
-        return text  # Anchor format changed — chmod likely upstreamed
-    return insert_once(
-        text,
+        raise ValueError(
+            "patch_claude_code: anchor '/logs/agent/claude-code.txt' not found; "
+            "harbor's claude command shape has changed — re-derive the patch"
+        )
+    return text.replace(
         anchor,
-        '            ExecInput(\n                command="chmod -R a+r $CLAUDE_CONFIG_DIR || true",\n                env=env,\n            ),\n',
+        '"/logs/agent/claude-code.txt ; chmod -R a+rX $CLAUDE_CONFIG_DIR || true"',
+        1,
     )
 
 
