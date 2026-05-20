@@ -19,7 +19,7 @@ No fine-tuning. No offline trajectory pool. Just an iterative explore → distil
 
 <div align="center">
 
-| Condition | avg@5 on 83 tasks | Δ vs human-curated |
+| Method | avg@5 on 83 tasks | Δ vs human-curated |
 |:---|:---:|:---:|
 | No skill                                   | 29.9% | −13.7% |
 | Self-generated (one-shot)                  | 32.0% | −11.6% |
